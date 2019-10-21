@@ -10,6 +10,11 @@ workspace "Engine"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.sysstem}-%{cfg.architecture}"
 
+IncludeDir = {}
+IncludeDir["GLFW"] = "Engine/vendor/GLFW/include"
+
+include "Engine/vendor/glfw"
+
 project "Engine"
 	location "Engine"
 	kind "SharedLib"
@@ -27,10 +32,17 @@ project "Engine"
 		"%{prj.name}/src/**.cpp"
 	}
 
+	links
+	{
+		"GLFW",
+		"opengl32.lib"
+	}
+
 	includedirs
 	{
 		"%{prj.name}/vendor/spdlog/include",
-		"%{prj.name}/src"
+		"%{prj.name}/src",
+		"%{IncludeDir.GLFW}"
 	}
 
 	libdirs
