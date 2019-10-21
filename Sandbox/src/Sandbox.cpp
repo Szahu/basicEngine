@@ -10,12 +10,12 @@ public:
 
 	void OnUpdate() override
 	{
-		EG_INFO("ExampleLayer::Update");
+
 	}
 
 	void OnEvent(Engine::Event& event) override
 	{
-		EG_TRACE("{0}", event);
+
 	}
 
 };
@@ -28,6 +28,7 @@ public:
 		EG_INFO("Sandbox app Online");
 
 		PushLayer(new ExampleLayer());
+		PushOverlay(new Engine::ImGuiLayer());
 	}
 	~Sandbox()
 	{

@@ -7,8 +7,14 @@
     <Filter Include="Engine\Events">
       <UniqueIdentifier>{5FAFB439-CB6F-3070-94AA-79ED002A754C}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Imgui">
+      <UniqueIdentifier>{65FD6795-5160-F739-FAE5-2FF0E627C3BC}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Platform">
       <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\OpenGl">
+      <UniqueIdentifier>{3E7D2C1D-AA08-9AE1-B319-1DD61F24F6E1}</UniqueIdentifier>
     </Filter>
     <Filter Include="Platform\Windows">
       <UniqueIdentifier>{64FBD71A-50F4-F66C-7926-DCF1657ED678}</UniqueIdentifier>
@@ -38,6 +44,9 @@
     <ClInclude Include="src\Engine\Events\MouseEvent.h">
       <Filter>Engine\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Imgui\ImGuiLayer.h">
+      <Filter>Engine\Imgui</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Layer.h">
       <Filter>Engine</Filter>
     </ClInclude>
@@ -50,14 +59,18 @@
     <ClInclude Include="src\Engine\Window.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\Windows\WindowsWindow.h">
+    <ClInclude Include="src\Engine\Platform\Windows\WindowsWindow.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Platform\OpenGl\imguiOpenGlRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EGpch.cpp" />
     <ClCompile Include="src\Engine\Application.cpp">
       <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Imgui\ImGuiLayer.cpp">
+      <Filter>Engine\Imgui</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Layer.cpp">
       <Filter>Engine</Filter>
@@ -68,8 +81,9 @@
     <ClCompile Include="src\Engine\Log.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
+    <ClCompile Include="src\Engine\Platform\Windows\WindowsWindow.cpp">
       <Filter>Platform\Windows</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Platform\OpenGl\imguiOpenGlRenderer.cpp" />
   </ItemGroup>
 </Project>
