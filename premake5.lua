@@ -12,8 +12,10 @@ outputdir = "%{cfg.buildcfg}-%{cfg.sysstem}-%{cfg.architecture}"
 
 IncludeDir = {}
 IncludeDir["GLFW"] = "Engine/vendor/GLFW/include"
+IncludeDir["Glad"] = "Engine/vendor/Glad/include"
 
-include "Engine/vendor/glfw"
+include "Engine/vendor/GLFW"
+include "Engine/vendor/Glad"
 
 project "Engine"
 	location "Engine"
@@ -35,6 +37,7 @@ project "Engine"
 	links
 	{
 		"GLFW",
+		"Glad",
 		"opengl32.lib"
 	}
 
@@ -42,7 +45,8 @@ project "Engine"
 	{
 		"%{prj.name}/vendor/spdlog/include",
 		"%{prj.name}/src",
-		"%{IncludeDir.GLFW}"
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.Glad}"
 	}
 
 	libdirs
@@ -59,7 +63,8 @@ project "Engine"
 		defines
 		{
 			"EG_PLATFORM_WINDOWS",
-			"EG_BUILD_DLL"
+			"EG_BUILD_DLL",
+			"GLFW_INCLUDE_NONE"
 		}
 	
 		postbuildcommands
@@ -69,14 +74,17 @@ project "Engine"
 
 	filter "configurations:Debug"
 		defines "EG_DEBUG"
+		buildoptions "/MDd"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "EG_RELEASE"
+		buildoptions "/MD"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "EG_DIST"
+		buildoptions "/MD"
 		optimize "On"
 
 project "Sandbox"
@@ -118,12 +126,15 @@ project "Sandbox"
 
 	filter "configurations:Debug"
 		defines "EG_DEBUG"
+		buildoptions "/MDd"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "EG_RELEASE"
+		buildoptions "/MD"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "EG_DIST"
+		buildoptions "/MD"
 		optimize "On"
