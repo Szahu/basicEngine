@@ -30,7 +30,6 @@ public:
 		EG_INFO("Sandbox app Online");
 
 		PushLayer(new ExampleLayer());
-		PushOverlay(new Engine::ImGuiLayer());
 	}
 	~Sandbox()
 	{

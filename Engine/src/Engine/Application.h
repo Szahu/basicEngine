@@ -7,6 +7,7 @@
 #include "Events/ApplicationEvent.h"
 #include "LayerStack.h"
 
+#include "Engine/Imgui/ImGuiLayer.h"
 
 namespace Engine
 {
@@ -27,8 +28,10 @@ namespace Engine
 		inline static Application& Get() { return *s_Instance; }
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
+		bool OnWindowResize(WindowResizeEvent& e);
 
 		std::unique_ptr<Window> m_Window;
+		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		LayerStack m_LayerStack;
 

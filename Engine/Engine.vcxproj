@@ -168,7 +168,6 @@
     <ClInclude Include="src\Engine\LayerStack.h" />
     <ClInclude Include="src\Engine\Log.h" />
     <ClInclude Include="src\Engine\MouseButtonCodes.h" />
-    <ClInclude Include="src\Engine\Platform\OpenGl\imguiOpenGlRenderer.h" />
     <ClInclude Include="src\Engine\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\Engine\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\Engine\Window.h" />
@@ -178,11 +177,11 @@
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\Engine\Application.cpp" />
+    <ClCompile Include="src\Engine\Imgui\ImGuiBuild.cpp" />
     <ClCompile Include="src\Engine\Imgui\ImGuiLayer.cpp" />
     <ClCompile Include="src\Engine\Layer.cpp" />
     <ClCompile Include="src\Engine\LayerStack.cpp" />
     <ClCompile Include="src\Engine\Log.cpp" />
-    <ClCompile Include="src\Engine\Platform\OpenGl\imguiOpenGlRenderer.cpp" />
     <ClCompile Include="src\Engine\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Engine\Platform\Windows\WindowsWindow.cpp" />
   </ItemGroup>

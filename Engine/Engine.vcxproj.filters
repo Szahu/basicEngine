@@ -65,9 +65,6 @@
     <ClInclude Include="src\Engine\MouseButtonCodes.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Platform\OpenGl\imguiOpenGlRenderer.h">
-      <Filter>Engine\Platform\OpenGl</Filter>
-    </ClInclude>
     <ClInclude Include="src\Engine\Platform\Windows\WindowsInput.h">
       <Filter>Engine\Platform\Windows</Filter>
     </ClInclude>
@@ -95,14 +92,12 @@
     <ClCompile Include="src\Engine\Log.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\Platform\OpenGl\imguiOpenGlRenderer.cpp">
-      <Filter>Engine\Platform\OpenGl</Filter>
-    </ClCompile>
     <ClCompile Include="src\Engine\Platform\Windows\WindowsInput.cpp">
       <Filter>Engine\Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Platform\Windows\WindowsWindow.cpp">
       <Filter>Engine\Platform\Windows</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Imgui\ImGuiBuild.cpp" />
   </ItemGroup>
 </Project>
