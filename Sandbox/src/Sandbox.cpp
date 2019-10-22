@@ -6,11 +6,13 @@ public:
 	ExampleLayer()
 		: Layer("example")
 	{
+
 	}
 
 	void OnUpdate() override
 	{
-
+		if (Engine::Input::IsKeyPressed(EG_KEY_TAB))
+			EG_INFO("Tab key has been just presed!");
 	}
 
 	void OnEvent(Engine::Event& event) override

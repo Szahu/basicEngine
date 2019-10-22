@@ -1,5 +1,6 @@
 workspace "Engine"
 	architecture "x64"
+	startproject "Sandbox"
 
 	configurations 
 	{
@@ -14,6 +15,7 @@ IncludeDir = {}
 IncludeDir["GLFW"] = "Engine/vendor/GLFW/include"
 IncludeDir["Glad"] = "Engine/vendor/Glad/include"
 IncludeDir["imgui"] = "Engine/vendor/imgui"
+IncludeDir["glm"] = "Engine/vendor/glm"
 
 include "Engine/vendor/GLFW"
 include "Engine/vendor/Glad"
@@ -50,7 +52,8 @@ project "Engine"
 		"%{prj.name}/src",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
-		"%{IncludeDir.imgui}"
+		"%{IncludeDir.imgui}",
+		"%{IncludeDir.glm}"
 	}
 
 	libdirs
@@ -109,7 +112,8 @@ project "Sandbox"
 	includedirs
 	{
 		"Engine/vendor/spdlog/include",
-		"Engine/src"
+		"Engine/src",
+		"%{IncludeDir.glm}"
 	}
 
 	links 

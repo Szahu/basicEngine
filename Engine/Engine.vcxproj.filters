@@ -10,14 +10,14 @@
     <Filter Include="Engine\Imgui">
       <UniqueIdentifier>{65FD6795-5160-F739-FAE5-2FF0E627C3BC}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Platform">
-      <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
+    <Filter Include="Engine\Platform">
+      <UniqueIdentifier>{8F0ABC95-FB95-295A-04A7-AC4E70B1855A}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Platform\OpenGl">
-      <UniqueIdentifier>{3E7D2C1D-AA08-9AE1-B319-1DD61F24F6E1}</UniqueIdentifier>
+    <Filter Include="Engine\Platform\OpenGl">
+      <UniqueIdentifier>{035DAFB7-EF56-D809-D8C3-6E1AC45C3E76}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Platform\Windows">
-      <UniqueIdentifier>{64FBD71A-50F4-F66C-7926-DCF1657ED678}</UniqueIdentifier>
+    <Filter Include="Engine\Platform\Windows">
+      <UniqueIdentifier>{C9D3B605-350B-FF9C-3E15-63C0AACB2596}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -47,6 +47,12 @@
     <ClInclude Include="src\Engine\Imgui\ImGuiLayer.h">
       <Filter>Engine\Imgui</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Input.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Keycodes.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Layer.h">
       <Filter>Engine</Filter>
     </ClInclude>
@@ -56,13 +62,21 @@
     <ClInclude Include="src\Engine\Log.h">
       <Filter>Engine</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\MouseButtonCodes.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Platform\OpenGl\imguiOpenGlRenderer.h">
+      <Filter>Engine\Platform\OpenGl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Platform\Windows\WindowsInput.h">
+      <Filter>Engine\Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Platform\Windows\WindowsWindow.h">
+      <Filter>Engine\Platform\Windows</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Window.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Platform\Windows\WindowsWindow.h">
-      <Filter>Platform\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Platform\OpenGl\imguiOpenGlRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EGpch.cpp" />
@@ -81,9 +95,14 @@
     <ClCompile Include="src\Engine\Log.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\Platform\Windows\WindowsWindow.cpp">
-      <Filter>Platform\Windows</Filter>
+    <ClCompile Include="src\Engine\Platform\OpenGl\imguiOpenGlRenderer.cpp">
+      <Filter>Engine\Platform\OpenGl</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\Platform\OpenGl\imguiOpenGlRenderer.cpp" />
+    <ClCompile Include="src\Engine\Platform\Windows\WindowsInput.cpp">
+      <Filter>Engine\Platform\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Platform\Windows\WindowsWindow.cpp">
+      <Filter>Engine\Platform\Windows</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
