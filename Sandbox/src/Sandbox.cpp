@@ -1,4 +1,5 @@
 #include <Engine.h>
+#include "imgui/imgui.h"
 
 class ExampleLayer : public Engine::Layer
 {
@@ -11,8 +12,12 @@ public:
 
 	void OnUpdate() override
 	{
-		if (Engine::Input::IsKeyPressed(EG_KEY_TAB))
-			EG_INFO("Tab key has been just presed!");
+
+	}
+
+	virtual void OnImGuiRender() override
+	{
+
 	}
 
 	void OnEvent(Engine::Event& event) override

@@ -70,7 +70,7 @@ namespace Engine
 		ImGuiStyle& style = ImGui::GetStyle();
 		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 		{
-			style.WindowRounding = 10.5f;
+			style.WindowRounding = 0.0f;
 			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 		}
 
@@ -80,8 +80,6 @@ namespace Engine
 		// Setup Platform/Renderer bindings
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
 		ImGui_ImplOpenGL3_Init("#version 410");
-
-		EG_CORE_INFO("Attached ImGui");
 	}
 
 	void ImGuiLayer::OnDetach()

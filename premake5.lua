@@ -23,8 +23,10 @@ include "Engine/vendor/imgui"
 
 project "Engine"
 	location "Engine"
-	kind "SharedLib"
+	kind "StaticLib"
 	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -36,6 +38,11 @@ project "Engine"
 	{
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp"
+	}
+
+	defines
+	{
+		"_CRT_SECURE_NO_WARNINGS"
 	}
 
 	links
@@ -63,8 +70,6 @@ project "Engine"
 
 
 	filter "system:windows"
-		cppdialect "C++17"
-		staticruntime "On"
 		systemversion "latest"
 
 		defines
@@ -73,32 +78,28 @@ project "Engine"
 			"EG_BUILD_DLL",
 			"GLFW_INCLUDE_NONE"
 		}
-	
-		postbuildcommands
-		{
-			("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox")
-		}
 
 	filter "configurations:Debug"
 		defines "EG_DEBUG"
-		buildoptions "/MDd"
+		runtime "Debug"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "EG_RELEASE"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "EG_DIST"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "On"
 
 project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
-
+	staticruntime "on"
 	language "C++"
+	cppdialect "C++17"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -112,6 +113,7 @@ project "Sandbox"
 	includedirs
 	{
 		"Engine/vendor/spdlog/include",
+		"%{IncludeDir.imgui} + /../",
 		"Engine/src",
 		"%{IncludeDir.glm}"
 	}
@@ -122,7 +124,6 @@ project "Sandbox"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
 		staticruntime "On"
 		systemversion "latest"
 
@@ -134,15 +135,15 @@ project "Sandbox"
 
 	filter "configurations:Debug"
 		defines "EG_DEBUG"
-		buildoptions "/MDd"
+		runtime "Debug"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "EG_RELEASE"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "EG_DIST"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "On"
