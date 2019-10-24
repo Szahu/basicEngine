@@ -74,6 +74,9 @@
     <ClInclude Include="src\Engine\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\Engine\Platform\OpenGl\OpenGLContext.h" />
     <ClInclude Include="src\Engine\Renderer\Shader.h" />
+    <ClInclude Include="src\Engine\Renderer\Buffer.h" />
+    <ClInclude Include="src\Engine\Platform\OpenGl\OpenGLBuffer.h" />
+    <ClInclude Include="src\Engine\Renderer\Renderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EGpch.cpp" />
@@ -103,5 +106,8 @@
     </ClCompile>
     <ClCompile Include="src\Engine\Platform\OpenGl\OpenGLContext.cpp" />
     <ClCompile Include="src\Engine\Renderer\Shader.cpp" />
+    <ClCompile Include="src\Engine\Renderer\Buffer.cpp" />
+    <ClCompile Include="src\Engine\Platform\OpenGl\OpenGLBuffer.cpp" />
+    <ClCompile Include="src\Engine\Renderer\Renderer.cpp" />
   </ItemGroup>
 </Project>

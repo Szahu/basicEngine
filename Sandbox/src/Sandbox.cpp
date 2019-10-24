@@ -32,6 +32,7 @@ class Sandbox : public Engine::Application
 public:
 	Sandbox()
 	{
+
 		EG_INFO("Sandbox app Online");
 
 		PushLayer(new ExampleLayer());

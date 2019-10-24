@@ -9,6 +9,7 @@
 
 #include "Engine/Imgui/ImGuiLayer.h"
 
+#include "Engine/Renderer/Buffer.h"
 #include "Engine/Renderer/Shader.h"
 
 namespace Engine
@@ -41,10 +42,10 @@ namespace Engine
 
 
 		unsigned int va;
-		unsigned int vb;
-		unsigned int ib;
 		unsigned int col;
 		std::unique_ptr<Shader> m_Shader;
+		std::unique_ptr<VertexBuffer> m_VertexBuffer;
+		std::unique_ptr<IndexBuffer> m_IndexBuffer;
 	};
 
 	Application* CreateApplication();

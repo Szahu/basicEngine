@@ -5,6 +5,8 @@
 
 #include "Input.h"
 
+
+
 namespace Engine
 {
 
@@ -29,32 +31,27 @@ namespace Engine
 		glGenVertexArrays(1, &va);
 		glBindVertexArray(va);
 
-		//Vertex Buffer
-		glGenBuffers(1, &vb);
-		glBindBuffer(GL_ARRAY_BUFFER, vb);
-
-		// Test code for openGl 
 		float positions[9] = {
 			-0.5f, -0.5f, 0.0f,
 			 0.5f, -0.5f, 0.0f,
 			 0.0f,  0.5f, 0.0f
 		};
 
-		glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), positions, GL_STATIC_DRAW);
+		uint32_t indices[3] = {
+			 0, 1, 2
+		};
+
+		//Vertex Buffer
+		m_VertexBuffer.reset(VertexBuffer::Create(positions, sizeof(positions)));
+		m_VertexBuffer->Bind();
+		// Test code for openGl 
+		
+		m_IndexBuffer.reset(IndexBuffer::Create(indices, 3));
+		m_IndexBuffer->Bind();
 
 		//Vertex Array
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
-
-		//Idex Buffer
-		glGenBuffers(1, &ib);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
-
-		unsigned int indices[3] = {
-		0, 1, 2
-		};
-
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3 * sizeof(unsigned int), indices, GL_STATIC_DRAW);
 
 		std::string vertexSrc = R"(
 			#version 330 core
@@ -84,6 +81,7 @@ namespace Engine
 								  )";
 
 		m_Shader.reset(new Shader(vertexSrc, fragmentSrc));
+
 	}
 
 	Application::~Application()
@@ -123,7 +121,7 @@ namespace Engine
 
 			m_Shader->Bind();
 			glBindVertexArray(va);
-			glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+			glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
 
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();
