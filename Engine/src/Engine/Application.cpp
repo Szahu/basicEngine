@@ -1,8 +1,6 @@
 #include "EGpch.h"
 #include "Application.h"
 
-#include <glad/glad.h>
-
 #include "Input.h"
 
 
@@ -36,10 +34,10 @@ namespace Engine
 		};
 
 		float positions1[4 * 7] = {
-			-0.7f, -0.7f, 0.0f, 0.0f, 0.0f, 0.7f, 1.0f,
-			 0.7f, -0.7f, 0.0f, 0.0f, 0.0f, 0.7f, 1.0f,
-			 0.7f,  0.7f, 0.0f, 0.0f, 0.0f, 0.7f, 1.0f,
-			-0.7f,  0.7f, 0.0f, 0.0f, 0.0f, 0.7f, 1.0f
+			-0.7f, -0.7f, 0.0f, 0.3f, 0.5f, 0.2f, 1.0f,
+			 0.7f, -0.7f, 0.0f, 0.3f, 0.5f, 0.2f, 1.0f,
+			 0.7f,  0.7f, 0.0f, 0.7f, 0.1f, 0.4f, 1.0f,
+			-0.7f,  0.7f, 0.0f, 0.7f, 0.1f, 0.4f, 1.0f
 		};
 
 		uint32_t indices[3] = {
@@ -146,17 +144,21 @@ namespace Engine
 	{
 		while (m_Running)
 		{
-			glClearColor(0.1f, 0.1f, 0.1f, 1);
-			glClear(GL_COLOR_BUFFER_BIT);
+			RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+			RenderCommand::Clear();
+			
+
+			Renderer::BeginScene();
 
 			m_Shader->Bind();
-			m_VertexArray2->Bind();
-			glDrawElements(GL_TRIANGLES, m_VertexArray2->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
-			m_VertexArray2->Unbind();
+			Renderer::Submit(m_VertexArray2);
 
 			m_Shader->Bind();
-			m_VertexArray->Bind();
-			glDrawElements(GL_TRIANGLES, m_VertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+			Renderer::Submit(m_VertexArray);
+
+			Renderer::EndScene();
+
+
 
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();
