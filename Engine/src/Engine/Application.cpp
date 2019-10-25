@@ -14,25 +14,6 @@ namespace Engine
 
 	Application* Application::s_Instance = nullptr;
 
-	static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type)
-	{
-		switch (type)
-		{
-			case Engine::ShaderDataType::Float:  return GL_FLOAT;
-			case Engine::ShaderDataType::Float2: return GL_FLOAT;
-			case Engine::ShaderDataType::Float3: return GL_FLOAT;
-			case Engine::ShaderDataType::Float4: return GL_FLOAT;
-			case Engine::ShaderDataType::Mat3:   return GL_FLOAT;
-			case Engine::ShaderDataType::Mat4:   return GL_FLOAT;
-			case Engine::ShaderDataType::Int:    return GL_INT;
-			case Engine::ShaderDataType::Int2:   return GL_INT;
-			case Engine::ShaderDataType::Int3:   return GL_INT;
-			case Engine::ShaderDataType::Int4:   return GL_INT;
-			case Engine::ShaderDataType::Bool:   return GL_BOOL;
-		}
-		return 0;
-	}
-
 	Application::Application()
 	{
 		EG_CORE_ASSERT(!s_Instance, "Application already exists!");
@@ -47,8 +28,6 @@ namespace Engine
 
 
 		//Test code
-		glGenVertexArrays(1, &va);
-		glBindVertexArray(va);
 
 		float positions[3 * 7] = {
 			-0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
@@ -69,23 +48,13 @@ namespace Engine
 		m_VertexBuffer.reset(VertexBuffer::Create(positions, sizeof(positions)));
 		m_VertexBuffer->Bind();
 		m_VertexBuffer->SetLayout(layout);
-		// Test code for openGl 
 		
 		m_IndexBuffer.reset(IndexBuffer::Create(indices, 3));
 		m_IndexBuffer->Bind();
 
-		
-
-		unsigned int i = 0;
-		for (const auto& element : m_VertexBuffer->GetLayout())
-		{
-			glEnableVertexAttribArray(i);
-			glVertexAttribPointer(i, element.GetComponenetCount(),
-				ShaderDataTypeToOpenGLBaseType(element.Type),
-				element.Normalised ? GL_TRUE : GL_FALSE, 
-				layout.GetStride(), (const void*)element.Offset);
-			i++;
-		}
+		m_VertexArray.reset(VertexArray::Create());
+		m_VertexArray->AddVertexBufer(m_VertexBuffer);
+		m_VertexArray->SetIndexBufer(m_IndexBuffer);
 
 		std::string vertexSrc = R"(
 			#version 330 core
@@ -155,7 +124,7 @@ namespace Engine
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			m_Shader->Bind();
-			glBindVertexArray(va);
+			m_VertexArray->Bind();
 			glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
 
 			for (Layer* layer : m_LayerStack)

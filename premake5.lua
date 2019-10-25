@@ -42,7 +42,8 @@ project "Engine"
 
 	defines
 	{
-		"_CRT_SECURE_NO_WARNINGS"
+		"_CRT_SECURE_NO_WARNINGS",
+		"EG_ENABLE_ASSERTS"
 	}
 
 	links
