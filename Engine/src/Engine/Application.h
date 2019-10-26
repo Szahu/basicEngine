@@ -10,9 +10,9 @@
 #include "Engine/Imgui/ImGuiLayer.h"
 
 #include "Engine/Renderer/Renderer.h"
-#include "Engine/Renderer/Buffer.h"
 #include "Engine/Renderer/Shader.h"
 #include "Engine/Renderer/VertexArray.h"
+#include "Engine/Renderer/OrtographicCamera.h"
 
 namespace Engine
 {
@@ -43,10 +43,12 @@ namespace Engine
 		static Application* s_Instance;
 
 
+		OrtographicCamera m_Camera;
+		glm::vec3 trnaslation = glm::vec3(0.0f);
+		float rotation = 0.0f;
 		unsigned int col;
 		std::shared_ptr<VertexArray> m_VertexArray;
 		std::shared_ptr<Shader> m_Shader;
-
 		std::shared_ptr<VertexArray> m_VertexArray2;
 	};
 

@@ -1,9 +1,7 @@
 #include "EGpch.h"
 #include "Application.h"
 
-#include "Input.h"
-
-
+#include "imgui.h"
 
 namespace Engine
 {
@@ -13,6 +11,7 @@ namespace Engine
 	Application* Application::s_Instance = nullptr;
 
 	Application::Application()
+		:m_Camera(-1.6f, 1.6f, -0.9f, 0.9f)
 	{
 		EG_CORE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
@@ -86,12 +85,14 @@ namespace Engine
 			layout(location = 0) in vec3 a_Positions;
 			layout(location = 1) in vec4 a_Color;
 
+			uniform mat4 u_ViewProjectionMatrix;
+
 			out vec4 v_Color;
 			
 			void main() 
 			{
 				v_Color = a_Color;
-				gl_Position = vec4(a_Positions, 1.0);
+				gl_Position = u_ViewProjectionMatrix * vec4(a_Positions, 1.0);
 			}
 								)";
 
@@ -147,18 +148,17 @@ namespace Engine
 			RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 			RenderCommand::Clear();
 			
+			m_Camera.SetRotation(rotation);
+			m_Camera.SetPosition(trnaslation);
 
-			Renderer::BeginScene();
+			Renderer::BeginScene(m_Camera);
 
-			m_Shader->Bind();
-			Renderer::Submit(m_VertexArray2);
-
-			m_Shader->Bind();
-			Renderer::Submit(m_VertexArray);
+			Renderer::Submit(m_VertexArray2, m_Shader);
+			Renderer::Submit(m_VertexArray, m_Shader);
 
 			Renderer::EndScene();
 
-
+			
 
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();
@@ -166,6 +166,9 @@ namespace Engine
 			m_ImGuiLayer->Begin();
 			for (Layer* layer : m_LayerStack)
 				layer->OnImGuiRender();
+			ImGui::Text("HEYY");
+			ImGui::SliderFloat3("translation", &trnaslation.x, -5.0f, 5.0f);
+			ImGui::SliderFloat("Rotation", &rotation, 0.0f, 360.0f);
 			m_ImGuiLayer->End();
 
 			m_Window->OnUpdate();
