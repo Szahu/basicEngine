@@ -106,6 +106,7 @@
     <ClInclude Include="src\Engine\Platform\OpenGl\OpenGLRendererAPI.h" />
     <ClInclude Include="src\Engine\Renderer\OrtographicCamera.h" />
     <ClInclude Include="src\Engine\Core\Timestep.h" />
+    <ClInclude Include="src\Engine\Platform\OpenGl\OpenGLShader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EGpch.cpp" />
@@ -158,5 +159,6 @@
     <ClCompile Include="src\Engine\Renderer\RenderCommand.cpp" />
     <ClCompile Include="src\Engine\Platform\OpenGl\OpenGLRendererAPI.cpp" />
     <ClCompile Include="src\Engine\Renderer\OrtographicCamera.cpp" />
+    <ClCompile Include="src\Engine\Platform\OpenGl\OpenGLShader.cpp" />
   </ItemGroup>
 </Project>

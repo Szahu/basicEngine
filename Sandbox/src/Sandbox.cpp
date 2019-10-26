@@ -1,6 +1,7 @@
 #include <Engine.h>
 #include "imgui/imgui.h"
 
+#include "Engine/Platform/OpenGl/OpenGLShader.h"
 
 class ExampleLayer : public Engine::Layer
 {
@@ -87,18 +88,20 @@ public:
 
 			in vec4 v_Color;
 
+			uniform vec4 u_Color;
+
 			void main() 
 			{
-				color = v_Color;
+				color = v_Color * u_Color;
 			}
 								  )";
 
-		m_Shader.reset(new Engine::Shader(vertexSrc, fragmentSrc));
+		m_Shader.reset(Engine::Shader::Create(vertexSrc, fragmentSrc));
 	}
 
 	void OnUpdate(Engine::Timestep ts) override
 	{
-		m_FPS =  60.0f / ts;
+		m_FPS =  1.0f / ts;
 
 		if (Engine::Input::IsKeyPressed(EG_KEY_UP))
 			camPosition.y += m_CameraSpeed * ts;
@@ -124,16 +127,23 @@ public:
 
 		Engine::Renderer::BeginScene(m_Camera);
 
-
+		
 		for (int x = 0; x < 20; x++)
 		{
 			for (int y = 0; y < 20; y++)
 			{
-				glm::mat4 transform2 = glm::translate(glm::mat4(1.0f), glm::vec3(x * 0.11f, y * 0.11f, 0.0f)) * scale;;
+				glm::mat4 transform2 = glm::translate(glm::mat4(1.0f), glm::vec3(x * 0.11f, y * 0.11f, 0.0f)) * scale;
+				if (x % 2 == 0)
+					std::dynamic_pointer_cast<Engine::OpenGLShader>(m_Shader)->UplaodUniformFloat4("u_Color", { 0.0f, 0.0f, 1.0f, 1.0f });
+				else 
+					std::dynamic_pointer_cast<Engine::OpenGLShader>(m_Shader)->UplaodUniformFloat4("u_Color", { 0.0f, 1.0f, 0.0f, 1.0f });
+
 				Engine::Renderer::Submit(m_VertexArray2, m_Shader, transform2);
 			}
 		}
 
+
+		std::dynamic_pointer_cast<Engine::OpenGLShader>(m_Shader)->UplaodUniformFloat4("u_Color", m_TriangleColor);
 		Engine::Renderer::Submit(m_VertexArray, m_Shader, transform1);
 
 
@@ -144,8 +154,8 @@ public:
 	{
 		ImGui::Text("FPS: %i", (int)m_FPS);
 		ImGui::SliderFloat3("translation1", &translation1.x, -5.0f, 5.0f);
-		ImGui::SliderFloat3("translation2", &translation2.x, -5.0f, 5.0f);
 		ImGui::SliderFloat("Rotation", &rotation, 0.0f, 360.0f);
+		ImGui::ColorPicker4("Triangle color", &m_TriangleColor.x);
 	}
 
 	void OnEvent(Engine::Event& event) override
@@ -157,9 +167,9 @@ private:
 	Engine::OrtographicCamera m_Camera; float m_CameraSpeed = 5.0f;
 	glm::vec3 camPosition = glm::vec3(0.0f);
 	glm::vec3 translation1 = glm::vec3(0.0f);
-	glm::vec3 translation2 = glm::vec3(0.0f);
 	float rotation = 0.0f;
 	float m_FPS = 0.0f;
+	glm::vec4 m_TriangleColor = { 1.0f, 1.0f, 1.0f, 1.0f };
 	std::shared_ptr<Engine::VertexArray> m_VertexArray;
 	std::shared_ptr<Engine::Shader> m_Shader;
 	std::shared_ptr<Engine::VertexArray> m_VertexArray2;
