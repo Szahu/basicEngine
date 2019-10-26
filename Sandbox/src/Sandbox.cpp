@@ -15,10 +15,10 @@ public:
 		};
 
 		float positions1[4 * 7] = {
-			-0.7f, -0.7f, 0.0f, 0.3f, 0.5f, 0.2f, 1.0f,
-			 0.7f, -0.7f, 0.0f, 0.3f, 0.5f, 0.2f, 1.0f,
-			 0.7f,  0.7f, 0.0f, 0.7f, 0.1f, 0.4f, 1.0f,
-			-0.7f,  0.7f, 0.0f, 0.7f, 0.1f, 0.4f, 1.0f
+			-0.5f, -0.5f, 0.0f, 0.3f, 0.5f, 0.2f, 1.0f,
+			 0.5f, -0.5f, 0.0f, 0.3f, 0.5f, 0.2f, 1.0f,
+			 0.5f,  0.5f, 0.0f, 0.7f, 0.1f, 0.4f, 1.0f,
+			-0.5f,  0.5f, 0.0f, 0.7f, 0.1f, 0.4f, 1.0f
 		};
 
 		uint32_t indices[3] = {
@@ -68,13 +68,15 @@ public:
 			layout(location = 1) in vec4 a_Color;
 
 			uniform mat4 u_ViewProjectionMatrix;
+			uniform mat4 u_Transform;
+						
 
 			out vec4 v_Color;
 			
 			void main() 
 			{
 				v_Color = a_Color;
-				gl_Position = u_ViewProjectionMatrix * vec4(a_Positions, 1.0);
+				gl_Position = u_ViewProjectionMatrix * u_Transform *  vec4(a_Positions, 1.0);
 			}
 								)";
 
@@ -99,27 +101,41 @@ public:
 		m_FPS =  60.0f / ts;
 
 		if (Engine::Input::IsKeyPressed(EG_KEY_UP))
-			translation.y += m_CameraSpeed * ts;
+			camPosition.y += m_CameraSpeed * ts;
 
 		if (Engine::Input::IsKeyPressed(EG_KEY_DOWN))
-			translation.y -= m_CameraSpeed * ts;
+			camPosition.y -= m_CameraSpeed * ts;
 
 		if (Engine::Input::IsKeyPressed(EG_KEY_LEFT))
-			translation.x -= m_CameraSpeed * ts;
+			camPosition.x -= m_CameraSpeed * ts;
 
 		if (Engine::Input::IsKeyPressed(EG_KEY_RIGHT))
-			translation.x += m_CameraSpeed * ts;
+			camPosition.x += m_CameraSpeed * ts;
+
+		
+		glm::mat4 transform1 = glm::translate(glm::mat4(1.0f), translation1);
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
 		Engine::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		Engine::RenderCommand::Clear();
 
 		m_Camera.SetRotation(rotation);
-		m_Camera.SetPosition(translation);
+		m_Camera.SetPosition(camPosition);
 
 		Engine::Renderer::BeginScene(m_Camera);
 
-		Engine::Renderer::Submit(m_VertexArray2, m_Shader);
-		Engine::Renderer::Submit(m_VertexArray, m_Shader);
+
+		for (int x = 0; x < 20; x++)
+		{
+			for (int y = 0; y < 20; y++)
+			{
+				glm::mat4 transform2 = glm::translate(glm::mat4(1.0f), glm::vec3(x * 0.11f, y * 0.11f, 0.0f)) * scale;;
+				Engine::Renderer::Submit(m_VertexArray2, m_Shader, transform2);
+			}
+		}
+
+		Engine::Renderer::Submit(m_VertexArray, m_Shader, transform1);
+
 
 		Engine::Renderer::EndScene();
 	}
@@ -127,7 +143,8 @@ public:
 	virtual void OnImGuiRender() override
 	{
 		ImGui::Text("FPS: %i", (int)m_FPS);
-		ImGui::SliderFloat3("translation", &translation.x, -5.0f, 5.0f);
+		ImGui::SliderFloat3("translation1", &translation1.x, -5.0f, 5.0f);
+		ImGui::SliderFloat3("translation2", &translation2.x, -5.0f, 5.0f);
 		ImGui::SliderFloat("Rotation", &rotation, 0.0f, 360.0f);
 	}
 
@@ -138,9 +155,11 @@ public:
 
 private:
 	Engine::OrtographicCamera m_Camera; float m_CameraSpeed = 5.0f;
-	glm::vec3 translation = glm::vec3(0.0f);
+	glm::vec3 camPosition = glm::vec3(0.0f);
+	glm::vec3 translation1 = glm::vec3(0.0f);
+	glm::vec3 translation2 = glm::vec3(0.0f);
 	float rotation = 0.0f;
-	float m_FPS;
+	float m_FPS = 0.0f;
 	std::shared_ptr<Engine::VertexArray> m_VertexArray;
 	std::shared_ptr<Engine::Shader> m_Shader;
 	std::shared_ptr<Engine::VertexArray> m_VertexArray2;
