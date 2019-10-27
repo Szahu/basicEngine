@@ -1,4 +1,4 @@
-#shader vertex
+#type vertex
 #version 330 core
 	
 	
@@ -17,7 +17,7 @@ void main()
 }
 							
 
-#shader fragment
+#type fragment
 #version 330 core
 			
 layout(location = 0) out vec4 color;
@@ -30,4 +30,4 @@ void main()
 {
 	color = texture(u_Texture, v_TexCoord);
 }
-								  
+		

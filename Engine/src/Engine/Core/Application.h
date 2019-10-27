@@ -6,6 +6,7 @@
 #include "Engine/Events/Event.h"
 #include "Engine/Events/ApplicationEvent.h"
 #include "LayerStack.h"
+#include "Engine/Renderer/Renderer.h"
 
 #include "Engine/Imgui/ImGuiLayer.h"
 

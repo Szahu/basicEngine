@@ -62,113 +62,11 @@ public:
 		m_VertexArray2->SetIndexBuffer(m_IndexBuffer2);
 		m_VertexArray2->Unbind();
 
-		std::string vertexSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) in vec3 a_Positions;
-			layout(location = 1) in vec4 a_Color;
+		m_Shader = Engine::Shader::Create("assets/shaders/Gradient.glsl");
+		m_TexShader = Engine::Shader::Create("assets/shaders/Texture.glsl");
 
-			uniform mat4 u_ViewProjectionMatrix;
-			uniform mat4 u_Transform;
-						
-
-			out vec4 v_Color;
-			
-			void main() 
-			{
-				v_Color = a_Color;
-				gl_Position = u_ViewProjectionMatrix * u_Transform *  vec4(a_Positions, 1.0);
-			}
-								)";
-
-		std::string fragmentSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) out vec4 color;
-
-			in vec4 v_Color;
-
-			uniform vec4 u_Color;
-
-			void main() 
-			{
-				color = v_Color * u_Color;
-			}
-								  )";
-
-		m_Shader.reset(Engine::Shader::Create(vertexSrc, fragmentSrc));
-
-		std::string s_vertexSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) in vec3 a_Positions;
-
-			uniform mat4 u_ViewProjectionMatrix;
-			uniform mat4 u_Transform;
-						
-
-			out vec4 v_Color;
-			
-			void main() 
-			{
-				gl_Position = u_ViewProjectionMatrix * u_Transform *  vec4(a_Positions, 1.0);
-			}
-								)";
-
-		std::string s_fragmentSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) out vec4 color;
-
-			uniform vec4 u_Color;
-
-			void main() 
-			{
-				color = vec4(1.0, 1.0, 1.0, 1.0);
-			}
-								  )";
-
-		m_SqrShader.reset(Engine::Shader::Create(s_vertexSrc, s_fragmentSrc));
-
-
-		std::string t_vertexSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) in vec3 a_Positions;
-			layout(location = 1) in vec2 a_TexCoords;
-
-			uniform mat4 u_ViewProjectionMatrix;
-			uniform mat4 u_Transform;
-						
-			out vec2 v_TexCoord;
-			
-			void main() 
-			{
-				v_TexCoord = a_TexCoords;
-				gl_Position = u_ViewProjectionMatrix * u_Transform *  vec4(a_Positions, 1.0);
-			}
-								)";
-
-		std::string t_fragmentSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) out vec4 color;
-
-			uniform sampler2D u_Texture;
-
-			in vec2 v_TexCoord;
-
-			void main() 
-			{
-				color = texture(u_Texture, v_TexCoord);
-			}
-								  )";
-
-		m_TexShader.reset(Engine::Shader::Create(t_vertexSrc, t_fragmentSrc));
-		std::dynamic_pointer_cast<Engine::OpenGLShader>(m_TexShader)->Bind();
-		std::dynamic_pointer_cast<Engine::OpenGLShader>(m_TexShader)->UplaodUniformInt1("u_Texture", 0);
-
-		m_Texture = Engine::Texture2D::Create("assets/logo.png");
+		m_TextureDirt = Engine::Texture2D::Create("assets/Textures/dirt_tex.jpg");
+		m_TextureLogo = Engine::Texture2D::Create("assets/Textures/cherno_logo.png");
 	}
 
 	void OnUpdate(Engine::Timestep ts) override
@@ -218,7 +116,10 @@ public:
 		std::dynamic_pointer_cast<Engine::OpenGLShader>(m_Shader)->UplaodUniformFloat4("u_Color", m_TriangleColor);
 		Engine::Renderer::Submit(m_VertexArray, m_Shader, transform1);
 
-		m_Texture->Bind();
+		m_TextureDirt->Bind();
+		Engine::Renderer::Submit(m_VertexArray2, m_TexShader, glm::translate(glm::mat4(1.0f), glm::vec3(-1.0f, 1.0f, 0.0f)));
+
+		m_TextureLogo->Bind();
 		Engine::Renderer::Submit(m_VertexArray2, m_TexShader, glm::translate(glm::mat4(1.0f), glm::vec3(-1.0f, 1.0f, 0.0f)));
 
 
@@ -239,6 +140,7 @@ public:
 	}
 
 private:
+	Engine::ShaderLibrary m_ShaderLibrary;
 	Engine::OrtographicCamera m_Camera; float m_CameraSpeed = 5.0f;
 	glm::vec3 camPosition = glm::vec3(0.0f);
 	glm::vec3 translation1 = glm::vec3(0.0f);
@@ -247,10 +149,10 @@ private:
 	glm::vec4 m_TriangleColor = { 1.0f, 1.0f, 1.0f, 1.0f };
 	Engine::Ref<Engine::VertexArray> m_VertexArray;
 	Engine::Ref<Engine::Shader> m_Shader;
-	Engine::Ref<Engine::Shader> m_SqrShader;
 	Engine::Ref<Engine::Shader> m_TexShader;
 	Engine::Ref<Engine::VertexArray> m_VertexArray2;
-	Engine::Ref<Engine::Texture2D> m_Texture;
+	Engine::Ref<Engine::Texture2D> m_TextureDirt;
+	Engine::Ref<Engine::Texture2D> m_TextureLogo;
 };
 
 class Sandbox : public Engine::Application
