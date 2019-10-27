@@ -5,7 +5,7 @@
 #include "examples/imgui_impl_glfw.h"
 #include "examples/imgui_impl_opengl3.h"
 
-#include "Engine/Application.h"
+#include "Engine/Core/Application.h"
 
 
 //Temporary for getting workingDir
@@ -37,6 +37,7 @@ const std::string CurrentPath()
 
 	std::string result = cCurrentPath;
 	std::replace(result.begin(), result.end(), '\\', '/');
+
 	return result;
 }
 

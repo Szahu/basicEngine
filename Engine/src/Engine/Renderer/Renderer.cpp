@@ -17,7 +17,7 @@ namespace Engine
 	{
 	}
 
-	void Renderer::Submit(const std::shared_ptr<VertexArray>& vertexArray, const std::shared_ptr<Shader>& shader, const glm::mat4 transform)
+	void Renderer::Submit(const Engine::Ref<VertexArray>& vertexArray, const Engine::Ref<Shader>& shader, const glm::mat4 transform)
 	{
 		std::dynamic_pointer_cast<OpenGLShader>(shader)->Bind();
 		std::dynamic_pointer_cast<OpenGLShader>(shader)->UplaodUniformMat4("u_ViewProjectionMatrix", m_SceneData->ViewProjectionMatrix);

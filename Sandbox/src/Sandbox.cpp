@@ -15,11 +15,11 @@ public:
 			 0.0f,  0.5f, 0.0f, 0.8f, 0.7f, 0.2f, 1.0f
 		};
 
-		float positions1[4 * 7] = {
-			-0.5f, -0.5f, 0.0f, 0.3f, 0.5f, 0.2f, 1.0f,
-			 0.5f, -0.5f, 0.0f, 0.3f, 0.5f, 0.2f, 1.0f,
-			 0.5f,  0.5f, 0.0f, 0.7f, 0.1f, 0.4f, 1.0f,
-			-0.5f,  0.5f, 0.0f, 0.7f, 0.1f, 0.4f, 1.0f
+		float positions1[4 * 5] = {
+			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f
 		};
 
 		uint32_t indices[3] = {
@@ -37,25 +37,25 @@ public:
 
 		Engine::BufferLayout layout1 = {
 			{Engine::ShaderDataType::Float3, "a_Positions"},
-			{Engine::ShaderDataType::Float4, "a_Color"}
+			{Engine::ShaderDataType::Float2, "a_TexCoord"}
 		};
 
-		//Triangle
-		std::shared_ptr<Engine::VertexBuffer> m_VertexBuffer;
+		// Setup for a Triangle
+		Engine::Ref<Engine::VertexBuffer> m_VertexBuffer;
 		m_VertexBuffer.reset(Engine::VertexBuffer::Create(positions, sizeof(positions)));
 		m_VertexBuffer->SetLayout(layout);
-		std::shared_ptr<Engine::IndexBuffer> m_IndexBuffer;
+		Engine::Ref<Engine::IndexBuffer> m_IndexBuffer;
 		m_IndexBuffer.reset(Engine::IndexBuffer::Create(indices, 3));
 		m_VertexArray.reset(Engine::VertexArray::Create());
 		m_VertexArray->AddVertexBuffer(m_VertexBuffer);
 		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
 		m_VertexArray->Unbind();
 
-		//Square
-		std::shared_ptr<Engine::VertexBuffer> m_VertexBuffer2;
+		// Setup for a Square
+		Engine::Ref<Engine::VertexBuffer> m_VertexBuffer2;
 		m_VertexBuffer2.reset(Engine::VertexBuffer::Create(positions1, sizeof(positions1)));
 		m_VertexBuffer2->SetLayout(layout1);
-		std::shared_ptr<Engine::IndexBuffer> m_IndexBuffer2;
+		Engine::Ref<Engine::IndexBuffer> m_IndexBuffer2;
 		m_IndexBuffer2.reset(Engine::IndexBuffer::Create(indices1, 6));
 		m_VertexArray2.reset(Engine::VertexArray::Create());
 		m_VertexArray2->AddVertexBuffer(m_VertexBuffer2);
@@ -97,6 +97,78 @@ public:
 								  )";
 
 		m_Shader.reset(Engine::Shader::Create(vertexSrc, fragmentSrc));
+
+		std::string s_vertexSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) in vec3 a_Positions;
+
+			uniform mat4 u_ViewProjectionMatrix;
+			uniform mat4 u_Transform;
+						
+
+			out vec4 v_Color;
+			
+			void main() 
+			{
+				gl_Position = u_ViewProjectionMatrix * u_Transform *  vec4(a_Positions, 1.0);
+			}
+								)";
+
+		std::string s_fragmentSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) out vec4 color;
+
+			uniform vec4 u_Color;
+
+			void main() 
+			{
+				color = vec4(1.0, 1.0, 1.0, 1.0);
+			}
+								  )";
+
+		m_SqrShader.reset(Engine::Shader::Create(s_vertexSrc, s_fragmentSrc));
+
+
+		std::string t_vertexSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) in vec3 a_Positions;
+			layout(location = 1) in vec2 a_TexCoords;
+
+			uniform mat4 u_ViewProjectionMatrix;
+			uniform mat4 u_Transform;
+						
+			out vec2 v_TexCoord;
+			
+			void main() 
+			{
+				v_TexCoord = a_TexCoords;
+				gl_Position = u_ViewProjectionMatrix * u_Transform *  vec4(a_Positions, 1.0);
+			}
+								)";
+
+		std::string t_fragmentSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) out vec4 color;
+
+			uniform sampler2D u_Texture;
+
+			in vec2 v_TexCoord;
+
+			void main() 
+			{
+				color = texture(u_Texture, v_TexCoord);
+			}
+								  )";
+
+		m_TexShader.reset(Engine::Shader::Create(t_vertexSrc, t_fragmentSrc));
+		std::dynamic_pointer_cast<Engine::OpenGLShader>(m_TexShader)->Bind();
+		std::dynamic_pointer_cast<Engine::OpenGLShader>(m_TexShader)->UplaodUniformInt1("u_Texture", 0);
+
+		m_Texture = Engine::Texture2D::Create("assets/logo.png");
 	}
 
 	void OnUpdate(Engine::Timestep ts) override
@@ -142,9 +214,12 @@ public:
 			}
 		}
 
-
+		
 		std::dynamic_pointer_cast<Engine::OpenGLShader>(m_Shader)->UplaodUniformFloat4("u_Color", m_TriangleColor);
 		Engine::Renderer::Submit(m_VertexArray, m_Shader, transform1);
+
+		m_Texture->Bind();
+		Engine::Renderer::Submit(m_VertexArray2, m_TexShader, glm::translate(glm::mat4(1.0f), glm::vec3(-1.0f, 1.0f, 0.0f)));
 
 
 		Engine::Renderer::EndScene();
@@ -170,9 +245,12 @@ private:
 	float rotation = 0.0f;
 	float m_FPS = 0.0f;
 	glm::vec4 m_TriangleColor = { 1.0f, 1.0f, 1.0f, 1.0f };
-	std::shared_ptr<Engine::VertexArray> m_VertexArray;
-	std::shared_ptr<Engine::Shader> m_Shader;
-	std::shared_ptr<Engine::VertexArray> m_VertexArray2;
+	Engine::Ref<Engine::VertexArray> m_VertexArray;
+	Engine::Ref<Engine::Shader> m_Shader;
+	Engine::Ref<Engine::Shader> m_SqrShader;
+	Engine::Ref<Engine::Shader> m_TexShader;
+	Engine::Ref<Engine::VertexArray> m_VertexArray2;
+	Engine::Ref<Engine::Texture2D> m_Texture;
 };
 
 class Sandbox : public Engine::Application

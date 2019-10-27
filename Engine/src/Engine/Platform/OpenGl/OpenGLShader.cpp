@@ -128,35 +128,41 @@ namespace Engine
 
 	void OpenGLShader::UplaodUniformMat4(const std::string& name, glm::mat4 matrix)
 	{
+		Bind();
 		GLuint location = glGetUniformLocation(m_RendererID, name.c_str());
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 	}
 
 	void OpenGLShader::UplaodUniformFloat4(const std::string& name, glm::vec4 data)
 	{
+		Bind();
 		GLuint location = glGetUniformLocation(m_RendererID, name.c_str());
 		glUniform4f(location, data.x, data.y, data.z, data.w);
 	}
 
 	void OpenGLShader::UplaodUniformFloat3(const std::string& name, glm::vec3 data)
 	{
+		Bind();
 		GLuint location = glGetUniformLocation(m_RendererID, name.c_str());
 		glUniform3f(location, data.x, data.y, data.z);
 	}
 	void OpenGLShader::UplaodUniformFloat2(const std::string& name, glm::vec2 data)
 	{
+		Bind();
 		GLuint location = glGetUniformLocation(m_RendererID, name.c_str());
 		glUniform2f(location, data.x, data.y);
 	}
 
 	void OpenGLShader::UplaodUniformFloat1(const std::string& name, float data)
 	{
+		Bind();
 		GLuint location = glGetUniformLocation(m_RendererID, name.c_str());
 		glUniform1f(location, data);
 	}
 
 	void OpenGLShader::UplaodUniformInt1(const std::string& name, int data)
 	{
+		Bind();
 		GLuint location = glGetUniformLocation(m_RendererID, name.c_str());
 		glUniform1i(location, data);
 	}

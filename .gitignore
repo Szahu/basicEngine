@@ -11,7 +11,10 @@
 *.sln.docstates
 
 *.sln
+*.jpg
+*.png
 Engine/src/Engine/Imgui/Fonts
+Sandbox/assets
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
