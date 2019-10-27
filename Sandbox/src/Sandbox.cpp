@@ -7,8 +7,9 @@ class ExampleLayer : public Engine::Layer
 {
 public:
 	ExampleLayer()
-		: Layer("example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f)
+		: Layer("example"), m_CameraController((float)Engine::Application::Get().GetWindow().GetWidth() / (float)Engine::Application::Get().GetWindow().GetHeight(), true)
 	{
+
 		float positions[3 * 7] = {
 			-0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
 			 0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
@@ -72,19 +73,7 @@ public:
 	void OnUpdate(Engine::Timestep ts) override
 	{
 		m_FPS =  1.0f / ts;
-
-		if (Engine::Input::IsKeyPressed(EG_KEY_UP))
-			camPosition.y += m_CameraSpeed * ts;
-
-		if (Engine::Input::IsKeyPressed(EG_KEY_DOWN))
-			camPosition.y -= m_CameraSpeed * ts;
-
-		if (Engine::Input::IsKeyPressed(EG_KEY_LEFT))
-			camPosition.x -= m_CameraSpeed * ts;
-
-		if (Engine::Input::IsKeyPressed(EG_KEY_RIGHT))
-			camPosition.x += m_CameraSpeed * ts;
-
+		m_CameraController.OnUpdate(ts);
 		
 		glm::mat4 transform1 = glm::translate(glm::mat4(1.0f), translation1);
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
@@ -92,10 +81,7 @@ public:
 		Engine::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		Engine::RenderCommand::Clear();
 
-		m_Camera.SetRotation(rotation);
-		m_Camera.SetPosition(camPosition);
-
-		Engine::Renderer::BeginScene(m_Camera);
+		Engine::Renderer::BeginScene(m_CameraController.GetCamera());
 
 		
 		for (int x = 0; x < 20; x++)
@@ -136,13 +122,12 @@ public:
 
 	void OnEvent(Engine::Event& event) override
 	{
-
+		m_CameraController.OnEvent(event);
 	}
 
 private:
 	Engine::ShaderLibrary m_ShaderLibrary;
-	Engine::OrtographicCamera m_Camera; float m_CameraSpeed = 5.0f;
-	glm::vec3 camPosition = glm::vec3(0.0f);
+	Engine::OrtographicCameraController m_CameraController;
 	glm::vec3 translation1 = glm::vec3(0.0f);
 	float rotation = 0.0f;
 	float m_FPS = 0.0f;

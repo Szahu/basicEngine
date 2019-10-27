@@ -158,6 +158,7 @@
     <ClInclude Include="src\Engine\Events\KeyEvent.h" />
     <ClInclude Include="src\Engine\Events\MouseEvent.h" />
     <ClInclude Include="src\Engine\Imgui\ImGuiLayer.h" />
+    <ClInclude Include="src\Engine\OrtographicCameraController.h" />
     <ClInclude Include="src\Engine\Platform\OpenGl\OpenGLBuffer.h" />
     <ClInclude Include="src\Engine\Platform\OpenGl\OpenGLContext.h" />
     <ClInclude Include="src\Engine\Platform\OpenGl\OpenGLRendererAPI.h" />
@@ -555,6 +556,7 @@
     <ClCompile Include="src\Engine\Core\Log.cpp" />
     <ClCompile Include="src\Engine\Imgui\ImGuiBuild.cpp" />
     <ClCompile Include="src\Engine\Imgui\ImGuiLayer.cpp" />
+    <ClCompile Include="src\Engine\OrtographicCameraController.cpp" />
     <ClCompile Include="src\Engine\Platform\OpenGl\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Engine\Platform\OpenGl\OpenGLContext.cpp" />
     <ClCompile Include="src\Engine\Platform\OpenGl\OpenGLRendererAPI.cpp" />
