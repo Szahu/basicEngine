@@ -7,13 +7,13 @@
 
 namespace Engine
 {
-	VertexBuffer* VertexBuffer::Create(float* vertices, uint32_t size)
+	Ref<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size)
 	{
 
 		switch (Renderer::GetAPI())
 		{
 			case RendererAPI::API::None: EG_CORE_ASSERT(false, "RendereAPI None is not supprtoed!");  return nullptr;
-			case RendererAPI::API::OpenGL:  return new OpenGLVertexBuffer(vertices, size);
+			case RendererAPI::API::OpenGL:  return std::make_shared<OpenGLVertexBuffer>(vertices, size);
 		}
 
 		EG_CORE_ASSERT(false, "Unknow RendererAPI!");
@@ -21,13 +21,13 @@ namespace Engine
 
 	}
 
-	IndexBuffer* IndexBuffer::Create(uint32_t* indices, uint32_t count)
+	Ref<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t count)
 	{
 
 		switch (Renderer::GetAPI())
 		{
 			case RendererAPI::API::None: EG_CORE_ASSERT(false, "RendereAPI None is not supprtoed!");  return nullptr;
-			case RendererAPI::API::OpenGL:  return new OpenGLIndexBuffer(indices, count);
+			case RendererAPI::API::OpenGL:  return std::make_shared<OpenGLIndexBuffer>(indices, count);
 		}
 
 		EG_CORE_ASSERT(false, "Unknow RendererAPI!");

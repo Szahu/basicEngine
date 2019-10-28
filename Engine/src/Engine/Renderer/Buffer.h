@@ -40,8 +40,6 @@ namespace Engine
 		uint32_t Offset;
 		bool Normalised;
 
-		BufferElement() {}
-
 		BufferElement(ShaderDataType type, const std::string& name, bool normalised = false)
 			:Name(name), Type(type), Size(ShaderDataTypeSize(type)), Offset(0), Normalised(normalised)
 		{
@@ -123,7 +121,7 @@ namespace Engine
 		virtual void SetLayout(const BufferLayout& layout) = 0;
 		virtual const BufferLayout GetLayout() const = 0;
 
-		static VertexBuffer* Create(float* vertices, uint32_t size);
+		static Ref<VertexBuffer> Create(float* vertices, uint32_t size);
 	};
 
 
@@ -139,7 +137,7 @@ namespace Engine
 
 		virtual uint32_t GetCount() = 0;
 
-		static IndexBuffer* Create(uint32_t* indices, uint32_t count);
+		static Ref<IndexBuffer> Create(uint32_t* indices, uint32_t count);
 	};
 
 

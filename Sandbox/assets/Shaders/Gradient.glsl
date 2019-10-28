@@ -28,6 +28,6 @@ uniform vec4 u_Color;
 
 void main() 
 {
-	color = v_Color * u_Color;
+	color = v_Color * (u_Color + vec4(0.0, 0.0, 0.0, 1.0));
 }
 						

@@ -30,4 +30,9 @@ namespace Engine
 	{
 		glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 	}
+
+	void OpenGLRendererAPI::DrawInstanced(const Engine::Ref<VertexArray>& vertexArray, uint32_t count)
+	{
+		glDrawElementsInstanced(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr, count);
+	}
 }

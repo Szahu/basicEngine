@@ -14,11 +14,11 @@ namespace Engine
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
 
-		virtual void AddVertexBuffer(const Engine::Ref<VertexBuffer>& vertexBuffer) = 0;
+		virtual void AddVertexBuffer(const Engine::Ref<VertexBuffer>& vertexBuffer, bool instancing = false) = 0;
 		virtual void SetIndexBuffer(const Engine::Ref<IndexBuffer>& indexBuffer) = 0;
 
 		virtual const Engine::Ref<IndexBuffer>& GetIndexBuffer() = 0;
 
-		static VertexArray* Create();
+		static Ref<VertexArray> Create();
 	};
 }

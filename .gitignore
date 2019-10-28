@@ -13,6 +13,9 @@
 *.sln
 *.jpg
 *.png
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
 Engine/src/Engine/Imgui/Fonts
 Sandbox/assets
 

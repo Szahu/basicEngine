@@ -1,8 +1,15 @@
+// -------- Entry Point---------------------
+#include <Engine/Core/EntryPoint.h>      
+// -----------------------------------------
 #include <Engine.h>
 #include "imgui/imgui.h"
 
 #include "Engine/Platform/OpenGl/OpenGLShader.h"
 
+#include "Sandbox2D.h"
+#include "Sandbox3D.h"
+
+/*
 class ExampleLayer : public Engine::Layer
 {
 public:
@@ -43,22 +50,22 @@ public:
 
 		// Setup for a Triangle
 		Engine::Ref<Engine::VertexBuffer> m_VertexBuffer;
-		m_VertexBuffer.reset(Engine::VertexBuffer::Create(positions, sizeof(positions)));
+		m_VertexBuffer = Engine::VertexBuffer::Create(positions, sizeof(positions));
 		m_VertexBuffer->SetLayout(layout);
 		Engine::Ref<Engine::IndexBuffer> m_IndexBuffer;
-		m_IndexBuffer.reset(Engine::IndexBuffer::Create(indices, 3));
-		m_VertexArray.reset(Engine::VertexArray::Create());
+		m_IndexBuffer = Engine::IndexBuffer::Create(indices, 3);
+		m_VertexArray = Engine::VertexArray::Create();
 		m_VertexArray->AddVertexBuffer(m_VertexBuffer);
 		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
 		m_VertexArray->Unbind();
 
 		// Setup for a Square
 		Engine::Ref<Engine::VertexBuffer> m_VertexBuffer2;
-		m_VertexBuffer2.reset(Engine::VertexBuffer::Create(positions1, sizeof(positions1)));
+		m_VertexBuffer2 = Engine::VertexBuffer::Create(positions1, sizeof(positions1));
 		m_VertexBuffer2->SetLayout(layout1);
 		Engine::Ref<Engine::IndexBuffer> m_IndexBuffer2;
-		m_IndexBuffer2.reset(Engine::IndexBuffer::Create(indices1, 6));
-		m_VertexArray2.reset(Engine::VertexArray::Create());
+		m_IndexBuffer2 = Engine::IndexBuffer::Create(indices1, 6);
+		m_VertexArray2 = Engine::VertexArray::Create();
 		m_VertexArray2->AddVertexBuffer(m_VertexBuffer2);
 		m_VertexArray2->SetIndexBuffer(m_IndexBuffer2);
 		m_VertexArray2->Unbind();
@@ -98,7 +105,6 @@ public:
 			}
 		}
 
-		
 		std::dynamic_pointer_cast<Engine::OpenGLShader>(m_Shader)->UplaodUniformFloat4("u_Color", m_TriangleColor);
 		Engine::Renderer::Submit(m_VertexArray, m_Shader, transform1);
 
@@ -139,16 +145,17 @@ private:
 	Engine::Ref<Engine::Texture2D> m_TextureDirt;
 	Engine::Ref<Engine::Texture2D> m_TextureLogo;
 };
+*/
 
 class Sandbox : public Engine::Application
 {
 public:
 	Sandbox()
 	{
-		EG_INFO("Sandbox app Online");
 		
-
-		PushLayer(new ExampleLayer());
+		//PushLayer(new Sandbox2D());
+		PushLayer(new Sandbox3D());
+		//PushLayer(new ExampleLayer());
 	}
 	~Sandbox()
 	{

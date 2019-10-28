@@ -34,6 +34,7 @@ namespace Engine
 		m_Window->SetVSync(false);
 
 		Renderer::Init();
+		Renderer2D::Init();
 
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
@@ -95,6 +96,8 @@ namespace Engine
 
 	bool Application::OnWindowClose(WindowCloseEvent& e)
 	{
+
+		Renderer2D::ShutDown();
 		m_Running = false;
 		return true;
 	}

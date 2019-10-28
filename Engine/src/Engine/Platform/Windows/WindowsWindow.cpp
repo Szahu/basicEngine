@@ -165,6 +165,11 @@ namespace Engine
 		m_Context->SwapBuffers();
 	}
 
+	void WindowsWindow::SetCursorPosition(float x, float y) const
+	{
+		glfwSetCursorPos(m_Window, x, y);
+	}
+
 	void WindowsWindow::SetVSync(bool enabled)
 	{
 		if (enabled)

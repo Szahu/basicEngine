@@ -158,7 +158,6 @@
     <ClInclude Include="src\Engine\Events\KeyEvent.h" />
     <ClInclude Include="src\Engine\Events\MouseEvent.h" />
     <ClInclude Include="src\Engine\Imgui\ImGuiLayer.h" />
-    <ClInclude Include="src\Engine\OrtographicCameraController.h" />
     <ClInclude Include="src\Engine\Platform\OpenGl\OpenGLBuffer.h" />
     <ClInclude Include="src\Engine\Platform\OpenGl\OpenGLContext.h" />
     <ClInclude Include="src\Engine\Platform\OpenGl\OpenGLRendererAPI.h" />
@@ -170,8 +169,11 @@
     <ClInclude Include="src\Engine\Renderer\Buffer.h" />
     <ClInclude Include="src\Engine\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\Engine\Renderer\OrtographicCamera.h" />
+    <ClInclude Include="src\Engine\Renderer\OrtographicCameraController.h" />
+    <ClInclude Include="src\Engine\Renderer\PerspectiveCamera.h" />
     <ClInclude Include="src\Engine\Renderer\RenderCommand.h" />
     <ClInclude Include="src\Engine\Renderer\Renderer.h" />
+    <ClInclude Include="src\Engine\Renderer\Renderer2D.h" />
     <ClInclude Include="src\Engine\Renderer\RendererAPI.h" />
     <ClInclude Include="src\Engine\Renderer\Shader.h" />
     <ClInclude Include="src\Engine\Renderer\Texture.h" />
@@ -556,7 +558,6 @@
     <ClCompile Include="src\Engine\Core\Log.cpp" />
     <ClCompile Include="src\Engine\Imgui\ImGuiBuild.cpp" />
     <ClCompile Include="src\Engine\Imgui\ImGuiLayer.cpp" />
-    <ClCompile Include="src\Engine\OrtographicCameraController.cpp" />
     <ClCompile Include="src\Engine\Platform\OpenGl\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Engine\Platform\OpenGl\OpenGLContext.cpp" />
     <ClCompile Include="src\Engine\Platform\OpenGl\OpenGLRendererAPI.cpp" />
@@ -567,8 +568,11 @@
     <ClCompile Include="src\Engine\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\Engine\Renderer\Buffer.cpp" />
     <ClCompile Include="src\Engine\Renderer\OrtographicCamera.cpp" />
+    <ClCompile Include="src\Engine\Renderer\OrtographicCameraController.cpp" />
+    <ClCompile Include="src\Engine\Renderer\PerspectiveCamera.cpp" />
     <ClCompile Include="src\Engine\Renderer\RenderCommand.cpp" />
     <ClCompile Include="src\Engine\Renderer\Renderer.cpp" />
+    <ClCompile Include="src\Engine\Renderer\Renderer2D.cpp" />
     <ClCompile Include="src\Engine\Renderer\RendererAPI.cpp" />
     <ClCompile Include="src\Engine\Renderer\Shader.cpp" />
     <ClCompile Include="src\Engine\Renderer\Texture.cpp" />

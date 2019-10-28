@@ -14,5 +14,6 @@ namespace Engine
 		virtual void Clear() override;
 
 		virtual void DrawIndexed(const Engine::Ref<VertexArray>& vertexArray) override;
+		virtual void DrawInstanced(const Engine::Ref<VertexArray>& vertexArray, uint32_t count) override;
 	};
 }

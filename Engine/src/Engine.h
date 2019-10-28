@@ -11,10 +11,12 @@
 #include "Engine/Core/MouseButtonCodes.h"
 #include "Engine/Core/Input.h"
 
-#include "Engine/OrtographicCameraController.h"
+#include "Engine/Renderer/OrtographicCameraController.h"
+#include "Engine/Renderer/PerspectiveCamera.h"
 
 // -------- Renderer Stuff-------------------
 #include "Engine/Renderer/Renderer.h"
+#include "Engine/Renderer/Renderer2D.h"
 #include "Engine/Renderer/RenderCommand.h"
 
 #include "Engine/Renderer/Buffer.h"
@@ -24,8 +26,5 @@
 
 #include "Engine/Renderer/OrtographicCamera.h"
 
+#include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
-
-// -------- Entry Point---------------------
-#include "Engine/Core/EntryPoint.h"
-// -----------------------------------------

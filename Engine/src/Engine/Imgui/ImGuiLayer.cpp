@@ -7,39 +7,9 @@
 
 #include "Engine/Core/Application.h"
 
-
-//Temporary for getting workingDir
-#include <string>
-#include <stdio.h>  /* defines FILENAME_MAX */
-#ifdef WIN32 // enabled when compiling on windows
-#include <direct.h>
-#define GetCurrentDir _getcwd
-#else
-#include <unistd.h>
-#define GetCurrentDir getcwd
-#endif
-
 //Temporary 
 #include <GLFW/glfw3.h>
 #include <Glad/glad.h>
-
-// Note : I use logging macros (from Hazel)
-const std::string CurrentPath()
-{
-	char cCurrentPath[FILENAME_MAX];
-	if (!GetCurrentDir(cCurrentPath, sizeof(cCurrentPath)))
-	{
-		EG_CORE_ERROR("Couldn't Get The Current Working Dir {0}", cCurrentPath);
-		return NULL;
-	}
-
-	//EG_CORE_INFO("The current working directory is : {0}", cCurrentPath);
-
-	std::string result = cCurrentPath;
-	std::replace(result.begin(), result.end(), '\\', '/');
-
-	return result;
-}
 
 namespace Engine
 {
@@ -55,7 +25,7 @@ namespace Engine
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
-		ImFont* font1 = io.Fonts->AddFontFromFileTTF((CurrentPath() + "/../Engine/src/Engine/ImGUi/Fonts/Roboto/Roboto-Medium.ttf").c_str(), 16.0f);
+		ImFont* font1 = io.Fonts->AddFontFromFileTTF("assets/Fonts/Roboto/Roboto-medium.ttf", 16.0f);
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
 		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking

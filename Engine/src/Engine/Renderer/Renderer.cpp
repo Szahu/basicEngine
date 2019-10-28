@@ -3,7 +3,6 @@
 
 #include "Engine/Platform/OpenGl/OpenGLShader.h"
 
-
 namespace Engine
 {
 	Renderer::SceneData* Renderer::m_SceneData = new Renderer::SceneData;
@@ -18,7 +17,7 @@ namespace Engine
 		RenderCommand::SetViewport(0, 0, width, height);
 	}
 
-	void Renderer::BeginScene(OrtographicCamera& camera)
+	void Renderer::BeginScene(PerspectiveCamera& camera)
 	{
 		m_SceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();
 	}
@@ -27,13 +26,23 @@ namespace Engine
 	{
 	}
 
-	void Renderer::Submit(const Engine::Ref<VertexArray>& vertexArray, const Engine::Ref<Shader>& shader, const glm::mat4 transform)
+	void Renderer::Submit(const Engine::Ref<VertexArray>& vertexArray, const Engine::Ref<Shader>& shader, const glm::mat4& transform, uint32_t instances)
 	{
 		std::dynamic_pointer_cast<OpenGLShader>(shader)->Bind();
 		std::dynamic_pointer_cast<OpenGLShader>(shader)->UplaodUniformMat4("u_ViewProjectionMatrix", m_SceneData->ViewProjectionMatrix);
 		std::dynamic_pointer_cast<OpenGLShader>(shader)->UplaodUniformMat4("u_Transform", transform);
 
-		vertexArray->Bind();
-		RenderCommand::DrawIndexed(vertexArray);
+		if (instances == 0)
+		{
+			vertexArray->Bind();
+			RenderCommand::DrawIndexed(vertexArray);
+		}
+		else
+		{
+			vertexArray->Bind();
+			RenderCommand::DrawInstanced(vertexArray, instances);
+		}
 	}
+
+
 }

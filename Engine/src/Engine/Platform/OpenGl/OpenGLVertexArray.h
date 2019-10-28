@@ -12,7 +12,7 @@ namespace Engine
 		virtual void Bind() const  override;
 		virtual void Unbind() const override;
 
-		virtual void AddVertexBuffer(const Engine::Ref<VertexBuffer>& vertexBuffer) override;
+		virtual void AddVertexBuffer(const Engine::Ref<VertexBuffer>& vertexBuffer, bool instancing = false) override;
 		virtual void SetIndexBuffer(const Engine::Ref<IndexBuffer>& indexBuffer) override;
 
 		inline virtual const Engine::Ref<IndexBuffer>& GetIndexBuffer() override { return m_IndexBuffer; }
@@ -23,5 +23,6 @@ namespace Engine
 		Engine::Ref<IndexBuffer> m_IndexBuffer;
 	private:
 		uint32_t m_RendererID;
+		unsigned int index = 0;
 	};
 }

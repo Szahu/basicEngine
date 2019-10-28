@@ -33,6 +33,11 @@ namespace Engine
 			s_RendererAPI->DrawIndexed(vertexArray);
 		}
 
+		inline static void DrawInstanced(const Engine::Ref<VertexArray>& vertexArray, uint32_t count)
+		{
+			s_RendererAPI->DrawInstanced(vertexArray, count);
+		}
+
 	private:
 		static RendererAPI* s_RendererAPI;
 	};

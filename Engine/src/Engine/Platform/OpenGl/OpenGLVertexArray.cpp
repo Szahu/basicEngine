@@ -39,22 +39,23 @@ namespace Engine
 		glBindVertexArray(0);
 	}
 
-	void OpenGLVertexArray::AddVertexBuffer(const Engine::Ref<VertexBuffer>& vertexBuffer)
+	void OpenGLVertexArray::AddVertexBuffer(const Engine::Ref<VertexBuffer>& vertexBuffer, bool instancing)
 	{
 		EG_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "VertexBuffer has no layout!");
 
 		glBindVertexArray(m_RendererID);
 		vertexBuffer->Bind();
 
-		unsigned int i = 0;
+		
 		for (const auto& element : vertexBuffer->GetLayout())
 		{
-			glEnableVertexAttribArray(i);
-			glVertexAttribPointer(i, element.GetComponenetCount(),
+			glEnableVertexAttribArray(index);
+			glVertexAttribPointer(index, element.GetComponenetCount(),
 				ShaderDataTypeToOpenGLBaseType(element.Type),
 				element.Normalised ? GL_TRUE : GL_FALSE,
 				vertexBuffer->GetLayout().GetStride(), (const void*)element.Offset);
-			i++;
+			if (instancing) glVertexAttribDivisor(index, 1);
+			index++;
 		}
 
 		m_VertexBuffers.push_back(vertexBuffer);
