@@ -40,6 +40,7 @@ namespace Engine
 			unsigned int Width, Height;
 			bool VSync;
 
+
 			EventCallbackFn EventCallback;
 		};
 

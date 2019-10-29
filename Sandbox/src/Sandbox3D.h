@@ -3,7 +3,6 @@
 #include "Engine.h"
 #include "Engine/Core/Layer.h"
 
-#include <glad/glad.h>
 
 class Sandbox3D : public Engine::Layer
 {
@@ -20,15 +19,18 @@ public:
 	void OnEvent(Engine::Event& event) override;
 
 private:
-	bool OnMouseButton(Engine::MouseButtonPressedEvent& e);
 
 private:
 	Engine::Ref<Engine::VertexArray> m_VertexArray;
+	Engine::Ref<Engine::VertexArray> m_LampVertexArray;
+	glm::vec3 m_LampPosition = { 2.0f, 0.0f, 0.0f };
 	Engine::Ref<Engine::Shader> m_Shader;
-	Engine::PerspectiveCamera m_Camera;
-	glm::vec3 m_CameraPosition = { 0.0f, 0.0f, 4.0f };
-	glm::vec2 m_Angles = glm::vec2(3.14f, 0.0f);
+	Engine::Ref<Engine::Shader> m_FlatColorShader;
+	Engine::Ref<Engine::Texture2D> m_DirtTexture;
+	Engine::PerspectiveCameraController m_CameraController;
 	glm::vec3 m_CubeColor = { 0.3f, 0.7f, 0.5f };
-	float m_MouseSpeed = 1.0f;
-	float m_CameraMoveSpeed = 4.0f;
+
+	int renderCount = 1;
+
+	unsigned int FPS = 0;
 };

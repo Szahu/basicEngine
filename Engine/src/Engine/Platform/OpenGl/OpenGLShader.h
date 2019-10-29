@@ -22,6 +22,7 @@ namespace Engine
 		virtual void SetFloat3(const std::string& name, const glm::vec3& value) override { UplaodUniformFloat3(name, value); }
 		virtual void SetFloat2(const std::string& name, const glm::vec2& value) override { UplaodUniformFloat2(name, value); }
 		virtual void SetFloat1(const std::string& name, const float value) override { UplaodUniformFloat1(name, value); }
+		virtual void SetInt1(const std::string& name, const int value) override { UplaodUniformInt1(name, value); }
 
 		virtual const std::string& GetName() const override { return m_Name; }
 

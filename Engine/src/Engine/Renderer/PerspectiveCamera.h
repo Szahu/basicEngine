@@ -23,6 +23,9 @@ namespace Engine
 		inline const void SetAngles(float horizontal, float vertical) { m_HorizontalAngle = horizontal; m_VerticalAngle = vertical; RecalculateViewMatrix(); }
 		inline const glm::vec2& GetAngles() { return glm::vec2(m_HorizontalAngle, m_VerticalAngle); }
 
+		inline const float GetFov() const { return m_FOV; }
+		inline const void SetFov(float value) { m_FOV = value; SetProjection(m_FOV, m_AspectRatio); }
+
 		const glm::mat4 GetProjectionMatrix() const { return m_ProjectionMatrix; }
 		const glm::mat4 GetViewMatrix() const { return m_ViewMatrix; }
 		const glm::mat4 GetViewProjectionMatrix() const { return m_ViewProjectionMatrix; }
@@ -39,6 +42,8 @@ namespace Engine
 		glm::vec3 m_Direction = { 0.0f, 0.0f, 0.0f };
 		glm::vec3 m_VectorRight = { 0.0f, 0.0f, 0.0f };
 		glm::vec3 m_VectorUp = { 0.0f, 0.0f, 0.0f };
+		float m_AspectRatio = 1.0f;
+		float m_FOV = 65.0f;
 		float m_HorizontalAngle = 3.14f;
 		float m_VerticalAngle = 0.0f;
 		float m_Rotation = 0.0f;

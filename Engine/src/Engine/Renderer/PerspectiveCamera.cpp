@@ -11,7 +11,7 @@ namespace Engine
 		m_ViewMatrix(glm::lookAt(glm::vec3(4, 3, 3),
 			glm::vec3(0, 0, 0),
 			glm::vec3(0, 1, 0))),
-		m_ViewProjectionMatrix(m_ProjectionMatrix * m_ViewMatrix)
+		m_ViewProjectionMatrix(m_ProjectionMatrix * m_ViewMatrix), m_AspectRatio(aspectRatio)
 	{
 
 	}
