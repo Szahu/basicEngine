@@ -17,10 +17,12 @@ IncludeDir["Glad"] = "Engine/vendor/Glad/include"
 IncludeDir["imgui"] = "Engine/vendor/imgui"
 IncludeDir["glm"] = "Engine/vendor/glm"
 IncludeDir["stb"] = "Engine/vendor/stb_image"
+IncludeDir["assimp"] = "Engine/vendor/assimp/include"
 
 include "Engine/vendor/GLFW"
 include "Engine/vendor/Glad"
 include "Engine/vendor/imgui"
+
 
 project "Engine"
 	location "Engine"
@@ -56,7 +58,8 @@ project "Engine"
 		"GLFW",
 		"Glad",
 		"imgui",
-		"opengl32.lib"
+		"opengl32.lib", 
+		"assimp-vc142-mtd.lib"
 	}
 
 	includedirs
@@ -68,12 +71,13 @@ project "Engine"
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.imgui}",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.stb}"
+		"%{IncludeDir.stb}",
+		"%{IncludeDir.assimp}"
 	}
 
 	libdirs
 	{
-		
+		"%{prj.name}/vendor/assimp/lib"
 	}
 
 
@@ -127,6 +131,8 @@ project "Sandbox"
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.imgui}",
+		"%{IncludeDir.stb}",
+		"%{IncludeDir.assimp}"
 	}
 
 	links 

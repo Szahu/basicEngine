@@ -24,7 +24,9 @@
 #include "Engine/Renderer/Shader.h"
 #include "Engine/Renderer/Texture.h"
 
-#include "Engine/Renderer/OrtographicCamera.h"
+#include "Engine/Renderer/Model.h"
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
+
+#include "Engine/Renderer/Lights.h"

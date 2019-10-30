@@ -18,6 +18,10 @@
 *.vcxproj.user
 Engine/src/Engine/Imgui/Fonts
 Sandbox/assets
+Engine/vendor
+bin
+bin-int
+
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

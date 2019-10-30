@@ -18,10 +18,12 @@ namespace Engine
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& filepath)
+		:m_Path(filepath)
 	{
 		std::string source = ReadFile(filepath);
 		auto shaderSouces = PreProcess(source);
 		Compile(shaderSouces);
+
 
 		// get aname from filepath
 		auto lastSlash = filepath.find_last_of("/\\");
@@ -43,6 +45,7 @@ namespace Engine
 	std::string OpenGLShader::ReadFile(const std::string& filepath)
 	{
 		std::string result;
+		
 
 		std::ifstream in(filepath, std::ios::in | std::ios::binary);
 		if (in)
@@ -89,7 +92,7 @@ namespace Engine
 	void OpenGLShader::Compile(std::unordered_map<GLenum, std::string>& shaderSources)
 	{
 		GLuint program = glCreateProgram();
-		EG_CORE_ASSERT(shaderSources.size() <= 2, "Onmly 2 shaders in one file are supported");
+		EG_CORE_ASSERT(shaderSources.size() <= 2, "Only 2 shaders in one file are supported");
 		std::array<GLenum, 2> glShaderIDs;
 		unsigned int glShaderIdIndex = 0;
 		for (auto& kv : shaderSources)
@@ -116,7 +119,7 @@ namespace Engine
 
 				glDeleteShader(shader);
 
-				EG_CORE_ERROR("{0}", infoLog.data());
+				EG_CORE_ERROR("{0}, from Path: {1}", infoLog.data(), m_Path);
 				EG_CORE_ASSERT(false, "Shader compilation failure!");
 				break;
 			}

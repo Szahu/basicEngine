@@ -3,6 +3,7 @@
 
 #include "Engine/Platform/OpenGl/OpenGLShader.h"
 
+
 namespace Engine
 {
 	Renderer::SceneData* Renderer::m_SceneData = new Renderer::SceneData;
@@ -17,9 +18,10 @@ namespace Engine
 		RenderCommand::SetViewport(0, 0, width, height);
 	}
 
-	void Renderer::BeginScene(PerspectiveCamera& camera)
+	void Renderer::BeginScene(PerspectiveCamera& camera, PointLight& light)
 	{
-		m_SceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();
+		m_SceneData->m_Camera = &camera;
+		m_SceneData->light = light;
 	}
 
 	void Renderer::EndScene()
@@ -28,9 +30,15 @@ namespace Engine
 
 	void Renderer::Submit(const Engine::Ref<VertexArray>& vertexArray, const Engine::Ref<Shader>& shader, const glm::mat4& transform, uint32_t instances)
 	{
-		std::dynamic_pointer_cast<OpenGLShader>(shader)->Bind();
-		std::dynamic_pointer_cast<OpenGLShader>(shader)->UplaodUniformMat4("u_ViewProjectionMatrix", m_SceneData->ViewProjectionMatrix);
-		std::dynamic_pointer_cast<OpenGLShader>(shader)->UplaodUniformMat4("u_Transform", transform);
+		shader->Bind();
+		shader->SetMat4("u_ViewProjectionMatrix", m_SceneData->m_Camera->GetViewProjectionMatrix());
+		shader->SetMat4("u_Transform", transform);
+		shader->SetFloat3("u_CameraPosition", m_SceneData->m_Camera->GetPosition());
+
+		shader->SetFloat3("u_Light.position", m_SceneData->light.GetPosition());
+		shader->SetFloat3("u_Light.ambient", m_SceneData->light.GetAmbient());
+		shader->SetFloat3("u_Light.diffuse", m_SceneData->light.GetDiffuse());
+		shader->SetFloat3("u_Light.specular", m_SceneData->light.GetSpecular());
 
 		if (instances == 0)
 		{
@@ -42,6 +50,21 @@ namespace Engine
 			vertexArray->Bind();
 			RenderCommand::DrawInstanced(vertexArray, instances);
 		}
+	}
+
+	void Renderer::Submit(Model& model, const Engine::Ref<Shader>& shader, const glm::mat4& transform)
+	{
+		shader->Bind();
+		shader->SetMat4("u_ViewProjectionMatrix", m_SceneData->m_Camera->GetViewProjectionMatrix());
+		shader->SetMat4("u_Transform", transform);
+		shader->SetFloat3("u_CameraPosition", m_SceneData->m_Camera->GetPosition());
+
+		shader->SetFloat3("u_Light.position", m_SceneData->light.GetPosition());
+		shader->SetFloat3("u_Light.diffuse", m_SceneData->light.GetDiffuse());
+		shader->SetFloat3("u_Light.ambient", m_SceneData->light.GetAmbient());
+		shader->SetFloat3("u_Light.specular", m_SceneData->light.GetSpecular());
+
+		model.Draw(shader);
 	}
 
 

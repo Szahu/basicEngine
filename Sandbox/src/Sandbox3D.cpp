@@ -6,7 +6,7 @@
 
 
 Sandbox3D::Sandbox3D()
-	:Layer("Sandbox3D"), m_CameraController(65.0f, 1280.0f / 720.0f)
+	:Layer("Sandbox3D"), m_CameraController(65.0f, 1280.0f / 720.0f), m_Model("assets/Models/nanosuit/scene.gltf")
 {
 
 }
@@ -17,15 +17,15 @@ void Sandbox3D::OnAttach()
 
 	float CubePositions[8 * 3] =
 	{  //Positions         | Normals
-		-1.0f, -1.0f,  1.0f, 
-		 1.0f, -1.0f,  1.0f, 
-		 1.0f, -1.0f, -1.0f, 
-		-1.0f, -1.0f, -1.0f,
-						   
-		-1.0f,  1.0f,  1.0f,
-		 1.0f,  1.0f,  1.0f,
-		 1.0f,  1.0f, -1.0f,
-		-1.0f,  1.0f, -1.0f
+		-0.5f, -0.5f,  0.5f, 
+		 0.5f, -0.5f,  0.5f, 
+		 0.5f, -0.5f, -0.5f, 
+		-0.5f, -0.5f, -0.5f,
+				
+		-0.5f,  0.5f,  0.5f,
+		 0.5f,  0.5f,  0.5f,
+		 0.5f,  0.5f, -0.5f,
+		-0.5f,  0.5f, -0.5f
 	}; 
 
 	float positions[] = {  //Positions:                                            |Normals:           |Tex Coords:  
@@ -76,22 +76,23 @@ void Sandbox3D::OnAttach()
 
 
 	
-
-	glm::vec3 translations[10000];
+	
+	glm::vec3 translations[10];
+	
 	int index = 0;
 	int offset = 4;
-	for (int x = 0; x < 100; x++)
+	for (int x = 0; x < 10; x++)
 	{
-		for (int z = 0; z < 10; z++)
+		for (int z = 0; z < 1; z++)
 		{
-			for (int y = 0; y < 10; y++)
+			for (int y = 0; y < 1; y++)
 			{
 				glm::vec3 translation(x * offset, y * offset, z * offset);
 				translations[index++] = translation;
 			}
 			
 		}
-	}
+	} 
 	Engine::Ref<Engine::VertexBuffer> t_TranslationsBuffer = Engine::VertexBuffer::Create(&translations[0].x, sizeof(translations));
 
 
@@ -139,8 +140,8 @@ void Sandbox3D::OnAttach()
 			v_FragPos = vec3(u_Transform * vec4(a_Positions, 1.0));
 			v_Normal = mat3(transpose(inverse(u_Transform))) * a_Normals;				
 
-			gl_Position = u_ViewProjectionMatrix * u_Transform * vec4(a_Positions.x + a_Translations.x ,a_Positions.y + a_Translations.y , a_Positions.z + a_Translations.z , 1.0);
-			//gl_Position = u_ViewProjectionMatrix * u_Transform * vec4(a_Positions.x + (gl_InstanceID * 2.3),a_Positions.y  , a_Positions.z , 1.0);
+			//gl_Position = u_ViewProjectionMatrix * u_Transform * vec4(a_Positions.x + a_Translations.x ,a_Positions.y + a_Translations.y , a_Positions.z + a_Translations.z , 1.0);
+			gl_Position = u_ViewProjectionMatrix * u_Transform * vec4(a_Positions.x ,a_Positions.y  , a_Positions.z , 1.0);
 		}
 
 
@@ -156,7 +157,7 @@ void Sandbox3D::OnAttach()
 		uniform vec3 u_LightPosition;
 		uniform vec3 u_CameraPosition;
 
-		uniform sampler2D u_Texture;
+		uniform sampler2D texture_diffuse1;
 
 		in vec3 v_FragPos;			
 		in vec3 v_Normal;	
@@ -165,7 +166,8 @@ void Sandbox3D::OnAttach()
 
 		void main() 
 		{
-			vec4 ObjectColor = texture(u_Texture, v_TexCoord);
+			vec4 ObjectColor = texture(texture_diffuse1, v_TexCoord);
+			//vec4 ObjectColor = u_Color;			
 
 			// ambient
 			float ambientStrength = 0.05;
@@ -195,6 +197,8 @@ void Sandbox3D::OnAttach()
 	m_Shader->SetFloat4("u_Color", glm::vec4(m_CubeColor, 1.0f));
 	m_Shader->SetMat4("u_Transform", glm::mat4(1.0f));
 
+	m_MatShader = Engine::Shader::Create("assets/shaders/Material.glsl");
+
 	m_FlatColorShader = Engine::Shader::Create("assets/shaders/FlatColor.glsl");
 	m_FlatColorShader->Bind();
 	m_FlatColorShader->SetFloat4("u_Color", {1.0f, 1.0f, 1.0f, 1.0f});
@@ -214,20 +218,21 @@ void Sandbox3D::OnUpdate(Engine::Timestep ts)
 
 	FPS = 1.0f / ts;
 
+	m_Light.SetPosition(m_LampPosition);
+
 	Engine::RenderCommand::Clear();
 	Engine::RenderCommand::SetClearColor({ 0.06f, 0.06f, 0.06f, 1.0f });
 
-	Engine::Renderer::BeginScene(m_CameraController.GetCamera());
+	Engine::Renderer::BeginScene(m_CameraController.GetCamera(), m_Light);
 	
-	m_Shader->Bind();
-	m_Shader->SetFloat4("u_Color", glm::vec4(m_CubeColor, 1.0f));
-	m_Shader->SetFloat3("u_LightColor", { 1.0f, 1.0f, 1.0f });
-	m_Shader->SetFloat3("u_LightPosition", m_LampPosition);
-	m_Shader->SetFloat3("u_CameraPosition", m_CameraController.GetCamera().GetPosition());
-	m_Shader->SetInt1("u_Texture", 0);
 	m_DirtTexture->Bind();
 	m_VertexArray->Bind();
-	Engine::Renderer::Submit(m_VertexArray, m_Shader, glm::mat4(1.0f), renderCount);
+	Engine::Renderer::Submit(m_VertexArray, m_MatShader, glm::mat4(1.0f), renderCount);
+	m_DirtTexture->Unbind();
+
+	m_MatShader->Bind();
+	m_MatShader->SetFloat4("u_Color", glm::vec4(m_CubeColor, 1.0f));
+	Engine::Renderer::Submit(m_Model, m_MatShader, glm::mat4(1.0f));
 
 	m_FlatColorShader->Bind();
 	glm::mat4 lampTransform = glm::translate(glm::mat4(1.0f), m_LampPosition) * glm::scale(glm::mat4(1.0f), { 0.5f, 0.5f, 0.5 });
@@ -239,9 +244,12 @@ void Sandbox3D::OnUpdate(Engine::Timestep ts)
 void Sandbox3D::OnImGuiRender()
 {
 	ImGui::Text("FPS: %i", FPS);
-	ImGui::ColorPicker3("Cube color", &m_CubeColor.x);
-	ImGui::SliderFloat3("Lamp Position", &m_LampPosition.x, -10.0f, 10.0f);
+	ImGui::ColorEdit3("Cube color", &m_CubeColor.x);
+	ImGui::SliderFloat3("Lamp Position", &m_LampPosition.x, -100.0f, 100.0f);
 	ImGui::SliderInt("Render Count", &renderCount, 0, 10000);
+	ImGui::ColorEdit3("Lamp Ambient", &amcol.x); m_Light.SetAmbient(amcol);
+	ImGui::ColorEdit3("Lamp Diffuse", &diffcol.x); m_Light.SetDiffuse(diffcol);
+	ImGui::ColorEdit3("Lamp Speculkar", &speccol.x); m_Light.SetSpecular(speccol);
 }
 
 void Sandbox3D::OnEvent(Engine::Event& event)

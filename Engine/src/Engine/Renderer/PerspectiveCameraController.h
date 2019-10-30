@@ -5,7 +5,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 
 #include "Engine/Core/Timestep.h"
-#include "Engine/Events/MouseEvent.h";
+#include "Engine/Events/MouseEvent.h"
 
 namespace Engine
 {
