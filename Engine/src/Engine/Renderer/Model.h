@@ -34,6 +34,8 @@ namespace Engine
 
 		~Model() = default;
 
+		const Ref<VertexArray>& GetVertexArray() const { return meshes[0].GetVertexArray(); };
+
 		void Draw(const Engine::Ref<Engine::Shader>& shader);
 	private:
 		//vector<m_Texture> textures_loaded;

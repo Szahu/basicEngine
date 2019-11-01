@@ -18,8 +18,8 @@ namespace Engine
 
 	void PerspectiveCamera::SetProjection(float fov, float aspectRatio)
 	{
-		m_ProjectionMatrix = glm::perspective(glm::radians(fov), aspectRatio, -1.0f, 100.0f);
-		m_ViewProjectionMatrix = m_ProjectionMatrix * m_ViewMatrix;
+		m_ProjectionMatrix = glm::perspective(glm::radians(fov), aspectRatio, 0.1f, 100.0f);
+		RecalculateViewMatrix();
 	}
 
 

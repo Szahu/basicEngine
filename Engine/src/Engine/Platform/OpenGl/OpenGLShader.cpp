@@ -210,10 +210,17 @@ namespace Engine
 
 	void OpenGLShader::UplaodUniformInt1(const std::string& name, int data)
 	{
-				GLuint location = glGetUniformLocation(m_RendererID, name.c_str());
+		GLuint location = glGetUniformLocation(m_RendererID, name.c_str());
 		glUniform1i(location, data);
 	}
 
+	void OpenGLShader::UploadUniformFloatv(const std::string& name, const float* value, uint32_t count)
+	{
+		GLuint location = glGetUniformLocation(m_RendererID, name.c_str());
+		glUniform1fv(location, count, value);
+	}
+
+	
 
 }
 

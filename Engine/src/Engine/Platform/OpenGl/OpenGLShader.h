@@ -26,6 +26,8 @@ namespace Engine
 		virtual void SetFloat1(const std::string& name, const float value) override { UplaodUniformFloat1(name, value); }
 		virtual void SetInt1(const std::string& name, const int value) override { UplaodUniformInt1(name, value); }
 
+		virtual void SetFloatV(const std::string& name, const float* value, uint32_t count) override { UploadUniformFloatv(name, value, count); }
+
 		virtual const std::string& GetName() const override { return m_Name; }
 
 		void UplaodUniformMat4(const std::string& name, const glm::mat4& matrix);
@@ -34,6 +36,8 @@ namespace Engine
 		void UplaodUniformFloat2(const std::string& name, const glm::vec2& data);
 		void UplaodUniformFloat1(const std::string& name, float data);
 		void UplaodUniformInt1(const std::string& name, int data);
+
+		void UploadUniformFloatv(const std::string& name, const float* value, uint32_t count);
 
 	private:
 		std::string ReadFile(const std::string& filepath);

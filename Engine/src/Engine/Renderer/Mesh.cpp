@@ -77,22 +77,18 @@ namespace Engine
 		}
 		
 		shader->Bind();
-		shader->SetFloat3("u_Material.diffuse", m_material.Diffuse);
-		shader->SetFloat3("u_Material.ambient", m_material.Ambient);
-		shader->SetFloat3("u_Material.specular", m_material.Specular);
-		shader->SetFloat1("u_Material.shininess", m_material.Shininess);
-
-		//shader->SetFloat3("u_Light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
-		//shader->SetFloat3("u_Light.ambient", glm::vec3(0.05f, 0.05f, 0.05f));
-		//shader->SetFloat3("u_Light.specular", glm::vec3(0.5f, 0.5f, 0.5f));
-		// draw mesh
-		//glBindVertexArray(VAO);
+		if (!HasTextures)
+		{
+			shader->SetFloat3("u_Material.diffuse", m_material.Diffuse);
+			shader->SetFloat3("u_Material.ambient", m_material.Ambient);
+			shader->SetFloat3("u_Material.specular", m_material.Specular);
+			shader->SetFloat1("u_Material.shininess", m_material.Shininess);
+		}
+	
+		
 		m_VertexArray->Bind();
-		//glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 		RenderCommand::DrawIndexed(m_VertexArray);
 		m_VertexArray->Unbind();
-		// always good practice to set everything back to defaults once configured.
-		//textures[0]->Unbind();
 	}
 
 }

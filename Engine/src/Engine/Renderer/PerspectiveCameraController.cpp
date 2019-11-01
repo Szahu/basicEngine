@@ -9,9 +9,10 @@
 namespace Engine
 {
 	Engine::PerspectiveCameraController::PerspectiveCameraController(float fov, float aspectRatio)
-		:m_Camera(fov, aspectRatio), m_AspectRatio(aspectRatio)
+		:m_Camera(fov, aspectRatio), m_AspectRatio(aspectRatio), m_FOV(fov)
 	{
-
+		m_ScreenHeight = Engine::Application::Get().GetWindow().GetHeight();
+		m_ScreenWidth = Engine::Application::Get().GetWindow().GetWidth();
 	}
 
 	void PerspectiveCameraController::OnUpdate(Timestep ts)
@@ -41,11 +42,11 @@ namespace Engine
 		{
 			float xpos = Engine::Input::GetMouseX();
 			float ypos = Engine::Input::GetMouseY();
-			Engine::Application::Get().GetWindow().SetCursorPosition(1280.0f / 2.0f, 720.0f / 2.0f);
+			Engine::Application::Get().GetWindow().SetCursorPosition(m_ScreenWidth / 2, m_ScreenHeight / 2);
 			float horizontalAngle = m_Camera.GetAngles().x;
 			float verticalAngle = m_Camera.GetAngles().y;
-			m_Angles.x = horizontalAngle + (m_MouseSpeed * ts * float(1280.0f / 2.0f - xpos));
-			m_Angles.y = verticalAngle + (m_MouseSpeed * ts * float(720.0f / 2.0f - ypos));
+			m_Angles.x = horizontalAngle + (m_MouseSpeed * ts * float(m_ScreenWidth / 2 - xpos));
+			m_Angles.y = verticalAngle + (m_MouseSpeed * ts * float(m_ScreenHeight / 2 - ypos));
 			m_Camera.SetAngles(m_Angles.x, m_Angles.y);
 		}
 	}
@@ -53,6 +54,7 @@ namespace Engine
 	void PerspectiveCameraController::OnEvent(Event& e)
 	{
 		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<WindowResizeEvent>(EG_BIND_EVENT_FN(PerspectiveCameraController::OnWindowResize));
 		dispatcher.Dispatch<MouseScrolledEvent>(EG_BIND_EVENT_FN(PerspectiveCameraController::OnMouseScroll));
 		dispatcher.Dispatch<MouseButtonPressedEvent>(EG_BIND_EVENT_FN(PerspectiveCameraController::OnMouseButton));
 	}
@@ -65,8 +67,20 @@ namespace Engine
 	bool PerspectiveCameraController::OnMouseButton(MouseButtonPressedEvent& e)
 	{
 		if (e.GetMouseButton() == EG_MOUSE_BUTTON_4)
-			Engine::Application::Get().GetWindow().SetCursorPosition(1280.0f / 2.0f, 720.0f / 2.0f);
+			Engine::Application::Get().GetWindow().SetCursorPosition(m_ScreenWidth / 2, m_ScreenHeight / 2);
 
+		return false;
+	}
+
+	bool PerspectiveCameraController::OnWindowResize(WindowResizeEvent& e)
+	{
+		if (!e.GetWidth() == 0 && !e.GetHeight() == 0)
+		{
+			m_Camera.SetProjection(m_FOV, (float)e.GetWidth() / (float)e.GetHeight());
+			m_ScreenHeight = e.GetHeight();
+			m_ScreenWidth = e.GetWidth();
+			return false;
+		}
 		return false;
 	}
 

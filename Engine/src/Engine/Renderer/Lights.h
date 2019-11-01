@@ -8,7 +8,7 @@ namespace Engine
 	{
 	public:
 		PointLight()
-			:m_Position(glm::vec3(0.0f)), m_Ambient(glm::vec3(0.05f)), m_Diffuse(glm::vec3(0.5f)), m_Specular(glm::vec3(0.5f))
+			:m_Position(glm::vec3(0.0f)), m_Ambient(glm::vec3(0.05f)), m_Diffuse(glm::vec3(1.0f)), m_Specular(glm::vec3(1.0f))
 		{
 
 		}

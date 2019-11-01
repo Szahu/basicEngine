@@ -41,16 +41,18 @@ namespace Engine
 		vector<unsigned int> indices;
 		vector<Ref<Texture2D>> textures;
 		Material m_material;
-		bool HasTextures;
 
 		Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Ref<Texture2D>> textures);
 		Mesh(vector<Vertex> vertices, vector<unsigned int> indices, Material material);
+
+		const Ref<VertexArray>& GetVertexArray() const { return m_VertexArray; };
+
 		void Draw(const Engine::Ref<Engine::Shader>& shader);
 
 	private:
 		unsigned int VAO, VBO, EBO;
 		Ref<VertexArray> m_VertexArray;
-
+		bool HasTextures;
 		void setupMesh();
 	};
 }

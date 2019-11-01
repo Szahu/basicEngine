@@ -6,7 +6,7 @@
 
 
 Sandbox3D::Sandbox3D()
-	:Layer("Sandbox3D"), m_CameraController(65.0f, 1280.0f / 720.0f), m_Model("assets/Models/nanosuit/scene.gltf")
+	:Layer("Sandbox3D"), m_CameraController(65.0f, 1280.0f / 720.0f), m_Model("assets/Models/fbxTest0.fbx")
 {
 
 }
@@ -28,36 +28,36 @@ void Sandbox3D::OnAttach()
 		-0.5f,  0.5f, -0.5f
 	}; 
 
-	float positions[] = {  //Positions:                                            |Normals:           |Tex Coords:  
-		CubePositions[0 * 3], CubePositions[(0 * 3) + 1], CubePositions[(0 * 3) + 2], 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, // BOTTOM 
-		CubePositions[1 * 3], CubePositions[(1 * 3) + 1], CubePositions[(1 * 3) + 2], 0.0f, -1.0f, 0.0f, 1.0f, 0.0f,// BOTTOM	
-		CubePositions[2 * 3], CubePositions[(2 * 3) + 1], CubePositions[(2 * 3) + 2], 0.0f, -1.0f, 0.0f, 1.0f, 1.0f,// BOTTOM	
-		CubePositions[3 * 3], CubePositions[(3 * 3) + 1], CubePositions[(3 * 3) + 2], 0.0f, -1.0f, 0.0f, 0.0f, 1.0f,// BOTTOM	
-							 			   				 			
-		CubePositions[0 * 3], CubePositions[(0 * 3) + 1], CubePositions[(0 * 3) + 2], 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, //FRONT	
-		CubePositions[1 * 3], CubePositions[(1 * 3) + 1], CubePositions[(1 * 3) + 2], 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, //FRONT	
-		CubePositions[5 * 3], CubePositions[(5 * 3) + 1], CubePositions[(5 * 3) + 2], 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, //FRONT	
-		CubePositions[4 * 3], CubePositions[(4 * 3) + 1], CubePositions[(4 * 3) + 2], 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, //FRONT	
-							 			   				 			
-		CubePositions[1 * 3], CubePositions[(1 * 3) + 1], CubePositions[(1 * 3) + 2], 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, // RIGHT SIDE
-		CubePositions[2 * 3], CubePositions[(2 * 3) + 1], CubePositions[(2 * 3) + 2], 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, // RIGHT SIDE
-		CubePositions[6 * 3], CubePositions[(6 * 3) + 1], CubePositions[(6 * 3) + 2], 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // RIGHT SIDE
-		CubePositions[5 * 3], CubePositions[(5 * 3) + 1], CubePositions[(5 * 3) + 2], 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, // RIGHT SIDE
-							 			  				 			
-		CubePositions[2 * 3], CubePositions[(2 * 3) + 1], CubePositions[(2 * 3) + 2], 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, // BACK		
-		CubePositions[3 * 3], CubePositions[(3 * 3) + 1], CubePositions[(3 * 3) + 2], 0.0f, 0.0f, -1.0f, 1.0f, 0.0f, // BACK		
-		CubePositions[7 * 3], CubePositions[(7 * 3) + 1], CubePositions[(7 * 3) + 2], 0.0f, 0.0f, -1.0f, 1.0f, 1.0f, // BACK		
-		CubePositions[6 * 3], CubePositions[(6 * 3) + 1], CubePositions[(6 * 3) + 2], 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, // BACK		
-							 							 			
-		CubePositions[3 * 3], CubePositions[(3 * 3) + 1], CubePositions[(3 * 3) + 2], -1.0f, 0.0f, 0.0f, 0.0f, 0.0f,// LEFT SIDE
-		CubePositions[0 * 3], CubePositions[(0 * 3) + 1], CubePositions[(0 * 3) + 2], -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,// LEFT SIDE
-		CubePositions[4 * 3], CubePositions[(4 * 3) + 1], CubePositions[(4 * 3) + 2], -1.0f, 0.0f, 0.0f, 1.0f, 1.0f,// LEFT SIDE
-		CubePositions[7 * 3], CubePositions[(7 * 3) + 1], CubePositions[(7 * 3) + 2], -1.0f, 0.0f, 0.0f, 0.0f, 1.0f,// LEFT SIDE
-							 							 			
-		CubePositions[7 * 3], CubePositions[(7 * 3) + 1], CubePositions[(7 * 3) + 2], 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, // TOP       
-		CubePositions[4 * 3], CubePositions[(4 * 3) + 1], CubePositions[(4 * 3) + 2], 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // TOP	   
-		CubePositions[5 * 3], CubePositions[(5 * 3) + 1], CubePositions[(5 * 3) + 2], 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, // TOP		
-		CubePositions[6 * 3], CubePositions[(6 * 3) + 1], CubePositions[(6 * 3) + 2], 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, // TOP		
+	float positions[] = {  //Positions:                                            |Normals:               |Tex Coords:  
+		CubePositions[0 * 3], CubePositions[(0 * 3) + 1], CubePositions[(0 * 3) + 2],  0.0f, -1.0f,  0.0f,  0.0f,  0.0f, // BOTTOM 
+		CubePositions[1 * 3], CubePositions[(1 * 3) + 1], CubePositions[(1 * 3) + 2],  0.0f, -1.0f,  0.0f,  1.0f,  0.0f, // BOTTOM	
+		CubePositions[2 * 3], CubePositions[(2 * 3) + 1], CubePositions[(2 * 3) + 2],  0.0f, -1.0f,  0.0f,  1.0f,  1.0f, // BOTTOM	
+		CubePositions[3 * 3], CubePositions[(3 * 3) + 1], CubePositions[(3 * 3) + 2],  0.0f, -1.0f,  0.0f,  0.0f,  1.0f, // BOTTOM	
+							 			   				 												    	   
+		CubePositions[0 * 3], CubePositions[(0 * 3) + 1], CubePositions[(0 * 3) + 2],  0.0f,  0.0f,  1.0f,  0.0f,  0.0f, //FRONT	
+		CubePositions[1 * 3], CubePositions[(1 * 3) + 1], CubePositions[(1 * 3) + 2],  0.0f,  0.0f,  1.0f,  1.0f,  0.0f, //FRONT	
+		CubePositions[5 * 3], CubePositions[(5 * 3) + 1], CubePositions[(5 * 3) + 2],  0.0f,  0.0f,  1.0f,  1.0f,  1.0f, //FRONT	
+		CubePositions[4 * 3], CubePositions[(4 * 3) + 1], CubePositions[(4 * 3) + 2],  0.0f,  0.0f,  1.0f,  0.0f,  1.0f, //FRONT	
+							 			   				 												    	   
+		CubePositions[1 * 3], CubePositions[(1 * 3) + 1], CubePositions[(1 * 3) + 2],  1.0f,  0.0f,  0.0f,  0.0f,  0.0f, // RIGHT SIDE
+		CubePositions[2 * 3], CubePositions[(2 * 3) + 1], CubePositions[(2 * 3) + 2],  1.0f,  0.0f,  0.0f,  1.0f,  0.0f, // RIGHT SIDE
+		CubePositions[6 * 3], CubePositions[(6 * 3) + 1], CubePositions[(6 * 3) + 2],  1.0f,  0.0f,  0.0f,  1.0f,  1.0f, // RIGHT SIDE
+		CubePositions[5 * 3], CubePositions[(5 * 3) + 1], CubePositions[(5 * 3) + 2],  1.0f,  0.0f,  0.0f,  0.0f,  1.0f, // RIGHT SIDE
+							 			  				 												    	   
+		CubePositions[2 * 3], CubePositions[(2 * 3) + 1], CubePositions[(2 * 3) + 2],  0.0f,  0.0f, -1.0f,  0.0f,  0.0f, // BACK		
+		CubePositions[3 * 3], CubePositions[(3 * 3) + 1], CubePositions[(3 * 3) + 2],  0.0f,  0.0f, -1.0f,  1.0f,  0.0f, // BACK		
+		CubePositions[7 * 3], CubePositions[(7 * 3) + 1], CubePositions[(7 * 3) + 2],  0.0f,  0.0f, -1.0f,  1.0f,  1.0f, // BACK		
+		CubePositions[6 * 3], CubePositions[(6 * 3) + 1], CubePositions[(6 * 3) + 2],  0.0f,  0.0f, -1.0f,  0.0f,  1.0f, // BACK		
+							 							 												    	   
+		CubePositions[3 * 3], CubePositions[(3 * 3) + 1], CubePositions[(3 * 3) + 2], -1.0f,  0.0f,  0.0f,  0.0f,  0.0f, // LEFT SIDE
+		CubePositions[0 * 3], CubePositions[(0 * 3) + 1], CubePositions[(0 * 3) + 2], -1.0f,  0.0f,  0.0f,  1.0f,  0.0f, // LEFT SIDE
+		CubePositions[4 * 3], CubePositions[(4 * 3) + 1], CubePositions[(4 * 3) + 2], -1.0f,  0.0f,  0.0f,  1.0f,  1.0f, // LEFT SIDE
+		CubePositions[7 * 3], CubePositions[(7 * 3) + 1], CubePositions[(7 * 3) + 2], -1.0f,  0.0f,  0.0f,  0.0f,  1.0f, // LEFT SIDE
+							 							 												    	   
+		CubePositions[7 * 3], CubePositions[(7 * 3) + 1], CubePositions[(7 * 3) + 2],  0.0f,  1.0f,  0.0f,  0.0f,  0.0f, // TOP       
+		CubePositions[4 * 3], CubePositions[(4 * 3) + 1], CubePositions[(4 * 3) + 2],  0.0f,  1.0f,  0.0f,  1.0f,  0.0f, // TOP	   
+		CubePositions[5 * 3], CubePositions[(5 * 3) + 1], CubePositions[(5 * 3) + 2],  0.0f,  1.0f,  0.0f,  1.0f,  1.0f, // TOP		
+		CubePositions[6 * 3], CubePositions[(6 * 3) + 1], CubePositions[(6 * 3) + 2],  0.0f,  1.0f,  0.0f,  0.0f,  1.0f, // TOP		
 	};											
 
 	Engine::Ref<Engine::VertexBuffer> t_VertexBuffer = Engine::VertexBuffer::Create(positions, sizeof(positions));
@@ -119,84 +119,6 @@ void Sandbox3D::OnAttach()
 	m_LampVertexArray->AddVertexBuffer(t_VertexBuffer);
 	m_LampVertexArray->SetIndexBuffer(t_IndexBuffer);
 
-	std::string vertexSrc = R"(
-		#version 330 core
-			
-		layout(location = 0) in vec3 a_Positions;
-		layout(location = 1) in vec3 a_Normals;
-		layout(location = 2) in vec2 a_TexCoords;
-		layout(location = 3) in vec3 a_Translations;
-
-		uniform mat4 u_ViewProjectionMatrix;
-		uniform mat4 u_Transform;			
-
-		out vec3 v_FragPos;			
-		out vec3 v_Normal;			
-		out vec2 v_TexCoord;			
-
-		void main() 
-		{
-			v_TexCoord = a_TexCoords;
-			v_FragPos = vec3(u_Transform * vec4(a_Positions, 1.0));
-			v_Normal = mat3(transpose(inverse(u_Transform))) * a_Normals;				
-
-			//gl_Position = u_ViewProjectionMatrix * u_Transform * vec4(a_Positions.x + a_Translations.x ,a_Positions.y + a_Translations.y , a_Positions.z + a_Translations.z , 1.0);
-			gl_Position = u_ViewProjectionMatrix * u_Transform * vec4(a_Positions.x ,a_Positions.y  , a_Positions.z , 1.0);
-		}
-
-
-		)";
-
-	std::string fragemtnSrc = R"(
-		#version 330 core
-			
-		layout(location = 0) out vec4 color;
-
-		uniform vec4 u_Color;
-		uniform vec3 u_LightColor;
-		uniform vec3 u_LightPosition;
-		uniform vec3 u_CameraPosition;
-
-		uniform sampler2D texture_diffuse1;
-
-		in vec3 v_FragPos;			
-		in vec3 v_Normal;	
-		in vec2 v_TexCoord;			
-
-
-		void main() 
-		{
-			vec4 ObjectColor = texture(texture_diffuse1, v_TexCoord);
-			//vec4 ObjectColor = u_Color;			
-
-			// ambient
-			float ambientStrength = 0.05;
-			vec3 ambient = ambientStrength * u_LightColor;
-			
-			// diffuse 
-			vec3 norm = normalize(v_Normal);
-			vec3 lightDir = normalize(u_LightPosition - v_FragPos);
-			float diff = max(dot(norm, lightDir), 0.0);
-			vec3 diffuse = diff * u_LightColor;
-
-			// specular
-			float specularStrength = 0.5;
-			vec3 viewDir = normalize(u_CameraPosition - v_FragPos);
-			vec3 reflectDir = reflect(-lightDir, norm);
-			float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
-			vec3 specular = specularStrength * spec * u_LightColor;
-			
-			vec3 result = (ambient + diffuse + specular) * vec3(ObjectColor);
-			color = vec4(result, 1.0);
-		}
-	
-		)";
-
-	m_Shader = Engine::Shader::Create("testShader", vertexSrc, fragemtnSrc);
-	m_Shader->Bind();
-	m_Shader->SetFloat4("u_Color", glm::vec4(m_CubeColor, 1.0f));
-	m_Shader->SetMat4("u_Transform", glm::mat4(1.0f));
-
 	m_MatShader = Engine::Shader::Create("assets/shaders/Material.glsl");
 
 	m_FlatColorShader = Engine::Shader::Create("assets/shaders/FlatColor.glsl");
@@ -205,6 +127,8 @@ void Sandbox3D::OnAttach()
 	m_FlatColorShader->SetMat4("u_Transform", glm::mat4(1.0f));
 
 	m_DirtTexture = Engine::Texture2D::Create("assets/textures/dirt_tex.jpg");
+
+	m_Lights.push_back(m_Light);
 }
 
 void Sandbox3D::OnDetach()
@@ -218,7 +142,6 @@ void Sandbox3D::OnUpdate(Engine::Timestep ts)
 
 	FPS = 1.0f / ts;
 
-	m_Light.SetPosition(m_LampPosition);
 
 	Engine::RenderCommand::Clear();
 	Engine::RenderCommand::SetClearColor({ 0.06f, 0.06f, 0.06f, 1.0f });
@@ -226,17 +149,24 @@ void Sandbox3D::OnUpdate(Engine::Timestep ts)
 	Engine::Renderer::BeginScene(m_CameraController.GetCamera(), m_Light);
 	
 	m_DirtTexture->Bind();
-	m_VertexArray->Bind();
+	m_MatShader->Bind();
+	m_MatShader->SetFloat3("u_PointLights[0].position", m_Light1.GetPosition());
+	m_MatShader->SetFloat3("u_PointLights[0].diffuse", m_Light1.GetDiffuse());
+	m_MatShader->SetFloat3("u_PointLights[0].ambient", m_Light1.GetAmbient());
+	m_MatShader->SetFloat3("u_PointLights[0].specular", m_Light1.GetSpecular());	
 	Engine::Renderer::Submit(m_VertexArray, m_MatShader, glm::mat4(1.0f), renderCount);
 	m_DirtTexture->Unbind();
 
-	m_MatShader->Bind();
-	m_MatShader->SetFloat4("u_Color", glm::vec4(m_CubeColor, 1.0f));
 	Engine::Renderer::Submit(m_Model, m_MatShader, glm::mat4(1.0f));
 
 	m_FlatColorShader->Bind();
+	m_Light.SetPosition(m_LampPosition);
+	m_Light1.SetPosition(m_LampPosition1);
+
 	glm::mat4 lampTransform = glm::translate(glm::mat4(1.0f), m_LampPosition) * glm::scale(glm::mat4(1.0f), { 0.5f, 0.5f, 0.5 });
+	glm::mat4 lampTransform1 = glm::translate(glm::mat4(1.0f), m_LampPosition1) * glm::scale(glm::mat4(1.0f), { 0.5f, 0.5f, 0.5 });
 	Engine::Renderer::Submit(m_LampVertexArray, m_FlatColorShader, lampTransform);
+	Engine::Renderer::Submit(m_LampVertexArray, m_FlatColorShader, lampTransform1);
 
 	Engine::Renderer::EndScene();
 }
@@ -245,7 +175,8 @@ void Sandbox3D::OnImGuiRender()
 {
 	ImGui::Text("FPS: %i", FPS);
 	ImGui::ColorEdit3("Cube color", &m_CubeColor.x);
-	ImGui::SliderFloat3("Lamp Position", &m_LampPosition.x, -100.0f, 100.0f);
+	ImGui::SliderFloat3("Lamp Position", &m_LampPosition.x, -20.0f, 20.0f);
+	ImGui::SliderFloat3("Lamp Position 1", &m_LampPosition1.x, -20.0f, 20.0f);
 	ImGui::SliderInt("Render Count", &renderCount, 0, 10000);
 	ImGui::ColorEdit3("Lamp Ambient", &amcol.x); m_Light.SetAmbient(amcol);
 	ImGui::ColorEdit3("Lamp Diffuse", &diffcol.x); m_Light.SetDiffuse(diffcol);
