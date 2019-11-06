@@ -32,8 +32,8 @@ namespace Engine
 		PerspectiveCamera m_Camera;
 
 		glm::vec2 m_Angles = { 3.14f, 0.0f };
-		glm::vec3 m_CameraPosition = { 0.0f, 0.0f, 0.0f };
-		float m_CameraMoveSpeed = 5.0f;
+		glm::vec3 m_CameraPosition = { 0.0f, 0.0f, 2.0f };
+		float m_CameraMoveSpeed = 15.0f;
 		float m_MouseSpeed = 1.0f;
 	};
 }

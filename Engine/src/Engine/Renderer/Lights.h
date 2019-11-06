@@ -4,7 +4,7 @@
 
 namespace Engine
 {
-	struct PointLight
+	class PointLight
 	{
 	public:
 		PointLight()

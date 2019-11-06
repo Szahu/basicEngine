@@ -61,6 +61,8 @@ namespace Engine
 
 	bool PerspectiveCameraController::OnMouseScroll(MouseScrolledEvent& e)
 	{
+		m_FOV -= e.GetYOffset() * 2.0f;
+		m_Camera.SetProjection(std::max((int)m_FOV, 1), m_AspectRatio);
 		return false;
 	}
 

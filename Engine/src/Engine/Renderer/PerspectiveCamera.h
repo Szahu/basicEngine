@@ -38,7 +38,7 @@ namespace Engine
 		glm::mat4 m_ViewMatrix;
 		glm::mat4 m_ViewProjectionMatrix;
 
-		glm::vec3 m_Position = glm::vec3(0.0f);
+		glm::vec3 m_Position = glm::vec3(0.0f, 0.0f, 0.0f);
 		glm::vec3 m_Direction = { 0.0f, 0.0f, 0.0f };
 		glm::vec3 m_VectorRight = { 0.0f, 0.0f, 0.0f };
 		glm::vec3 m_VectorUp = { 0.0f, 0.0f, 0.0f };

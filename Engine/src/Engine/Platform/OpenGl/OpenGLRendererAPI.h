@@ -8,6 +8,9 @@ namespace Engine
 	{
 	public:
 		virtual void Init() override;
+
+		virtual void RenderToScreen() override;
+
 		virtual void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) override;
 
 		virtual void SetClearColor(const glm::vec4 color) override;
@@ -15,5 +18,9 @@ namespace Engine
 
 		virtual void DrawIndexed(const Engine::Ref<VertexArray>& vertexArray) override;
 		virtual void DrawInstanced(const Engine::Ref<VertexArray>& vertexArray, uint32_t count) override;
+
+	private:
+		Ref<VertexArray> m_ScreenQuad;
+		Ref<Shader> m_ScreenShader;
 	};
 }

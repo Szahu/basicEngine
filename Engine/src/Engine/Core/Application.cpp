@@ -5,17 +5,6 @@
 
 #include <GLFW/glfw3.h>
 
-//Temporary for getting workingDir
-#include <string>
-#include <stdio.h>  /* defines FILENAME_MAX */
-#ifdef WIN32 // enabled when compiling on windows
-#include <direct.h>
-#define GetCurrentDir _getcwd
-#else
-#include <unistd.h>
-#define GetCurrentDir getcwd
-#endif
-
 namespace Engine
 {
 
@@ -34,7 +23,7 @@ namespace Engine
 		m_Window->SetVSync(false);
 
 		Renderer::Init();
-		Renderer2D::Init();
+		//Renderer2D::Init();
 
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
@@ -117,23 +106,5 @@ namespace Engine
 		return false;
 	}
 
-	// Note : I use logging macros (from Hazel)
-	const std::string Application::GetCurrentPath()
-	{
-		char cCurrentPath[FILENAME_MAX];
-		if (!GetCurrentDir(cCurrentPath, sizeof(cCurrentPath)))
-		{
-			EG_CORE_ERROR("Couldn't Get The Current Working Dir {0}", cCurrentPath);
-			return NULL;
-		}
-
-		//EG_CORE_INFO("The current working directory is : {0}", cCurrentPath);
-
-		std::string result = cCurrentPath;
-		std::replace(result.begin(), result.end(), '\\', '/');
-
-		EG_CORE_INFO(result);
-		return result;
-	}
 
 }

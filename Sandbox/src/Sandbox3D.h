@@ -3,6 +3,7 @@
 #include "Engine.h"
 #include "Engine/Core/Layer.h"
 
+#include "Engine/World/Chunk.h"
 
 class Sandbox3D : public Engine::Layer
 {
@@ -21,20 +22,27 @@ public:
 private:
 
 private:
+	Engine::Ref<Engine::FrameBuffer> m_Framebuffer;
+	Engine::Ref<Engine::VertexArray> m_ScreenQuad;
+
+	Engine::ShaderLibrary m_ShaderLibrary;
+
 	Engine::Ref<Engine::VertexArray> m_VertexArray;
 	Engine::Ref<Engine::VertexArray> m_LampVertexArray;
+	Engine::Model m_Model;
 	Engine::PointLight m_Light;
 	Engine::PointLight m_Light1;
-	std::vector<Engine::PointLight> m_Lights;
+	std::vector<Engine::PointLight*> m_Lights;
 	glm::vec3 m_LampPosition = { 2.0f, 0.0f, 0.0f };
 	glm::vec3 m_LampPosition1 = { -2.0f, 0.0f, 0.0f };
-	Engine::Ref<Engine::Shader> m_MatShader;
-	Engine::Ref<Engine::Shader> m_FlatColorShader;
-	Engine::Ref<Engine::Texture2D> m_DirtTexture;
+	//Engine::Ref<Engine::Shader> m_MatShader;
+	//Engine::Ref<Engine::Shader> m_FlatColorShader;
+	//Engine::Ref<Engine::Shader> m_BlockShader;
+	//Engine::Ref<Engine::Texture2D> m_DirtTexture;
 	Engine::PerspectiveCameraController m_CameraController;
 	glm::vec3 m_CubeColor = { 0.3f, 0.7f, 0.5f };
 
-	Engine::Model m_Model;
+	//Engine::Model m_Model;
 	Engine::Ref<Engine::Shader> m_ModelShader;
 
 	int renderCount = 1;

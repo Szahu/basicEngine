@@ -12,6 +12,7 @@ namespace Engine
 		if (type == "vertex") return GL_VERTEX_SHADER;
 		if (type == "fragment") return GL_FRAGMENT_SHADER;
 		if (type == "pixel") return GL_FRAGMENT_SHADER;
+		if (type == "geometry") return GL_GEOMETRY_SHADER;
 
 		EG_CORE_ASSERT(false, "Unknown shader type!");
 		return 0;
@@ -92,8 +93,8 @@ namespace Engine
 	void OpenGLShader::Compile(std::unordered_map<GLenum, std::string>& shaderSources)
 	{
 		GLuint program = glCreateProgram();
-		EG_CORE_ASSERT(shaderSources.size() <= 2, "Only 2 shaders in one file are supported");
-		std::array<GLenum, 2> glShaderIDs;
+		EG_CORE_ASSERT(shaderSources.size() <= 3, "Only 3 shaders in one file are supported");
+		std::array<GLenum, 3> glShaderIDs;
 		unsigned int glShaderIdIndex = 0;
 		for (auto& kv : shaderSources)
 		{
@@ -130,6 +131,10 @@ namespace Engine
 
 		m_RendererID = program;
 
+		//glBindAttribLocation(m_RendererID, 0, "a_Positions");
+		//glBindAttribLocation(m_RendererID, 1, "a_Normals");
+		//glBindAttribLocation(m_RendererID, 2, "a_TexCoords");
+		//glBindAttribLocation(m_RendererID, 3, "a_Translations");
 
 		glLinkProgram(m_RendererID);
 
@@ -164,6 +169,19 @@ namespace Engine
 
 	}
 
+	int OpenGLShader::GetUniformLocation(const std::string& name)
+	{
+		if (m_UniformLocationCache.find(name) != m_UniformLocationCache.end())
+			return m_UniformLocationCache[name];
+
+		int location = glGetUniformLocation(m_RendererID, name.c_str());
+		if (location == -1)
+			std::cout << m_Path << " Warning: unifrom ' " << name << " ' doesnt exist!" << std::endl;
+
+		m_UniformLocationCache[name] = location;
+		return location;
+	}
+
 	OpenGLShader::~OpenGLShader()
 	{
 		glDeleteProgram(m_RendererID);
@@ -181,42 +199,42 @@ namespace Engine
 
 	void OpenGLShader::UplaodUniformMat4(const std::string& name, const glm::mat4& matrix)
 	{
-		GLuint location = glGetUniformLocation(m_RendererID, name.c_str());
+		GLuint location = GetUniformLocation(name.c_str());
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 	}
 
 	void OpenGLShader::UplaodUniformFloat4(const std::string& name, const glm::vec4& data)
 	{
-		GLuint location = glGetUniformLocation(m_RendererID, name.c_str());
+		GLuint location = GetUniformLocation(name.c_str());
 		glUniform4f(location, data.x, data.y, data.z, data.w);
 	}
 
 	void OpenGLShader::UplaodUniformFloat3(const std::string& name, const glm::vec3& data)
 	{
-		GLuint location = glGetUniformLocation(m_RendererID, name.c_str());
+		GLuint location = GetUniformLocation(name.c_str());
 		glUniform3f(location, data.x, data.y, data.z);
 	}
 	void OpenGLShader::UplaodUniformFloat2(const std::string& name, const glm::vec2& data)
 	{
-		GLuint location = glGetUniformLocation(m_RendererID, name.c_str());
+		GLuint location = GetUniformLocation(name.c_str());
 		glUniform2f(location, data.x, data.y);
 	}
 
 	void OpenGLShader::UplaodUniformFloat1(const std::string& name, float data)
 	{
-		GLuint location = glGetUniformLocation(m_RendererID, name.c_str());
+		GLuint location = GetUniformLocation(name.c_str());
 		glUniform1f(location, data);
 	}
 
 	void OpenGLShader::UplaodUniformInt1(const std::string& name, int data)
 	{
-		GLuint location = glGetUniformLocation(m_RendererID, name.c_str());
+		GLuint location = GetUniformLocation(name.c_str());
 		glUniform1i(location, data);
 	}
 
 	void OpenGLShader::UploadUniformFloatv(const std::string& name, const float* value, uint32_t count)
 	{
-		GLuint location = glGetUniformLocation(m_RendererID, name.c_str());
+		GLuint location = GetUniformLocation(name.c_str());
 		glUniform1fv(location, count, value);
 	}
 

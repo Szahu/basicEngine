@@ -19,6 +19,7 @@
 #include "Engine/Renderer/Renderer2D.h"
 #include "Engine/Renderer/RenderCommand.h"
 
+#include "Engine/Renderer/FrameBuffer.h"
 #include "Engine/Renderer/Buffer.h"
 #include "Engine/Renderer/VertexArray.h"
 #include "Engine/Renderer/Shader.h"

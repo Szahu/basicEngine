@@ -143,6 +143,7 @@ namespace Engine
 		textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
 		// return a mesh object created from the extracted mesh data
+		//EG_CORE_INFO(textures.size());
 		if (textures.size() == 0) return Mesh(vertices, indices, m_Material);
 		else return Mesh(vertices, indices, textures);
 	}

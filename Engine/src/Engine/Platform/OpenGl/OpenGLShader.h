@@ -43,9 +43,11 @@ namespace Engine
 		std::string ReadFile(const std::string& filepath);
 		std::unordered_map<GLenum, std::string> PreProcess(const std::string& source);
 		void Compile(std::unordered_map<GLenum, std::string>& shaderSources);
+		int GetUniformLocation(const std::string& name);
 	private:
 		std::string m_Path;
 		std::string m_Name;
+		std::unordered_map<std::string, int> m_UniformLocationCache;
 		uint32_t m_RendererID;
 	};
 }

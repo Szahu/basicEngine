@@ -163,6 +163,7 @@
     <ClInclude Include="src\Engine\Imgui\ImGuiLayer.h" />
     <ClInclude Include="src\Engine\Platform\OpenGl\OpenGLBuffer.h" />
     <ClInclude Include="src\Engine\Platform\OpenGl\OpenGLContext.h" />
+    <ClInclude Include="src\Engine\Platform\OpenGl\OpenGLFrameBuffer.h" />
     <ClInclude Include="src\Engine\Platform\OpenGl\OpenGLRendererAPI.h" />
     <ClInclude Include="src\Engine\Platform\OpenGl\OpenGLShader.h" />
     <ClInclude Include="src\Engine\Platform\OpenGl\OpenGLVertexArray.h" />
@@ -170,6 +171,7 @@
     <ClInclude Include="src\Engine\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\Engine\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\Engine\Renderer\Buffer.h" />
+    <ClInclude Include="src\Engine\Renderer\FrameBuffer.h" />
     <ClInclude Include="src\Engine\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\Engine\Renderer\Lights.h" />
     <ClInclude Include="src\Engine\Renderer\Mesh.h" />
@@ -186,6 +188,8 @@
     <ClInclude Include="src\Engine\Renderer\Texture.h" />
     <ClInclude Include="src\Engine\Renderer\Vertex.h" />
     <ClInclude Include="src\Engine\Renderer\VertexArray.h" />
+    <ClInclude Include="src\Engine\World\Block.h" />
+    <ClInclude Include="src\Engine\World\Chunk.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_features.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_fixes.hpp" />
@@ -568,6 +572,7 @@
     <ClCompile Include="src\Engine\Imgui\ImGuiLayer.cpp" />
     <ClCompile Include="src\Engine\Platform\OpenGl\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Engine\Platform\OpenGl\OpenGLContext.cpp" />
+    <ClCompile Include="src\Engine\Platform\OpenGl\OpenGLFrameBuffer.cpp" />
     <ClCompile Include="src\Engine\Platform\OpenGl\OpenGLRendererAPI.cpp" />
     <ClCompile Include="src\Engine\Platform\OpenGl\OpenGLShader.cpp" />
     <ClCompile Include="src\Engine\Platform\OpenGl\OpenGLVertexArray.cpp" />
@@ -575,6 +580,7 @@
     <ClCompile Include="src\Engine\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Engine\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\Engine\Renderer\Buffer.cpp" />
+    <ClCompile Include="src\Engine\Renderer\FrameBuffer.cpp" />
     <ClCompile Include="src\Engine\Renderer\Mesh.cpp" />
     <ClCompile Include="src\Engine\Renderer\Model.cpp" />
     <ClCompile Include="src\Engine\Renderer\OrtographicCamera.cpp" />
@@ -588,6 +594,8 @@
     <ClCompile Include="src\Engine\Renderer\Shader.cpp" />
     <ClCompile Include="src\Engine\Renderer\Texture.cpp" />
     <ClCompile Include="src\Engine\Renderer\VertexArray.cpp" />
+    <ClCompile Include="src\Engine\World\Block.cpp" />
+    <ClCompile Include="src\Engine\World\Chunk.cpp" />
     <ClCompile Include="vendor\stb_image\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>

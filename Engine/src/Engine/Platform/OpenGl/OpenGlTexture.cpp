@@ -12,7 +12,7 @@ namespace Engine
 		: m_Path(path)
 	{
 		int width, height, channels;
-		stbi_set_flip_vertically_on_load(1);
+		stbi_set_flip_vertically_on_load(0);
 		stbi_uc* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
 		if (data == NULL) EG_CORE_ERROR("Failed to load Image from path {0}", path);
 		EG_CORE_ASSERT(data, "Failed to load image!");
@@ -36,8 +36,12 @@ namespace Engine
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
 		glTextureStorage2D(m_RendererID, 1, internalFormat, m_Width, m_Height);
 
-		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTextureParameteri(m_RendererID, GL_TEXTURE_LOD_BIAS, 0);
+		
+		float amount = std::min(4, GL_MAX_TEXTURE_MAX_ANISOTROPY);
+		glTextureParameterf(m_RendererID, GL_MAX_TEXTURE_MAX_ANISOTROPY, amount);
 
 		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, dataFormat, GL_UNSIGNED_BYTE, data);
 

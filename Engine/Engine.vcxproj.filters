@@ -1286,6 +1286,10 @@
     </ClInclude>
     <ClInclude Include="src\Engine\Renderer\Vertex.h" />
     <ClInclude Include="src\Engine\Renderer\Lights.h" />
+    <ClInclude Include="src\Engine\World\Block.h" />
+    <ClInclude Include="src\Engine\World\Chunk.h" />
+    <ClInclude Include="src\Engine\Renderer\FrameBuffer.h" />
+    <ClInclude Include="src\Engine\Platform\OpenGl\OpenGLFrameBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EGpch.cpp">
@@ -1378,5 +1382,9 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\World\Block.cpp" />
+    <ClCompile Include="src\Engine\World\Chunk.cpp" />
+    <ClCompile Include="src\Engine\Renderer\FrameBuffer.cpp" />
+    <ClCompile Include="src\Engine\Platform\OpenGl\OpenGLFrameBuffer.cpp" />
   </ItemGroup>
 </Project>

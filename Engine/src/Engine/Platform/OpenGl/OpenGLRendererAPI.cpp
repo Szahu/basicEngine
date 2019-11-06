@@ -10,10 +10,42 @@ namespace Engine
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		//glEnable(GL_CULL_FACE);
+		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
+
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LESS);
+
+		glEnable(GL_MULTISAMPLE);
+
+		float quadVertices[] = { 
+		// positions   // texCoords
+		-1.0f,  1.0f,  0.0f, 1.0f,
+		-1.0f, -1.0f,  0.0f, 0.0f,
+		 1.0f, -1.0f,  1.0f, 0.0f,
+
+		-1.0f,  1.0f,  0.0f, 1.0f,
+		 1.0f, -1.0f,  1.0f, 0.0f,
+		 1.0f,  1.0f,  1.0f, 1.0f
+		};
+
+		Engine::Ref<Engine::VertexBuffer> buffer = Engine::VertexBuffer::Create(quadVertices, sizeof(quadVertices));
+		buffer->SetLayout(Engine::BufferLayout{
+			{Engine::ShaderDataType::Float2, "a_Positions"},
+			{Engine::ShaderDataType::Float2, "a_TexCoords"},
+		});
+
+		m_ScreenQuad = Engine::VertexArray::Create();
+		m_ScreenQuad->AddVertexBuffer(buffer);
+
+		m_ScreenShader = Shader::Create("assets/shaders/screenShader.glsl");
+	}
+
+	void OpenGLRendererAPI::RenderToScreen()
+	{
+		m_ScreenShader->Bind();
+		m_ScreenQuad->Bind();
+		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
 
 	void OpenGLRendererAPI::SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
@@ -33,7 +65,7 @@ namespace Engine
 
 	void OpenGLRendererAPI::DrawIndexed(const Engine::Ref<VertexArray>& vertexArray)
 	{
-		glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+		glDrawElements(vertexArray->GetDrawingMode(),vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 	}
 
 	void OpenGLRendererAPI::DrawInstanced(const Engine::Ref<VertexArray>& vertexArray, uint32_t count)

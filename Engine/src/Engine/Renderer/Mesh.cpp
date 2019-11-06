@@ -2,6 +2,7 @@
 #include "Engine/Renderer/Mesh.h"
 
 #include "Engine/Renderer/RenderCommand.h"
+#include "glad/glad.h"
 
 namespace Engine
 {
@@ -29,7 +30,7 @@ namespace Engine
 	{
 		m_VertexArray = VertexArray::Create();
 
-		Ref<VertexBuffer> t_VBO = VertexBuffer::Create(vertices, vertices.size() * sizeof(Vertex));
+		Ref<VertexBuffer> t_VBO = VertexBuffer::Create(&vertices[0].Position.x, vertices.size() * sizeof(Vertex));
 		t_VBO->SetLayout(BufferLayout{
 			{ShaderDataType::Float3, "a_Positions"},
 			{ShaderDataType::Float3, "a_Normals"},
@@ -54,9 +55,12 @@ namespace Engine
 		unsigned int normalNr = 1;
 		unsigned int heightNr = 1;
 
+		shader->Bind();
+
 		for (unsigned int i = 0; i < textures.size(); i++)
 		{
-			textures[i]->Bind(0x84C0 + i);
+			//textures[i]->Bind(0x84C0 + i);
+			glActiveTexture(GL_TEXTURE0 + i); 
 			// retrieve texture number (the N in diffuse_textureN)
 			std::string number;
 			std::string name = textures[i]->GetType();
@@ -70,15 +74,18 @@ namespace Engine
 				number = std::to_string(heightNr++); // transfer unsigned int to stream
 
 														// now set the sampler to the correct texture unit
-			shader->Bind();
 			shader->SetInt1((name + number).c_str(), i);
 			// and finally bind the texture
-			textures[i]->Bind();
+			glBindTexture(GL_TEXTURE_2D, textures[i]->GetID());
+
+			//textures[i]->Bind(0x84C0 + i);
 		}
 		
-		shader->Bind();
+		shader->SetInt1("u_UseTexture", 1);
+
 		if (!HasTextures)
 		{
+			shader->SetInt1("u_UseTexture", 0);
 			shader->SetFloat3("u_Material.diffuse", m_material.Diffuse);
 			shader->SetFloat3("u_Material.ambient", m_material.Ambient);
 			shader->SetFloat3("u_Material.specular", m_material.Specular);
@@ -89,6 +96,9 @@ namespace Engine
 		m_VertexArray->Bind();
 		RenderCommand::DrawIndexed(m_VertexArray);
 		m_VertexArray->Unbind();
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
 	}
 
 }

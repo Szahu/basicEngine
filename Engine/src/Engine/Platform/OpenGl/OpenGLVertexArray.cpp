@@ -1,7 +1,6 @@
 #include "EGpch.h"
 #include "OpenGLVertexArray.h"
 
-#include <glad/glad.h>
 
 namespace Engine
 {
@@ -39,7 +38,7 @@ namespace Engine
 		glBindVertexArray(0);
 	}
 
-	void OpenGLVertexArray::AddVertexBuffer(const Engine::Ref<VertexBuffer>& vertexBuffer, bool instancing)
+	void OpenGLVertexArray::AddVertexBuffer(const Engine::Ref<VertexBuffer>& vertexBuffer, bool instancing, uint32_t divisor)
 	{
 		EG_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "VertexBuffer has no layout!");
 
@@ -54,19 +53,25 @@ namespace Engine
 				ShaderDataTypeToOpenGLBaseType(element.Type),
 				element.Normalised ? GL_TRUE : GL_FALSE,
 				vertexBuffer->GetLayout().GetStride(), (const void*)element.Offset);
-			if (instancing) glVertexAttribDivisor(index, 1);
+			if (instancing) glVertexAttribDivisor(index, divisor);
 			index++;
 		}
 
 		m_VertexBuffers.push_back(vertexBuffer);
+		glBindVertexArray(0);
 	}
 
-	void OpenGLVertexArray::SetIndexBuffer(const Engine::Ref<IndexBuffer>& indexBuffer)
+	void OpenGLVertexArray::SetIndexBuffer(const Engine::Ref<IndexBuffer>& indexBuffer, int drawingMode)
 	{
+		if (drawingMode == 0) m_GlDrawingMode = GL_TRIANGLES;
+		if (drawingMode == 1) m_GlDrawingMode = GL_QUADS;
+
 		glBindVertexArray(m_RendererID);
 		indexBuffer->Bind();
 
 		m_IndexBuffer = indexBuffer;
+
+		glBindVertexArray(0);
 	}
 
 }
