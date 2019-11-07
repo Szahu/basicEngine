@@ -11,8 +11,11 @@
 #include "Engine/Core/MouseButtonCodes.h"
 #include "Engine/Core/Input.h"
 
-#include "Engine/Renderer/OrtographicCameraController.h"
-#include "Engine/Renderer/PerspectiveCameraController.h"
+#include "Engine/Toolbox/OrtographicCameraController.h"
+#include "Engine/Toolbox/PerspectiveCameraController.h"
+#include "Engine/Toolbox/MousePicker.h"
+
+#include "Engine/GUI/GUI.h"
 
 // -------- Renderer Stuff-------------------
 #include "Engine/Renderer/Renderer.h"

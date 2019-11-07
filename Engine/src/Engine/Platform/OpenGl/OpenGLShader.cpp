@@ -176,8 +176,7 @@ namespace Engine
 
 		int location = glGetUniformLocation(m_RendererID, name.c_str());
 		if (location == -1)
-			std::cout << m_Path << " Warning: unifrom ' " << name << " ' doesnt exist!" << std::endl;
-
+			EG_CORE_WARN("{0} Warning: Uniform '{1}', doesnt exist!", m_Path, name);
 		m_UniformLocationCache[name] = location;
 		return location;
 	}

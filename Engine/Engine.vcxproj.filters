@@ -144,18 +144,6 @@
     <ClInclude Include="src\Engine\Renderer\Model.h">
       <Filter>src\Engine\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Renderer\OrtographicCamera.h">
-      <Filter>src\Engine\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Renderer\OrtographicCameraController.h">
-      <Filter>src\Engine\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Renderer\PerspectiveCamera.h">
-      <Filter>src\Engine\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Renderer\PerspectiveCameraController.h">
-      <Filter>src\Engine\Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="src\Engine\Renderer\RenderCommand.h">
       <Filter>src\Engine\Renderer</Filter>
     </ClInclude>
@@ -1290,6 +1278,20 @@
     <ClInclude Include="src\Engine\World\Chunk.h" />
     <ClInclude Include="src\Engine\Renderer\FrameBuffer.h" />
     <ClInclude Include="src\Engine\Platform\OpenGl\OpenGLFrameBuffer.h" />
+    <ClInclude Include="src\Engine\Toolbox\OrtographicCamera.h">
+      <Filter>src\Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Toolbox\OrtographicCameraController.h">
+      <Filter>src\Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Toolbox\PerspectiveCamera.h">
+      <Filter>src\Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Toolbox\PerspectiveCameraController.h">
+      <Filter>src\Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Toolbox\MousePicker.h" />
+    <ClInclude Include="src\Engine\GUI\Gui.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EGpch.cpp">
@@ -1346,18 +1348,6 @@
     <ClCompile Include="src\Engine\Renderer\Model.cpp">
       <Filter>src\Engine\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\Renderer\OrtographicCamera.cpp">
-      <Filter>src\Engine\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Engine\Renderer\OrtographicCameraController.cpp">
-      <Filter>src\Engine\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Engine\Renderer\PerspectiveCamera.cpp">
-      <Filter>src\Engine\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Engine\Renderer\PerspectiveCameraController.cpp">
-      <Filter>src\Engine\Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="src\Engine\Renderer\RenderCommand.cpp">
       <Filter>src\Engine\Renderer</Filter>
     </ClCompile>
@@ -1386,5 +1376,19 @@
     <ClCompile Include="src\Engine\World\Chunk.cpp" />
     <ClCompile Include="src\Engine\Renderer\FrameBuffer.cpp" />
     <ClCompile Include="src\Engine\Platform\OpenGl\OpenGLFrameBuffer.cpp" />
+    <ClCompile Include="src\Engine\Toolbox\OrtographicCamera.cpp">
+      <Filter>src\Engine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Toolbox\OrtographicCameraController.cpp">
+      <Filter>src\Engine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Toolbox\PerspectiveCamera.cpp">
+      <Filter>src\Engine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Toolbox\PerspectiveCameraController.cpp">
+      <Filter>src\Engine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Toolbox\MousePicker.cpp" />
+    <ClCompile Include="src\Engine\GUI\Gui.cpp" />
   </ItemGroup>
 </Project>

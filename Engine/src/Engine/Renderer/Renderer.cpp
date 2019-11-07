@@ -37,8 +37,8 @@ namespace Engine
 
 		Engine::RenderCommand::Clear();
 
-		m_SceneData->m_FrameBuffer->BindTexture();
-		Engine::RenderCommand::RenderToScreen();
+		//m_SceneData->m_FrameBuffer->BindTexture();
+		//Engine::RenderCommand::RenderToScreen();
 	}
 
 	void Renderer::Submit(const Engine::Ref<VertexArray>& vertexArray, const glm::mat4& transform, const Engine::Ref<Shader>& shader, uint32_t instances)

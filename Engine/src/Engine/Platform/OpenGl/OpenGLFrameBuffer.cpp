@@ -15,8 +15,8 @@ namespace Engine
 		glGenTextures(1, &m_TextureColorBuffer);
 		glBindTexture(GL_TEXTURE_2D, m_TextureColorBuffer);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Application::Get().GetWindow().GetWidth(), Application::Get().GetWindow().GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_TextureColorBuffer, 0);
 
 		glGenRenderbuffers(1, &m_RenderBuffer);
@@ -56,6 +56,12 @@ namespace Engine
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
+	void OpenGLFrameBuffer::SetTextureSize(const glm::vec2& vec)
+	{
+		m_TextureSize = vec;
+		UpdateSize();
+	}
+
 	void OpenGLFrameBuffer::OnEvent(Event& e) 
 	{
 		EventDispatcher dispatcher(e);
@@ -64,15 +70,23 @@ namespace Engine
 
 	bool OpenGLFrameBuffer::OnWindowResize(WindowResizeEvent& e)
 	{
-		
+		m_TextureSize = { e.GetWidth(), e.GetHeight() };
+
+		UpdateSize();
+
+		return false;
+	}
+
+	void OpenGLFrameBuffer::UpdateSize()
+	{
 		BindTexture();
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, e.GetWidth(), e.GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_TextureSize.x, m_TextureSize.y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 		UnbindTexture();
 
 		glBindRenderbuffer(GL_RENDERBUFFER, m_RenderBuffer);
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, e.GetWidth(), e.GetHeight());
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, m_TextureSize.x, m_TextureSize.y);
+		glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
-		return false;
 	}
 }
 

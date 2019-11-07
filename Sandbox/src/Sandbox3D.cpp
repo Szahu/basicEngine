@@ -7,7 +7,8 @@
 #include "GLFW/glfw3.h"
 
 Sandbox3D::Sandbox3D()
-	:Layer("Sandbox3D"), m_CameraController(65.0f, 1280.0f / 720.0f), m_Model("assets/Models/SF_Fighter/SciFi_Fighter.FBX")
+	:Layer("Sandbox3D"), m_CameraController(65.0f, 1280.0f / 720.0f), m_Model("assets/Models/SF_Fighter/SciFi_Fighter.FBX"),
+	 m_MousePicker(m_CameraController.GetCamera())
 {
 
 }
@@ -145,6 +146,7 @@ void Sandbox3D::OnDetach()
 void Sandbox3D::OnUpdate(Engine::Timestep ts)
 {
 	m_CameraController.OnUpdate(ts);
+	m_MousePicker.OnUpdate();
 
 	FPS = 1.0f / ts;
 
@@ -169,6 +171,14 @@ void Sandbox3D::OnUpdate(Engine::Timestep ts)
 
 void Sandbox3D::OnImGuiRender()
 {
+	Engine::Gui::InitDocspace();
+
+	Engine::Gui::ViewportWindow(m_Framebuffer);
+
+	bool show = true;
+	ImGui::ShowDemoWindow(&show);
+
+	ImGui::Begin("Debug Window");
 	ImGui::Text("FPS: %i", FPS);
 	ImGui::ColorEdit3("Cube color", &m_CubeColor.x);
 	ImGui::SliderFloat3("Lamp Position", &m_LampPosition.x, -20.0f, 20.0f);
@@ -177,8 +187,8 @@ void Sandbox3D::OnImGuiRender()
 	ImGui::ColorEdit3("Lamp Ambient", &amcol.x); m_Light.SetAmbient(amcol);
 	ImGui::ColorEdit3("Lamp Diffuse", &diffcol.x); m_Light.SetDiffuse(diffcol);
 	ImGui::ColorEdit3("Lamp Speculkar", &speccol.x); m_Light.SetSpecular(speccol);
-	bool show = true;
-	ImGui::ShowDemoWindow(&show);
+	ImGui::SliderFloat2("FrameBuffer size", &frameBufferSize.x, 0, 1500);
+	ImGui::End();
 }
 
 void Sandbox3D::OnEvent(Engine::Event& event)
