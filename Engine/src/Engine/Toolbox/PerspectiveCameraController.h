@@ -8,12 +8,18 @@
 #include "Engine/Events/MouseEvent.h"
 #include "Engine/Events/ApplicationEvent.h"
 
+#include "Engine/Renderer/FrameBuffer.h"
+
+#include "Engine/GUI/ViewportWindow.h"
+
+#include "Engine/Core/Application.h"
+
 namespace Engine
 {
 	class PerspectiveCameraController
 	{
 	public:
-		PerspectiveCameraController(float fov, float aspecRatio);
+		PerspectiveCameraController(float fov = 65.0f, float aspecRatio = 1.6f, ViewportWindow* window = Application::Get().GetViewportWindowPointer());
 		void OnUpdate(Timestep ts);
 		void OnEvent(Event& e);
 
@@ -24,7 +30,10 @@ namespace Engine
 		bool OnMouseButton(MouseButtonPressedEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
 
+		void OnGuiWindowResize(const glm::vec2& size);
+
 	private:
+		ViewportWindow* m_ActiveWindow;
 		float m_AspectRatio;
 		float m_FOV;
 		int m_ScreenWidth, m_ScreenHeight;

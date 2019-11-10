@@ -156,11 +156,17 @@
     <ClInclude Include="src\Engine\Core\MouseButtonCodes.h" />
     <ClInclude Include="src\Engine\Core\Timestep.h" />
     <ClInclude Include="src\Engine\Core\Window.h" />
+    <ClInclude Include="src\Engine\Entity\Components\MaterialComponent.h" />
+    <ClInclude Include="src\Engine\Entity\Components\MeshComponent.h" />
+    <ClInclude Include="src\Engine\Entity\Components\TransformComponent.h" />
+    <ClInclude Include="src\Engine\Entity\Entity.h" />
+    <ClInclude Include="src\Engine\Entity\Component.h" />
     <ClInclude Include="src\Engine\Events\ApplicationEvent.h" />
     <ClInclude Include="src\Engine\Events\Event.h" />
     <ClInclude Include="src\Engine\Events\KeyEvent.h" />
     <ClInclude Include="src\Engine\Events\MouseEvent.h" />
     <ClInclude Include="src\Engine\GUI\Gui.h" />
+    <ClInclude Include="src\Engine\GUI\ViewportWindow.h" />
     <ClInclude Include="src\Engine\Imgui\ImGuiLayer.h" />
     <ClInclude Include="src\Engine\Platform\OpenGl\OpenGLBuffer.h" />
     <ClInclude Include="src\Engine\Platform\OpenGl\OpenGLContext.h" />
@@ -177,6 +183,7 @@
     <ClInclude Include="src\Engine\Renderer\Lights.h" />
     <ClInclude Include="src\Engine\Renderer\Mesh.h" />
     <ClInclude Include="src\Engine\Renderer\Model.h" />
+    <ClInclude Include="src\Engine\Renderer\Scene.h" />
     <ClInclude Include="src\Engine\Toolbox\MousePicker.h" />
     <ClInclude Include="src\Engine\Toolbox\OrtographicCamera.h" />
     <ClInclude Include="src\Engine\Toolbox\OrtographicCameraController.h" />
@@ -570,7 +577,13 @@
     <ClCompile Include="src\Engine\Core\Layer.cpp" />
     <ClCompile Include="src\Engine\Core\LayerStack.cpp" />
     <ClCompile Include="src\Engine\Core\Log.cpp" />
+    <ClCompile Include="src\Engine\Entity\Component.cpp" />
+    <ClCompile Include="src\Engine\Entity\Components\MaterialComponent.cpp" />
+    <ClCompile Include="src\Engine\Entity\Components\MeshComponent.cpp" />
+    <ClCompile Include="src\Engine\Entity\Components\TransformComponent.cpp" />
+    <ClCompile Include="src\Engine\Entity\Entity.cpp" />
     <ClCompile Include="src\Engine\GUI\Gui.cpp" />
+    <ClCompile Include="src\Engine\GUI\ViewportWindow.cpp" />
     <ClCompile Include="src\Engine\Imgui\ImGuiBuild.cpp" />
     <ClCompile Include="src\Engine\Imgui\ImGuiLayer.cpp" />
     <ClCompile Include="src\Engine\Platform\OpenGl\OpenGLBuffer.cpp" />
@@ -586,6 +599,7 @@
     <ClCompile Include="src\Engine\Renderer\FrameBuffer.cpp" />
     <ClCompile Include="src\Engine\Renderer\Mesh.cpp" />
     <ClCompile Include="src\Engine\Renderer\Model.cpp" />
+    <ClCompile Include="src\Engine\Renderer\Scene.cpp" />
     <ClCompile Include="src\Engine\Toolbox\MousePicker.cpp" />
     <ClCompile Include="src\Engine\Toolbox\OrtographicCamera.cpp" />
     <ClCompile Include="src\Engine\Toolbox\OrtographicCameraController.cpp" />

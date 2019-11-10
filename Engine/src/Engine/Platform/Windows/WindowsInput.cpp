@@ -26,14 +26,14 @@ namespace Engine
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 		double xpos, ypos;
 		glfwGetCursorPos(window, &xpos, &ypos);
-		return (float)xpos;
+		return (float)xpos; //To Deal with viewport
 	}
 	float WindowsInput::GetMouseYImpl()
 	{
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 		double xpos, ypos;
 		glfwGetCursorPos(window, &xpos, &ypos);
-		return (float)ypos;
+		return (float)ypos; //To Deal with viewport
 	}
 	std::pair<float, float> WindowsInput::GetMousePosImpl()
 	{

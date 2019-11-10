@@ -9,7 +9,7 @@ namespace Engine
 	class OpenGLFrameBuffer : public FrameBuffer
 	{
 	public:
-		OpenGLFrameBuffer();
+		OpenGLFrameBuffer(const glm::vec2& size);
 		virtual ~OpenGLFrameBuffer() override;
 
 		virtual void Bind() const override;

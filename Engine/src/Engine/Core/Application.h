@@ -9,6 +9,8 @@
 #include "Engine/Renderer/Renderer.h"
 #include "Engine/Renderer/Renderer2D.h"
 
+#include "Engine/GUI/ViewportWindow.h"
+
 #include "Engine/Imgui/ImGuiLayer.h"
 
 #include "Engine/Core/Timestep.h"
@@ -31,13 +33,17 @@ namespace Engine
 		inline Window& GetWindow() { return *m_Window; }
 		inline static Application& Get() { return *s_Instance; }
 
-		static const std::string GetCurrentPath();
+		const void SetViewportWindowPointer(ViewportWindow* window) { viewport_window = window; }
+		ViewportWindow* GetViewportWindowPointer() { EG_CORE_ASSERT(viewport_window, "FrameBufferPointer not set / not set correctly"); return viewport_window; }
+
+
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
 
 	private:
 		Engine::Scope<Window> m_Window;
+		ViewportWindow* viewport_window;
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		bool m_Minimized = false;

@@ -3,7 +3,9 @@
 #include "Engine.h"
 #include "Engine/Core/Layer.h"
 
-#include "Engine/World/Chunk.h"
+#include "glm/gtx/intersect.hpp"
+
+#include "Engine/Renderer/Scene.h"
 
 class Sandbox3D : public Engine::Layer
 {
@@ -22,8 +24,7 @@ public:
 private:
 
 private:
-	Engine::Ref<Engine::FrameBuffer> m_Framebuffer;
-	Engine::Ref<Engine::VertexArray> m_ScreenQuad;
+	Engine::ViewportWindow m_Window;
 
 	Engine::ShaderLibrary m_ShaderLibrary;
 
@@ -34,7 +35,7 @@ private:
 	Engine::PointLight m_Light1;
 	std::vector<Engine::PointLight*> m_Lights;
 	glm::vec3 m_LampPosition = { 2.0f, 0.0f, 0.0f };
-	glm::vec3 m_LampPosition1 = { -2.0f, 0.0f, 0.0f };
+	glm::vec3 m_LampPosition1 = { 0.0f, 0.0f, 0.0f };
 	//Engine::Ref<Engine::Shader> m_MatShader;
 	//Engine::Ref<Engine::Shader> m_FlatColorShader;
 	//Engine::Ref<Engine::Shader> m_BlockShader;
@@ -56,4 +57,9 @@ private:
 	glm::vec3 speccol = { 213.0f / 255.0f, 225.0f / 255.0f, 44.0f / 255.0f };
 
 	glm::vec2 frameBufferSize = { 1280, 720 };
+	glm::vec3 rayPos = glm::vec3(0.0f);
+	glm::vec3 rayDir = glm::vec3(0.0f);
+
+	Engine::Entity testEntity;
+	Engine::Scene testScene;
 };

@@ -18,6 +18,10 @@ namespace Engine
 
 		glEnable(GL_MULTISAMPLE);
 
+		//glEnable(GL_STENCIL_TEST);
+		//glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+		//glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
 		float quadVertices[] = { 
 		// positions   // texCoords
 		-1.0f,  1.0f,  0.0f, 1.0f,
@@ -60,7 +64,7 @@ namespace Engine
 
 	void OpenGLRendererAPI::Clear()
 	{
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	}
 
 	void OpenGLRendererAPI::DrawIndexed(const Engine::Ref<VertexArray>& vertexArray)

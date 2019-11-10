@@ -23,6 +23,6 @@ namespace Engine
 
 		virtual void OnEvent(Event& e) = 0;
 
-		static Ref<FrameBuffer> Create();
+		static Ref<FrameBuffer> Create(const glm::vec2& size);
 	};
 }

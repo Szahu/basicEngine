@@ -16,6 +16,9 @@
 #include "Engine/Toolbox/MousePicker.h"
 
 #include "Engine/GUI/GUI.h"
+#include "Engine/GUI/ViewportWindow.h"
+
+#include "Engine/Entity/Entity.h"
 
 // -------- Renderer Stuff-------------------
 #include "Engine/Renderer/Renderer.h"

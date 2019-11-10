@@ -1292,6 +1292,13 @@
     </ClInclude>
     <ClInclude Include="src\Engine\Toolbox\MousePicker.h" />
     <ClInclude Include="src\Engine\GUI\Gui.h" />
+    <ClInclude Include="src\Engine\GUI\ViewportWindow.h" />
+    <ClInclude Include="src\Engine\Entity\Entity.h" />
+    <ClInclude Include="src\Engine\Entity\Component.h" />
+    <ClInclude Include="src\Engine\Entity\Components\MeshComponent.h" />
+    <ClInclude Include="src\Engine\Entity\Components\TransformComponent.h" />
+    <ClInclude Include="src\Engine\Renderer\Scene.h" />
+    <ClInclude Include="src\Engine\Entity\Components\MaterialComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EGpch.cpp">
@@ -1390,5 +1397,12 @@
     </ClCompile>
     <ClCompile Include="src\Engine\Toolbox\MousePicker.cpp" />
     <ClCompile Include="src\Engine\GUI\Gui.cpp" />
+    <ClCompile Include="src\Engine\GUI\ViewportWindow.cpp" />
+    <ClCompile Include="src\Engine\Entity\Entity.cpp" />
+    <ClCompile Include="src\Engine\Entity\Component.cpp" />
+    <ClCompile Include="src\Engine\Entity\Components\TransformComponent.cpp" />
+    <ClCompile Include="src\Engine\Renderer\Scene.cpp" />
+    <ClCompile Include="src\Engine\Entity\Components\MeshComponent.cpp" />
+    <ClCompile Include="src\Engine\Entity\Components\MaterialComponent.cpp" />
   </ItemGroup>
 </Project>

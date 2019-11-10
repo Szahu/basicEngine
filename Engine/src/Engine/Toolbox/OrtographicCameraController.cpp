@@ -51,7 +51,6 @@ namespace Engine
 	{
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<MouseScrolledEvent>(EG_BIND_EVENT_FN(OrtographicCameraController::onMouseScrolled));
-		dispatcher.Dispatch<WindowResizeEvent>(EG_BIND_EVENT_FN(OrtographicCameraController::onWindowResize));
 	}
 
 	bool OrtographicCameraController::onMouseScrolled(MouseScrolledEvent& e)
@@ -65,9 +64,9 @@ namespace Engine
 	bool OrtographicCameraController::onWindowResize(WindowResizeEvent& e)
 	{
 		m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
-
+		
 		m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
-
+		
 		return false;
 	}
 }

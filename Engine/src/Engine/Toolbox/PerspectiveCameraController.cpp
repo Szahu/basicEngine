@@ -8,15 +8,22 @@
 
 namespace Engine
 {
-	Engine::PerspectiveCameraController::PerspectiveCameraController(float fov, float aspectRatio)
+	Engine::PerspectiveCameraController::PerspectiveCameraController(float fov, float aspectRatio, ViewportWindow* window)
 		:m_Camera(fov, aspectRatio), m_AspectRatio(aspectRatio), m_FOV(fov)
 	{
-		m_ScreenHeight = Engine::Application::Get().GetWindow().GetHeight();
-		m_ScreenWidth = Engine::Application::Get().GetWindow().GetWidth();
+		m_ActiveWindow = window;
+		m_ScreenHeight = m_ActiveWindow->GetFrameBuffer()->GetTextureSize().y;
+		m_ScreenWidth = m_ActiveWindow->GetFrameBuffer()->GetTextureSize().x;
 	}
 
 	void PerspectiveCameraController::OnUpdate(Timestep ts)
 	{
+		if (m_ScreenWidth != m_ActiveWindow->GetFrameBuffer()->GetTextureSize().x || m_ScreenWidth != m_ActiveWindow->GetFrameBuffer()->GetTextureSize().x)
+		{
+			OnGuiWindowResize({m_ActiveWindow->GetFrameBuffer()->GetTextureSize().x, m_ActiveWindow->GetFrameBuffer()->GetTextureSize().y });
+		}
+
+
 		//Camera
 		if (Engine::Input::IsKeyPressed(EG_KEY_W))
 			m_CameraPosition += m_Camera.GetDirection() * m_CameraMoveSpeed * ts.GetSeconds();
@@ -78,12 +85,24 @@ namespace Engine
 	{
 		if (!e.GetWidth() == 0 && !e.GetHeight() == 0)
 		{
-			m_Camera.SetProjection(m_FOV, (float)e.GetWidth() / (float)e.GetHeight());
-			m_ScreenHeight = e.GetHeight();
-			m_ScreenWidth = e.GetWidth();
+			//m_Camera.SetProjection(m_FOV, (float)e.GetWidth() / (float)e.GetHeight());
+			//m_ScreenHeight = e.GetHeight();
+			//m_ScreenWidth = e.GetWidth();
+			//m_AspectRatio = (float)m_ScreenWidth / (float)m_ScreenHeight;
 			return false;
 		}
 		return false;
+	}
+
+	void PerspectiveCameraController::OnGuiWindowResize(const glm::vec2& size)
+	{
+		if (!size.x == 0 && !size.y == 0)
+		{
+			m_ScreenHeight = size.y;
+			m_ScreenWidth = size.x;
+			m_AspectRatio = (float)m_ScreenWidth / (float)m_ScreenHeight;
+			m_Camera.SetProjection(m_FOV, m_AspectRatio);
+		}
 	}
 
 }

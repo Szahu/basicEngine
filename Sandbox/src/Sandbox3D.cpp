@@ -6,11 +6,13 @@
 
 #include "GLFW/glfw3.h"
 
-Sandbox3D::Sandbox3D()
-	:Layer("Sandbox3D"), m_CameraController(65.0f, 1280.0f / 720.0f), m_Model("assets/Models/SF_Fighter/SciFi_Fighter.FBX"),
-	 m_MousePicker(m_CameraController.GetCamera())
-{
+#include "Engine/Entity/Components/MeshComponent.h"
+#include "Engine/Entity/Components/TransformComponent.h"
 
+Sandbox3D::Sandbox3D()
+	:Layer("Sandbox3D"), m_CameraController(65.0f, 1280.0f / 720.0f, &m_Window), m_Model("assets/Models/SF_Fighter/SciFi_Fighter.FBX"),
+	 m_MousePicker(m_CameraController.GetCamera(), &m_Window), testEntity("Test")
+{
 }
 
 void Sandbox3D::OnAttach()
@@ -77,26 +79,6 @@ void Sandbox3D::OnAttach()
 	Engine::Ref<Engine::IndexBuffer> t_IndexBuffer = Engine::IndexBuffer::Create(CubeIndices, sizeof(CubeIndices) / sizeof(unsigned int));
 
 
-	
-	
-	glm::vec3 translations[10 * 10 * 10];
-	
-	int index = 0;
-	int offset = 1;
-	for (int x = 0; x < 10; x++)
-	{
-		for (int z = 0; z < 10; z++)
-		{
-			for (int y = 0; y < 10; y++)
-			{
-				glm::vec3 translation(x * offset, y * offset, z * offset);
-				translations[index++] = translation;
-			}
-			
-		}
-	} 
-	Engine::Ref<Engine::VertexBuffer> t_TranslationsBuffer = Engine::VertexBuffer::Create(&translations[0].x, sizeof(translations));
-
 
 	Engine::BufferLayout layout{
 		{ Engine::ShaderDataType::Float3, "a_Positions" },
@@ -104,21 +86,11 @@ void Sandbox3D::OnAttach()
 		{ Engine::ShaderDataType::Float2, "a_TexCoords" },
 	};
 
-	Engine::BufferLayout TranslationsLayout{
-		{ Engine::ShaderDataType::Float3, "a_Translations" }
-	};
-
 	t_VertexBuffer->SetLayout(Engine::BufferLayout {
 		{ Engine::ShaderDataType::Float3, "a_Positions" },
 		{ Engine::ShaderDataType::Float3, "a_Normals" },
 		{ Engine::ShaderDataType::Float2, "a_TexCoords" },
 		});
-	t_TranslationsBuffer->SetLayout(TranslationsLayout);
-
-	m_VertexArray = Engine::VertexArray::Create();
-	m_VertexArray->AddVertexBuffer(t_VertexBuffer);
-	m_VertexArray->AddVertexBuffer(t_TranslationsBuffer, true);
-	m_VertexArray->SetIndexBuffer(t_IndexBuffer);
 
 	
 	m_LampVertexArray = Engine::VertexArray::Create();
@@ -128,14 +100,14 @@ void Sandbox3D::OnAttach()
 	m_ShaderLibrary.Load("assets/shaders/Material.glsl");
 	m_ShaderLibrary.Load("assets/shaders/FlatColor.glsl");
 
-	//m_FlatColorShader->Bind();
-	//m_FlatColorShader->SetFloat4("u_Color", {1.0f, 1.0f, 1.0f, 1.0f});
-	//m_FlatColorShader->SetMat4("u_Transform", glm::mat4(1.0f));
-
 	m_Lights.push_back(&m_Light);
 	m_Lights.push_back(&m_Light1);
 
-	m_Framebuffer = Engine::FrameBuffer::Create();
+	testEntity.AddComponent(Engine::ComponentType::Mesh);
+	testEntity.GetMeshComponent()->SetVertexArray(m_LampVertexArray);
+
+	testScene.SetSceneData(m_Window.GetFrameBuffer(), m_CameraController, m_Lights, &m_ShaderLibrary);
+	testScene.AddEntity(testEntity);
 }
 
 void Sandbox3D::OnDetach()
@@ -145,48 +117,77 @@ void Sandbox3D::OnDetach()
 
 void Sandbox3D::OnUpdate(Engine::Timestep ts)
 {
-	m_CameraController.OnUpdate(ts);
-	m_MousePicker.OnUpdate();
+	//glStencilMask(0x00);
 
+	testScene.OnUpdate(ts);
 	FPS = 1.0f / ts;
 
-	Engine::Renderer::BeginScene(m_Framebuffer, m_CameraController.GetCamera(), m_Lights, &m_ShaderLibrary);
+	glm::mat4 lampTransform1 = glm::translate(glm::mat4(1.0f), m_LampPosition1) * glm::scale(glm::mat4(1.0f), { 0.5f, 0.5f, 0.5 });
+	m_Light1.SetPosition(glm::vec3(lampTransform1[3][0], lampTransform1[3][1], lampTransform1[3][2]));
+
+	/*
+	testEntity.OnUpdate();
+
+	m_CameraController.OnUpdate(ts);
+	m_MousePicker.OnUpdate(m_CameraController.GetCamera().GetProjectionMatrix(), m_CameraController.GetCamera().GetViewMatrix());	
+
+	const glm::vec3 test = { 0.0f, 0.0f, 0.0f };
+	float distance = 0.0f;
+	bool isInterSecting = glm::intersectRaySphere(m_CameraController.GetCamera().GetPosition(), m_MousePicker.GetCurrentRay(), m_LampPosition1, 1.0f, distance);
+
+	Engine::Renderer::BeginScene(m_Window.GetFrameBuffer(), m_CameraController.GetCamera(), m_Lights, &m_ShaderLibrary);
 	
+	glStencilMask(0x00);
 
 	m_ShaderLibrary.Get("FlatColor")->Bind();
 	m_ShaderLibrary.Get("FlatColor")->SetFloat4("u_Color", { 1.0f, 1.0f, 1.0f, 1.0f });
-	Engine::Renderer::Submit(m_Model, glm::mat4(1.0f));
+	Engine::Renderer::Submit(m_Model, testEntity.GetTransformComponent()->GetTransform());
 
-	glm::mat4 lampTransform = glm::translate(glm::mat4(1.0f), glm::vec3(m_LampPosition.x, m_LampPosition.y + sin(glfwGetTime()) * 5, m_LampPosition.z)) * glm::scale(glm::mat4(1.0f), { 0.5f, 0.5f, 0.5 });
 	glm::mat4 lampTransform1 = glm::translate(glm::mat4(1.0f), m_LampPosition1) * glm::scale(glm::mat4(1.0f), { 0.5f, 0.5f, 0.5 });
-	m_Light.SetPosition(glm::vec3(lampTransform[3][0], lampTransform[3][1], lampTransform[3][2]));
 	m_Light1.SetPosition(glm::vec3(lampTransform1[3][0], lampTransform1[3][1], lampTransform1[3][2]));
-	m_Framebuffer->BindTexture();
-	Engine::Renderer::Submit(m_LampVertexArray, lampTransform1, m_ShaderLibrary.Get("Material"));
-	m_Framebuffer->BindTexture();
-	Engine::Renderer::Submit(m_LampVertexArray, lampTransform, m_ShaderLibrary.Get("FlatColor"));
+
+	glStencilFunc(GL_ALWAYS, 1, 0xFF);
+	glStencilMask(0xFF);
+
+	Engine::Renderer::Submit(m_LampVertexArray, lampTransform1, m_ShaderLibrary.Get("FlatColor"));
+
+	glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+	glStencilMask(0x00);
+	//glDisable(GL_DEPTH_TEST);
+
+	m_ShaderLibrary.Get("FlatColor")->SetFloat4("u_Color", { 0.7f, 2.0f, 0.0f, 1.0f });
+	Engine::Renderer::Submit(m_LampVertexArray, glm::scale(lampTransform1, glm::vec3(1.2f, 1.2f, 1.2f)), m_ShaderLibrary.Get("FlatColor"));
+
+	glStencilMask(0x00);
+	//glEnable(GL_DEPTH_TEST);
+
+	
+	m_ShaderLibrary.Get("FlatColor")->SetFloat4("u_Color", { 1.0f, 1.0f, 1.0f, 1.0f });
+	glm::mat4 lampTransform = glm::translate(glm::mat4(1.0f), glm::vec3(m_LampPosition.x, m_LampPosition.y + sin(glfwGetTime()) * 5, m_LampPosition.z)) * glm::scale(glm::mat4(1.0f), { 0.5f, 0.5f, 0.5 });
+	m_Light.SetPosition(glm::vec3(lampTransform[3][0], lampTransform[3][1], lampTransform[3][2]));
+	//Engine::Renderer::Submit(testEntity.GetMeshComponent()->GetVertexArray(), testEntity.GetTransformComponent()->GetTransform(), m_ShaderLibrary.Get("FlatColor"));
+
 
 	Engine::Renderer::EndScene();
+	*/
 }
 
 void Sandbox3D::OnImGuiRender()
 {
 	Engine::Gui::InitDocspace();
 
-	Engine::Gui::ViewportWindow(m_Framebuffer);
+	m_Window.OnImGuiRender();
 
 	bool show = true;
 	ImGui::ShowDemoWindow(&show);
 
 	ImGui::Begin("Debug Window");
+	testScene.OnImGuiRender();
+
 	ImGui::Text("FPS: %i", FPS);
-	ImGui::ColorEdit3("Cube color", &m_CubeColor.x);
-	ImGui::SliderFloat3("Lamp Position", &m_LampPosition.x, -20.0f, 20.0f);
-	ImGui::SliderFloat3("Lamp Position 1", &m_LampPosition1.x, -20.0f, 20.0f);
-	ImGui::SliderInt("Render Count", &renderCount, 0, pow(Engine::Chunk::GetChunkSize(), 3));
-	ImGui::ColorEdit3("Lamp Ambient", &amcol.x); m_Light.SetAmbient(amcol);
-	ImGui::ColorEdit3("Lamp Diffuse", &diffcol.x); m_Light.SetDiffuse(diffcol);
-	ImGui::ColorEdit3("Lamp Speculkar", &speccol.x); m_Light.SetSpecular(speccol);
+	ImGui::DragFloat3("CubePos", &m_LampPosition1.x, 0.3f);
+	ImGui::SliderFloat3("Starting pos", &rayPos.x, -20.0f, 20.0f);
+	ImGui::SliderFloat3("Dir", &rayDir.x, -1, 1);
 	ImGui::SliderFloat2("FrameBuffer size", &frameBufferSize.x, 0, 1500);
 	ImGui::End();
 }
@@ -194,6 +195,6 @@ void Sandbox3D::OnImGuiRender()
 void Sandbox3D::OnEvent(Engine::Event& event)
 {
 	m_CameraController.OnEvent(event);
-	m_Framebuffer->OnEvent(event);
+	testScene.OnEvent(event);
 }
 

@@ -55,7 +55,7 @@ namespace Engine
 		m_Context->Init();
 
 		glfwWindowHint(GLFW_SAMPLES, 0);
-		glfwSetWindowPos(m_Window, 0, 30);
+		glfwSetWindowPos(m_Window, (1920 - m_Data.Width) / 2 , 40);
 
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);

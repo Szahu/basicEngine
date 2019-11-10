@@ -60,27 +60,41 @@ namespace Engine
 		ImGui::End();
 	}
 
+	Gui::ViewportData*  Gui::m_Data = new Gui::ViewportData;
+
 	const void Gui::ViewportWindow(const Ref<FrameBuffer>& frameBuffer)
 	{
 		int W = frameBuffer->GetTextureSize().x;
 		int H = frameBuffer->GetTextureSize().y;
 
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0.0f, 4.0f));
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
 		ImGui::SetNextWindowSize(ImVec2(W, H));
-		//m_Framebuffer->SetTextureSize({ size.x , size.y});
 		ImGuiWindowFlags flags = ImGuiTabBarFlags_NoTooltip;
 		ImGui::Begin("Viewport", NULL, flags);
 		{
 			ImVec2 size = ImGui::GetWindowSize();
 			frameBuffer->SetTextureSize({ size.x, size.y });
-			ImVec2 pos = ImGui::GetCursorScreenPos();
 
+			ImVec2 pos = ImGui::GetCursorScreenPos();
+			ImVec2 pos_win = ImGui::GetWindowPos();
+			ImVec2 region = ImGui::GetWindowContentRegionMax();
+			ImVec2 cursor_pos = ImGui::GetCursorPos();
+			EG_INFO("x: {0}, y: {1}", ImGui::GetWindowPos().x, ImGui::GetWindowPos().y);
+
+
+			m_Data->m_ViewportPosition = { cursor_pos.x, cursor_pos.y };
 			auto tex = frameBuffer->GetTextureID();
 
 			ImGui::GetWindowDrawList()->AddImage(
 				(void*)tex,
-				ImVec2(ImGui::GetItemRectMin().x, ImGui::GetItemRectMin().y),
-				ImVec2(pos.x + W, pos.y + H), ImVec2(0, 1), ImVec2(1, 0));
+				ImVec2(ImGui::GetItemRectMin().x - 20, ImGui::GetItemRectMin().y),
+				ImVec2(pos.x + W, pos.y + H),
+				ImVec2(0, 1), ImVec2(1, 0));
 		}
 		ImGui::End();
+		ImGui::PopStyleVar();
+		ImGui::PopStyleVar();
 	}
+
 }

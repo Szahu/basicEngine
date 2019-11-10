@@ -29,6 +29,7 @@ namespace Engine
 
 		Engine::RenderCommand::Clear();
 		Engine::RenderCommand::SetClearColor({ 0.53f, 0.81f, 0.98f, 1.0f });
+
 	}
 
 	void Renderer::EndScene()
@@ -41,17 +42,17 @@ namespace Engine
 		//Engine::RenderCommand::RenderToScreen();
 	}
 
-	void Renderer::Submit(const Engine::Ref<VertexArray>& vertexArray, const glm::mat4& transform, const Engine::Ref<Shader>& shader, uint32_t instances)
+	void Renderer::Submit(const Engine::Ref<VertexArray>& vertexArray, const MaterialStruct& material, const glm::mat4& transform, const Engine::Ref<Shader>& shader, uint32_t instances)
 	{
 		shader->Bind();
 		shader->SetMat4("u_ViewProjectionMatrix", m_SceneData->m_Camera->GetViewProjectionMatrix());
 		shader->SetMat4("u_Transform", transform);
 		shader->SetFloat3("u_CameraPosition", m_SceneData->m_Camera->GetPosition());
 
-		shader->SetFloat3("u_Material.ambient", glm::vec3(1.0f));
-		shader->SetFloat3("u_Material.diffuse", glm::vec3(1.0f));
-		shader->SetFloat3("u_Material.specular", glm::vec3(1.0f));
-		shader->SetFloat1("u_Material.shininess", 64.0f);
+		shader->SetFloat3("u_Material.ambient", material.m_Ambient);
+		shader->SetFloat3("u_Material.diffuse", material.m_Diffuse);
+		shader->SetFloat3("u_Material.specular", material.m_Specular);
+		shader->SetFloat1("u_Material.shininess", material.m_Shininess);
 
 		for (unsigned int i = 0; i < m_SceneData->m_Lights.size(); i++)
 		{

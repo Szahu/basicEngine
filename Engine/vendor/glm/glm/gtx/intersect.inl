@@ -1,5 +1,7 @@
 /// @ref gtx_intersect
 
+#include "glm/gtx/intersect.hpp"
+
 namespace glm
 {
 	template<typename genType>

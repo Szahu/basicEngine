@@ -5,6 +5,8 @@
 #include "Engine/Core/Core.h"
 #include "Engine/Events/Event.h"
 
+#include "Engine/Renderer/FrameBuffer.h"
+
 namespace Engine
 {
 
@@ -13,6 +15,7 @@ namespace Engine
 		std::string Title;
 		unsigned int Width;
 		unsigned int Height;
+		Ref<FrameBuffer> FramebufferPointer;
 
 		WindowProps(const std::string& title = "Engine Engine",
 			unsigned int width = 1280,
