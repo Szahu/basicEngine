@@ -19,7 +19,7 @@
 Engine/src/Engine/Imgui/Fonts
 Sandbox/assets/Models
 Sandbox/assets/Textures
-Engine/vendor
+#Engine/vendor
 bin
 bin-int
 
