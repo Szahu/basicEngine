@@ -21,8 +21,9 @@ namespace Engine
 
 		if (component == ComponentType::Mesh)
 		{
-			std::dynamic_pointer_cast<MeshComponent>(m_Components[component])->SetTransform(&GetTransformComponent()->GetTransform().Full_Transform);
-			//std::dynamic_pointer_cast<MeshComponent>(m_Components[component])->SetSelectingBool(&isActive);
+			auto pm = std::dynamic_pointer_cast<MeshComponent>(m_Components[component]);
+			if (pm) pm->SetTransform(&GetTransformComponent()->GetTransform());
+			else EG_CORE_ERROR("Casting in Entity.cpp when wrong");
 		}
 	}
 
@@ -50,13 +51,46 @@ namespace Engine
 
 	void Entity::OnImGuiRender()
 	{
-		ImGui::Text(GetName().c_str());
+
+		ImGui::SetWindowFontScale(1.3);
+		ImGui::TextColored(ImVec4(1.0f, 0.75f, 0.0f, 1.0f), GetName().c_str());
+		ImGui::SetWindowFontScale(1.0f);
 		ImGui::Separator();
+
+		if (ImGui::IsMouseClicked(1) && ImGui::IsWindowHovered())
+		{
+			ImGui::OpenPopup("AddComponent");
+
+			
+		}
+
+		
+		if (ImGui::BeginPopup("AddComponent"))
+		{
+			if (ImGui::Button("Add component"))
+			{
+				ImGui::OpenPopup("Choose");
+			}
+
+			if (ImGui::BeginPopup("Choose"))
+			{
+				if (ImGui::Button("MeshComponent"))
+				{
+					AddComponent(ComponentType::Mesh);
+					ImGui::CloseCurrentPopup();
+				}
+				ImGui::EndPopup();
+			}
+
+			ImGui::EndPopup();
+		}
+		
+		
+
 		for (auto com : m_Components)
 		{
 			com.second->OnImGuiRender();
 		}
-		ImGui::Separator();
 	}
 
 	void Entity::OnUpdate()
@@ -65,7 +99,7 @@ namespace Engine
 		{
 			com.second->OnUpdate();
 		}
-		GetMeshComponent()->IsActive = isActive;
+		if(HasComponent(ComponentType::Mesh)) GetMeshComponent()->IsActive = isActive;
 	}
 
 	bool Entity::HasComponent(ComponentType type)
@@ -83,7 +117,7 @@ namespace Engine
 	{
 		bool isWorking =  glm::intersectRaySphere(Application::Get().GetEditorCameraPointer()->GetPosition(),
 			picker->GetCurrentRay(),
-			GetTransformComponent()->GetPosition(), 2.0f, pickingDistance);	
+			GetTransformComponent()->GetPosition(), 0.85f, pickingDistance);	
 		return isWorking;
 	}
 

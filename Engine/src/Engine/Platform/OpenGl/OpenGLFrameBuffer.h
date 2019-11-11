@@ -37,5 +37,6 @@ namespace Engine
 		uint32_t m_RenderBuffer;
 		uint32_t m_TextureColorBuffer, m_ScreenTexture;
 		glm::vec2 m_TextureSize = { Application::Get().GetWindow().GetWidth(), Application::Get().GetWindow().GetHeight() };
+		unsigned int samples = 4;
 	};
 }

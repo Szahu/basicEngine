@@ -22,7 +22,7 @@ Sandbox/assets/Textures
 #Engine/vendor
 bin
 bin-int
-
+AdditionalDependenciesForGit
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

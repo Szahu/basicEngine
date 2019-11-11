@@ -20,8 +20,8 @@ namespace Engine
 	void MeshComponent::OnUpdate()
 	{
 		EG_CORE_ASSERT(m_Transform, "m_Transform is a nullptr in MeshComponent");
-		glm::mat4 transform = *m_Transform;
-		Renderer::Submit(GetVertexArray(),m_Material.GetMaterial(), transform, IsActive);
+		//EG_CORE_ASSERT(m_VertexArray, "VertexArray not set in MeshComponent");
+		if(m_VertexArray) Renderer::Submit(GetVertexArray(),m_Material.GetMaterial(), *m_Transform, IsActive);
 	}
 }
 

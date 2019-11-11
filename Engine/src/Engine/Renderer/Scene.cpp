@@ -6,6 +6,8 @@
 #include "Engine/Core/Application.h"
 #include "Engine/Core/MouseButtonCodes.h"
 
+#include "Engine/Core/Input.h"
+
 namespace Engine
 {
 
@@ -36,6 +38,53 @@ namespace Engine
 	void Scene::OnImGuiRender()
 	{
 		ImGui::Begin("Entities in the scene");
+
+		if (ImGui::IsMouseClicked(1) && ImGui::IsWindowHovered())
+		{
+			ImGui::OpenPopup("Test_popup"); 
+		}
+
+		if(ImGui::BeginPopup("Test_popup"))
+		{
+			if(ImGui::BeginPopup("EnterText"))
+			{
+				ImGui::SameLine();
+				static char text[16];
+				if (ImGui::InputText("Name:", &text[0], IM_ARRAYSIZE(text), ImGuiInputTextFlags_EnterReturnsTrue))
+				{
+					if (text[0] != 0)
+					{
+						Entity new_Entity(text);
+						AddEntity(new_Entity);
+						text[0] = 0;
+					}
+					ImGui::CloseCurrentPopup();
+				}
+				ImGui::SameLine();
+
+				if (ImGui::Button("Enter")) 
+				{ 
+					if (text[0] != 0)
+					{
+						Entity new_Entity(text);
+						AddEntity(new_Entity);
+						text[0] = 0;
+					}
+					ImGui::CloseCurrentPopup();
+				} 
+
+				ImGui::EndPopup();
+			}
+
+			if (ImGui::Button("Add new Entity!"))
+			{
+				ImGui::OpenPopup("EnterText");
+			}
+
+			ImGui::EndPopup();
+		}
+			
+
 		for (auto& en : m_Entities)
 		{	
 			if (m_ActiveEntity == &en.second)
@@ -72,7 +121,7 @@ namespace Engine
 		m_Lights = lights;
 	}
 
-	void Scene::AddEntity(Entity& entity)
+	void Scene::AddEntity(Entity entity)
 	{
 		for (auto& em : m_Entities)
 		{
@@ -82,9 +131,10 @@ namespace Engine
 				return;
 			}
 		}
-		m_Entities[entity.GetName()] = entity;
-		itr = m_Entities.find(entity.GetName());
-		m_ActiveEntity = &entity;
+		//m_Entities[entity.GetName()] = entity;
+		m_Entities.emplace(std::make_pair(entity.GetName(), entity));
+		//m_Entities.insert(std::make_pair(entity.GetName(), entity));
+		m_ActiveEntity = &m_Entities[entity.GetName()];
 	}
 
 	bool Scene::OnMouseClick(MouseButtonPressedEvent& e)

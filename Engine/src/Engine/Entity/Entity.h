@@ -20,8 +20,8 @@ namespace Engine
 
 		const Ref<Component> GetComponent(ComponentType type); //Has to be dynamicly cast afterwards
 
-		const Ref<TransformComponent> GetTransformComponent() { return std::dynamic_pointer_cast<TransformComponent>(m_Components[ComponentType::Transform]); }
-		const Ref<MeshComponent> GetMeshComponent() { return std::dynamic_pointer_cast<MeshComponent>(m_Components[ComponentType::Mesh]); }
+		const Ref<TransformComponent> GetTransformComponent() { auto pm = std::dynamic_pointer_cast<TransformComponent>(m_Components[ComponentType::Transform]); if (pm) return pm; else EG_CORE_ERROR("Casting went wrong In GetTransformComponent"); }
+		const Ref<MeshComponent> GetMeshComponent() { auto pm = std::dynamic_pointer_cast<MeshComponent>(m_Components[ComponentType::Mesh]); if (pm) return pm; else EG_CORE_ERROR("Casting went wrong In GetMeshComponent"); }
 
 		void OnImGuiRender();
 		void OnUpdate();

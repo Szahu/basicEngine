@@ -20,7 +20,7 @@ namespace Engine
 		virtual void DrawInstanced(const Engine::Ref<VertexArray>& vertexArray, uint32_t count) override;
 
 	private:
-		Ref<VertexArray> m_ScreenQuad;
-		Ref<Shader> m_ScreenShader;
+		//Ref<VertexArray> m_ScreenQuad;
+		//Ref<Shader> m_ScreenShader;
 	};
 }

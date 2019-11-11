@@ -3,6 +3,9 @@
 #include "Engine/Core/Core.h"
 #include "Engine/Renderer/FrameBuffer.h"
 
+#include "Engine/Core/Keycodes.h"
+#include "Engine/Core/MouseButtonCodes.h"
+
 namespace Engine
 {
 	class Input

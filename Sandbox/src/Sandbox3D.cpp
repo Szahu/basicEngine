@@ -115,9 +115,10 @@ void Sandbox3D::OnAttach()
 	testEntity2.GetMeshComponent()->SetVertexArray(m_LampVertexArray);
 
 	testScene.SetSceneData(m_Window.GetFrameBuffer(), &m_CameraController, m_Lights, &m_ShaderLibrary);
-	testScene.AddEntity(testEntity);
-	testScene.AddEntity(testEntity1);
-	testScene.AddEntity(testEntity2);
+	testScene.AddEntity(Engine::Entity("ImNew"));
+	//testScene.AddEntity(testEntity);
+	//testScene.AddEntity(testEntity1);
+	//testScene.AddEntity(testEntity2);
 }
 
 void Sandbox3D::OnDetach()
@@ -195,9 +196,8 @@ void Sandbox3D::OnImGuiRender()
 	bool show = true;
 	ImGui::ShowDemoWindow(&show);
 
-	ImGui::Begin("Debug Window");
+	ImGui::Begin("Inspector");
 	testScene.OnImGuiRender();
-
 	ImGui::Text("FPS: %i", FPS);
 	ImGui::DragFloat3("LightPos", &m_LampPosition1.x, 0.3f);
 	ImGui::End();

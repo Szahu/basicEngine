@@ -44,7 +44,7 @@ namespace Engine
 		//Engine::RenderCommand::RenderToScreen();
 	}
 
-	void Renderer::Submit(const Engine::Ref<VertexArray>& vertexArray, const MaterialStruct& material, const glm::mat4& transform, bool drawOutline, const Engine::Ref<Shader>& shader,  uint32_t instances)
+	void Renderer::Submit(const Engine::Ref<VertexArray>& vertexArray, const MaterialStruct& material, const Transform& transform, bool drawOutline, const Engine::Ref<Shader>& shader,  uint32_t instances)
 	{
 		shader->Bind();
 		shader->SetFloat3("u_FlatColor", glm::vec3(0.0f, 0.0f, 0.0f));
@@ -82,7 +82,12 @@ namespace Engine
 				glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
 				glStencilMask(0x00);
 
-				shader->SetMat4("u_Transform", glm::scale(transform, glm::vec3(1.1f)));
+				glm::mat4 scaledTransform = transform;
+				scaledTransform[0][0] += 0.15f;
+				scaledTransform[1][1] += 0.15f;
+				scaledTransform[2][2] += 0.15f;
+
+				shader->SetMat4("u_Transform", scaledTransform);
 				shader->SetFloat3("u_FlatColor", glm::vec3(1.0f, 165.0f / 255.0f, 0.0f));
 				RenderCommand::DrawIndexed(vertexArray);
 			}

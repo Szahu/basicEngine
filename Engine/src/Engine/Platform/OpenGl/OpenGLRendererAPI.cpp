@@ -22,34 +22,34 @@ namespace Engine
 		glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
 		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-		float quadVertices[] = { 
-		// positions   // texCoords
-		-1.0f,  1.0f,  0.0f, 1.0f,
-		-1.0f, -1.0f,  0.0f, 0.0f,
-		 1.0f, -1.0f,  1.0f, 0.0f,
+		//float quadVertices[] = { 
+		//// positions   // texCoords
+		//-1.0f,  1.0f,  0.0f, 1.0f,
+		//-1.0f, -1.0f,  0.0f, 0.0f,
+		// 1.0f, -1.0f,  1.0f, 0.0f,
+		//
+		//-1.0f,  1.0f,  0.0f, 1.0f,
+		// 1.0f, -1.0f,  1.0f, 0.0f,
+		// 1.0f,  1.0f,  1.0f, 1.0f
+		//};
+		//
+		//Engine::Ref<Engine::VertexBuffer> buffer = Engine::VertexBuffer::Create(quadVertices, sizeof(quadVertices));
+		//buffer->SetLayout(Engine::BufferLayout{
+		//	{Engine::ShaderDataType::Float2, "a_Positions"},
+		//	{Engine::ShaderDataType::Float2, "a_TexCoords"},
+		//});
+		//
+		//m_ScreenQuad = Engine::VertexArray::Create();
+		//m_ScreenQuad->AddVertexBuffer(buffer);
 
-		-1.0f,  1.0f,  0.0f, 1.0f,
-		 1.0f, -1.0f,  1.0f, 0.0f,
-		 1.0f,  1.0f,  1.0f, 1.0f
-		};
-
-		Engine::Ref<Engine::VertexBuffer> buffer = Engine::VertexBuffer::Create(quadVertices, sizeof(quadVertices));
-		buffer->SetLayout(Engine::BufferLayout{
-			{Engine::ShaderDataType::Float2, "a_Positions"},
-			{Engine::ShaderDataType::Float2, "a_TexCoords"},
-		});
-
-		m_ScreenQuad = Engine::VertexArray::Create();
-		m_ScreenQuad->AddVertexBuffer(buffer);
-
-		m_ScreenShader = Shader::Create("assets/shaders/screenShader.glsl");
+		//m_ScreenShader = Shader::Create("assets/shaders/screenShader.glsl");
 	}
 
 	void OpenGLRendererAPI::RenderToScreen()
 	{
-		m_ScreenShader->Bind();
-		m_ScreenQuad->Bind();
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		//m_ScreenShader->Bind();
+		//m_ScreenQuad->Bind();
+		//glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
 
 	void OpenGLRendererAPI::SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)

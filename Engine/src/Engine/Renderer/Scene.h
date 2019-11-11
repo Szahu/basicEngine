@@ -24,19 +24,19 @@ namespace Engine
 
 		void SetSceneData(const Ref<FrameBuffer>& frameBuffer, PerspectiveCameraController* camera, const std::vector<PointLight*>& lights, ShaderLibrary* library);
 
-		void AddEntity(Entity& entity);
+		void AddEntity(Entity entity);
 
 	private:
 		bool OnMouseClick(MouseButtonPressedEvent& e);
 
 	private:
 		Entity* m_ActiveEntity = nullptr;
-		std::unordered_map<std::string, Entity>::iterator itr;
 		Ref<FrameBuffer> m_FrameBuffer;
 		PerspectiveCameraController* m_Camera;
 		ShaderLibrary* m_ShaderLibrary;
 		std::vector<PointLight*> m_Lights;
 		std::unordered_map<std::string, Entity> m_Entities;
 		MousePicker m_MousePicker;
+
 	};
 }

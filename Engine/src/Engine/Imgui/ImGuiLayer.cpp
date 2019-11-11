@@ -46,7 +46,7 @@ namespace Engine
 		}
 
 		style.FramePadding = ImVec2(5, 2);
-		style.FrameRounding = 2.0f;
+		style.FrameRounding = 2.5f;
 		style.ItemSpacing = ImVec2(6, 8);
 		style.ItemInnerSpacing = ImVec2(8, 6);
 		style.IndentSpacing = 25.0f;
@@ -94,13 +94,14 @@ namespace Engine
 		style.Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.25f, 1.00f, 0.00f, 0.43f);
 		style.Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(1.00f, 0.98f, 0.95f, 0.73f);
 
-		style.Colors[ImGuiCol_Tab] = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
+		style.Colors[ImGuiCol_Tab] = ImVec4(0.1f, 0.1f, 0.1f, 1.0f);
 		style.Colors[ImGuiCol_TabHovered] = ImVec4(0.3f, 0.3f, 0.3f, 1.0f);
 		style.Colors[ImGuiCol_TabActive] = ImVec4(0.2f, 0.2f, 0.2f, 1.0f);
 		style.Colors[ImGuiCol_TabUnfocused] = ImVec4(0.1f, 0.1f, 0.1f, 1.0f);
 		style.Colors[ImGuiCol_TabUnfocusedActive] = ImVec4(0.2f, 0.2f, 0.2f, 1.0f);
 
 		style.ColorButtonPosition = ImGuiDir_Left;
+		style.WindowMenuButtonPosition = ImGuiDir_Right;
 
 		Application& app = Application::Get();
 		GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
