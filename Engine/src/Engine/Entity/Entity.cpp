@@ -77,7 +77,7 @@ namespace Engine
 				if (ImGui::Button("MeshComponent"))
 				{
 					AddComponent(ComponentType::Mesh);
-					ImGui::CloseCurrentPopup();
+					ImGui::CloseCurrentPopup(); //Ey
 				}
 				ImGui::EndPopup();
 			}
