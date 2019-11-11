@@ -18,9 +18,7 @@ namespace Engine
 
 	
 
-	MousePicker::MousePicker(const PerspectiveCamera& camera, ViewportWindow* window) :
-		m_ProjectionMatrix(camera.GetProjectionMatrix()),
-		m_ViewMatrix(camera.GetViewMatrix()),
+	MousePicker::MousePicker(ViewportWindow* window) :
 		m_CurrentRay{ 0.0f, 0.0f, 0.0f },
 		window(window)
 	{

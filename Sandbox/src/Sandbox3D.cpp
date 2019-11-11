@@ -11,12 +11,14 @@
 
 Sandbox3D::Sandbox3D()
 	:Layer("Sandbox3D"), m_CameraController(65.0f, 1280.0f / 720.0f, &m_Window), m_Model("assets/Models/SF_Fighter/SciFi_Fighter.FBX"),
-	 m_MousePicker(m_CameraController.GetCamera(), &m_Window), testEntity("Test")
+	 m_MousePicker(&m_Window), testEntity("TestEntity"), testEntity1("TestEntity1"), testEntity2("TestEntity2")
 {
 }
 
 void Sandbox3D::OnAttach()
 {
+	Engine::Application::Get().SetEditorCameraPointer(&m_CameraController.GetCamera());
+
 	EG_INFO("Sanbox3D online");
 
 	float CubePositions[8 * 3] =
@@ -106,8 +108,16 @@ void Sandbox3D::OnAttach()
 	testEntity.AddComponent(Engine::ComponentType::Mesh);
 	testEntity.GetMeshComponent()->SetVertexArray(m_LampVertexArray);
 
-	testScene.SetSceneData(m_Window.GetFrameBuffer(), m_CameraController, m_Lights, &m_ShaderLibrary);
+	testEntity1.AddComponent(Engine::ComponentType::Mesh);
+	testEntity1.GetMeshComponent()->SetVertexArray(m_LampVertexArray);
+
+	testEntity2.AddComponent(Engine::ComponentType::Mesh);
+	testEntity2.GetMeshComponent()->SetVertexArray(m_LampVertexArray);
+
+	testScene.SetSceneData(m_Window.GetFrameBuffer(), &m_CameraController, m_Lights, &m_ShaderLibrary);
 	testScene.AddEntity(testEntity);
+	testScene.AddEntity(testEntity1);
+	testScene.AddEntity(testEntity2);
 }
 
 void Sandbox3D::OnDetach()
@@ -117,10 +127,14 @@ void Sandbox3D::OnDetach()
 
 void Sandbox3D::OnUpdate(Engine::Timestep ts)
 {
-	//glStencilMask(0x00);
+	
 
 	testScene.OnUpdate(ts);
 	FPS = 1.0f / ts;
+
+	glStencilMask(0x00);
+
+	m_MousePicker.OnUpdate(m_CameraController.GetCamera().GetProjectionMatrix(), m_CameraController.GetCamera().GetViewMatrix());
 
 	glm::mat4 lampTransform1 = glm::translate(glm::mat4(1.0f), m_LampPosition1) * glm::scale(glm::mat4(1.0f), { 0.5f, 0.5f, 0.5 });
 	m_Light1.SetPosition(glm::vec3(lampTransform1[3][0], lampTransform1[3][1], lampTransform1[3][2]));
@@ -185,10 +199,7 @@ void Sandbox3D::OnImGuiRender()
 	testScene.OnImGuiRender();
 
 	ImGui::Text("FPS: %i", FPS);
-	ImGui::DragFloat3("CubePos", &m_LampPosition1.x, 0.3f);
-	ImGui::SliderFloat3("Starting pos", &rayPos.x, -20.0f, 20.0f);
-	ImGui::SliderFloat3("Dir", &rayDir.x, -1, 1);
-	ImGui::SliderFloat2("FrameBuffer size", &frameBufferSize.x, 0, 1500);
+	ImGui::DragFloat3("LightPos", &m_LampPosition1.x, 0.3f);
 	ImGui::End();
 }
 

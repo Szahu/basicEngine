@@ -18,7 +18,7 @@ namespace Engine
 
 	void PerspectiveCameraController::OnUpdate(Timestep ts)
 	{
-		if (m_ScreenWidth != m_ActiveWindow->GetFrameBuffer()->GetTextureSize().x || m_ScreenWidth != m_ActiveWindow->GetFrameBuffer()->GetTextureSize().x)
+		if (m_ScreenWidth != m_ActiveWindow->GetFrameBuffer()->GetTextureSize().x || m_ScreenHeight != m_ActiveWindow->GetFrameBuffer()->GetTextureSize().y)
 		{
 			OnGuiWindowResize({m_ActiveWindow->GetFrameBuffer()->GetTextureSize().x, m_ActiveWindow->GetFrameBuffer()->GetTextureSize().y });
 		}

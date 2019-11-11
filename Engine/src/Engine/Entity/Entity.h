@@ -6,6 +6,8 @@
 #include "Engine/Entity/Components/TransformComponent.h"
 #include "Engine/Entity/Components/MeshComponent.h"
 
+#include "Engine/Toolbox/MousePicker.h"
+
 namespace Engine
 {
 	class Entity
@@ -26,10 +28,17 @@ namespace Engine
 
 		bool HasComponent(ComponentType type);
 
+		bool CheckForIntersection(MousePicker* picker);
+
+		void CheckIfActive(Entity* ptr) { if (ptr == this) isActive = true; else isActive = false; }
+
 		std::string GetName() { return m_EntityName; }
+
 
 	private:
 		std::unordered_map<ComponentType, Ref<Component>> m_Components;
 		std::string m_EntityName;
+		float pickingDistance = 0.0f;
+		bool isActive = false;
 	};
 }

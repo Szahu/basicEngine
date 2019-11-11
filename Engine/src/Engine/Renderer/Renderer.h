@@ -25,7 +25,7 @@ namespace Engine
 		static void BeginScene(const Ref<FrameBuffer>& frameBuffer, const PerspectiveCamera& camera, const std::vector<PointLight*>& lights, ShaderLibrary* library);
 		static void EndScene();
 
-		static void Submit(const Engine::Ref<VertexArray>& vertexArray, const MaterialStruct& material, const glm::mat4& transform = glm::mat4(1.0f), const Engine::Ref<Shader>& shader = m_SceneData->m_ShaderLibrary->Get("Material"), uint32_t instances = 0);
+		static void Submit(const Engine::Ref<VertexArray>& vertexArray, const MaterialStruct& material, const glm::mat4& transform = glm::mat4(1.0f), bool drawOutline = false, const Engine::Ref<Shader>& shader = m_SceneData->m_ShaderLibrary->Get("Material"),  uint32_t instances = 0);
 		static void Submit(Model& model, const glm::mat4& transform);
 
 		static inline RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }

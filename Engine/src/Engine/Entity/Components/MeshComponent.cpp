@@ -21,7 +21,7 @@ namespace Engine
 	{
 		EG_CORE_ASSERT(m_Transform, "m_Transform is a nullptr in MeshComponent");
 		glm::mat4 transform = *m_Transform;
-		Renderer::Submit(GetVertexArray(),m_Material.GetMaterial(), transform);
+		Renderer::Submit(GetVertexArray(),m_Material.GetMaterial(), transform, IsActive);
 	}
 }
 

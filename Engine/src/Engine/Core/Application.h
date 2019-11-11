@@ -15,6 +15,8 @@
 
 #include "Engine/Core/Timestep.h"
 
+#include "Engine/Toolbox/PerspectiveCamera.h"
+
 namespace Engine
 {
 	class Application
@@ -34,8 +36,10 @@ namespace Engine
 		inline static Application& Get() { return *s_Instance; }
 
 		const void SetViewportWindowPointer(ViewportWindow* window) { viewport_window = window; }
-		ViewportWindow* GetViewportWindowPointer() { EG_CORE_ASSERT(viewport_window, "FrameBufferPointer not set / not set correctly"); return viewport_window; }
+		ViewportWindow* GetViewportWindowPointer() { EG_CORE_ASSERT(viewport_window, "Viewport window pointer not set / not set correctly"); return viewport_window; }
 
+		void SetEditorCameraPointer(PerspectiveCamera* cam) { editor_camera = cam; }
+		PerspectiveCamera* GetEditorCameraPointer() { EG_CORE_ASSERT(editor_camera, "Editor camrera pointer not set / not set correctly"); return editor_camera; }
 
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
@@ -44,6 +48,7 @@ namespace Engine
 	private:
 		Engine::Scope<Window> m_Window;
 		ViewportWindow* viewport_window;
+		PerspectiveCamera* editor_camera;
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		bool m_Minimized = false;

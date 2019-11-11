@@ -15,7 +15,9 @@ namespace Engine
 		virtual void Bind() const override;
 		virtual void Unbind() const override;
 			 
-		virtual const uint32_t GetTextureID() const override { return m_TextureColorBuffer; }
+		//virtual const uint32_t GetTextureID() const override { return m_TextureColorBuffer; }
+		virtual const uint32_t GetTextureID() const override { return m_ScreenTexture; }
+		
 		virtual void BindTexture() const override;
 		virtual void UnbindTexture() const override;
 
@@ -31,9 +33,9 @@ namespace Engine
 		void UpdateSize();
 
 	private:
-		uint32_t m_FrameBuffer;
+		uint32_t m_FrameBuffer, m_SampledFrameBuffer, m_DistFrameBuffer;
 		uint32_t m_RenderBuffer;
-		uint32_t m_TextureColorBuffer;
+		uint32_t m_TextureColorBuffer, m_ScreenTexture;
 		glm::vec2 m_TextureSize = { Application::Get().GetWindow().GetWidth(), Application::Get().GetWindow().GetHeight() };
 	};
 }

@@ -1,24 +1,33 @@
 #include "EGpch.h"
 #include "Scene.h"
 
+#include "imgui.h"
+
+#include "Engine/Core/Application.h"
+#include "Engine/Core/MouseButtonCodes.h"
+
 namespace Engine
 {
 
 	Scene::Scene()
-		:m_ShaderLibrary(nullptr)
+		:m_ShaderLibrary(nullptr), m_MousePicker(Application::Get().GetViewportWindowPointer())
 	{
 
 	}
 
 	void Scene::OnUpdate(Timestep ts)
 	{
-		Renderer::BeginScene(m_FrameBuffer, m_Camera.GetCamera(), m_Lights, m_ShaderLibrary);
 
-		m_Camera.OnUpdate(ts);
+		Renderer::BeginScene(m_FrameBuffer, m_Camera->GetCamera(), m_Lights, m_ShaderLibrary);
 
-		for (auto ent : m_Entities)
+		m_Camera->OnUpdate(ts);
+		m_MousePicker.OnUpdate(m_Camera->GetCamera().GetProjectionMatrix(), m_Camera->GetCamera().GetViewMatrix());
+
+		for (auto& ent : m_Entities)
 		{
 			ent.second.OnUpdate();
+			ent.second.CheckForIntersection(&m_MousePicker);
+			ent.second.CheckIfActive(m_ActiveEntity);
 		}
 
 		Renderer::EndScene();
@@ -26,18 +35,36 @@ namespace Engine
 
 	void Scene::OnImGuiRender()
 	{
-		for (auto ent : m_Entities)
-		{
-			ent.second.OnImGuiRender();
+		ImGui::Begin("Entities in the scene");
+		for (auto& en : m_Entities)
+		{	
+			if (m_ActiveEntity == &en.second)
+			{
+				ImGui::Button((en.second.GetName() + " (Active)").c_str());
+			}
+
+			else
+			{
+				if (ImGui::Button(en.second.GetName().c_str()))
+				{
+					m_ActiveEntity = &en.second;
+				}
+			}
+			
 		}
+		ImGui::End();
+
+		if(m_ActiveEntity != nullptr) m_ActiveEntity->OnImGuiRender();
 	}
 
 	void Scene::OnEvent(Event& e)
 	{
-		m_Camera.OnEvent(e);
+		m_Camera->OnEvent(e);
+		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<MouseButtonPressedEvent>(EG_BIND_EVENT_FN(Scene::OnMouseClick));
 	}
 
-	void Scene::SetSceneData(const Ref<FrameBuffer>& frameBuffer, PerspectiveCameraController camera, const std::vector<PointLight*>& lights, ShaderLibrary* library)
+	void Scene::SetSceneData(const Ref<FrameBuffer>& frameBuffer, PerspectiveCameraController* camera, const std::vector<PointLight*>& lights, ShaderLibrary* library)
 	{
 		m_FrameBuffer = frameBuffer;
 		m_Camera = camera;
@@ -47,7 +74,7 @@ namespace Engine
 
 	void Scene::AddEntity(Entity& entity)
 	{
-		for (auto em : m_Entities)
+		for (auto& em : m_Entities)
 		{
 			if (entity.GetName() == em.first)
 			{
@@ -56,6 +83,27 @@ namespace Engine
 			}
 		}
 		m_Entities[entity.GetName()] = entity;
+		itr = m_Entities.find(entity.GetName());
+		m_ActiveEntity = &entity;
+	}
+
+	bool Scene::OnMouseClick(MouseButtonPressedEvent& e)
+	{
+		if (e.GetMouseButton() == EG_MOUSE_BUTTON_1)
+		{
+			for (auto& ent : m_Entities)
+			{
+				if (ent.second.CheckForIntersection(&m_MousePicker))
+				{
+					m_ActiveEntity = &ent.second;
+					return false;
+				}
+			}
+			return false;
+		}
+
+		return false;
+
 	}
 
 }

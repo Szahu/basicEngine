@@ -3,6 +3,8 @@
 
 #include "Engine/Platform/OpenGl/OpenGLShader.h"
 
+#include "glad/glad.h" //Temporary
+#include "glm/gtc/matrix_transform.hpp"
 
 namespace Engine
 {
@@ -42,9 +44,10 @@ namespace Engine
 		//Engine::RenderCommand::RenderToScreen();
 	}
 
-	void Renderer::Submit(const Engine::Ref<VertexArray>& vertexArray, const MaterialStruct& material, const glm::mat4& transform, const Engine::Ref<Shader>& shader, uint32_t instances)
+	void Renderer::Submit(const Engine::Ref<VertexArray>& vertexArray, const MaterialStruct& material, const glm::mat4& transform, bool drawOutline, const Engine::Ref<Shader>& shader,  uint32_t instances)
 	{
 		shader->Bind();
+		shader->SetFloat3("u_FlatColor", glm::vec3(0.0f, 0.0f, 0.0f));
 		shader->SetMat4("u_ViewProjectionMatrix", m_SceneData->m_Camera->GetViewProjectionMatrix());
 		shader->SetMat4("u_Transform", transform);
 		shader->SetFloat3("u_CameraPosition", m_SceneData->m_Camera->GetPosition());
@@ -68,8 +71,28 @@ namespace Engine
 
 		if (instances == 0)
 		{
-			vertexArray->Bind();
-			RenderCommand::DrawIndexed(vertexArray);
+			if (drawOutline)
+			{
+				glStencilFunc(GL_ALWAYS, 1, 0xFF);
+				glStencilMask(0xFF);
+
+				vertexArray->Bind();
+				RenderCommand::DrawIndexed(vertexArray);
+
+				glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+				glStencilMask(0x00);
+
+				shader->SetMat4("u_Transform", glm::scale(transform, glm::vec3(1.1f)));
+				shader->SetFloat3("u_FlatColor", glm::vec3(1.0f, 165.0f / 255.0f, 0.0f));
+				RenderCommand::DrawIndexed(vertexArray);
+			}
+			else
+			{
+				glStencilFunc(GL_ALWAYS, 1, 0xFF); // all fragments should update the stencil buffer
+
+				vertexArray->Bind();
+				RenderCommand::DrawIndexed(vertexArray);
+			}
 		}
 		else
 		{

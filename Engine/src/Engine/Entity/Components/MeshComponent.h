@@ -20,8 +20,12 @@ namespace Engine
 		const Ref<VertexArray>& GetVertexArray() { return m_VertexArray; }
 
 		void SetTransform(glm::mat4* transform) { m_Transform = transform; }
+		//void SetSelectingBool(bool* ptr) { *IsActive = ptr; }
 
 		void OnUpdate() override;
+
+		bool IsActive = false;
+
 
 	private:
 		Ref<VertexArray> m_VertexArray;

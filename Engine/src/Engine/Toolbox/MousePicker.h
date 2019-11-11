@@ -9,12 +9,13 @@ namespace Engine
 	class MousePicker
 	{
 	public:
-		MousePicker(const PerspectiveCamera& camera, ViewportWindow* window);
+		MousePicker(ViewportWindow* window);
 
 		inline const glm::vec3& GetCurrentRay() const { return m_CurrentRay; }
-		//inline void UpdateProjactionMatrix	
 
 		void OnUpdate(const glm::mat4& proj, const glm::mat4& view);
+
+		const float GetPickingDistance() { return m_PickingDistance; }
 
 	private:
 		glm::vec3 CalculateMouseRay();
@@ -27,5 +28,6 @@ namespace Engine
 		glm::mat4 m_ProjectionMatrix;
 		glm::mat4 m_ViewMatrix;
 		ViewportWindow* window;
+		const float m_PickingDistance = 0;
 	};
 }

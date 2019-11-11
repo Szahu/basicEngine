@@ -1,6 +1,11 @@
 #include "EGpch.h"
 #include "Entity.h"
 
+#include "imgui.h"
+
+#include "glm/gtx/intersect.hpp"
+
+#include "Application.h"
 
 namespace Engine
 {
@@ -15,7 +20,10 @@ namespace Engine
 		m_Components[component] = new_Component;	
 
 		if (component == ComponentType::Mesh)
-			std::dynamic_pointer_cast<MeshComponent>(m_Components[component])->SetTransform(&GetTransformComponent()->GetTransform());
+		{
+			std::dynamic_pointer_cast<MeshComponent>(m_Components[component])->SetTransform(&GetTransformComponent()->GetTransform().Full_Transform);
+			//std::dynamic_pointer_cast<MeshComponent>(m_Components[component])->SetSelectingBool(&isActive);
+		}
 	}
 
 	const Ref<Component> Entity::GetComponent(ComponentType type)
@@ -42,11 +50,13 @@ namespace Engine
 
 	void Entity::OnImGuiRender()
 	{
+		ImGui::Text(GetName().c_str());
+		ImGui::Separator();
 		for (auto com : m_Components)
 		{
 			com.second->OnImGuiRender();
-			//std::dynamic_pointer_cast<MeshComponent>(m_Components[ComponentType::Mesh])->SetVertexArray(nullptr);
 		}
+		ImGui::Separator();
 	}
 
 	void Entity::OnUpdate()
@@ -55,6 +65,7 @@ namespace Engine
 		{
 			com.second->OnUpdate();
 		}
+		GetMeshComponent()->IsActive = isActive;
 	}
 
 	bool Entity::HasComponent(ComponentType type)
@@ -66,6 +77,14 @@ namespace Engine
 		}
 
 		return false;
+	}
+
+	bool Entity::CheckForIntersection(MousePicker* picker)
+	{
+		bool isWorking =  glm::intersectRaySphere(Application::Get().GetEditorCameraPointer()->GetPosition(),
+			picker->GetCurrentRay(),
+			GetTransformComponent()->GetPosition(), 2.0f, pickingDistance);	
+		return isWorking;
 	}
 
 

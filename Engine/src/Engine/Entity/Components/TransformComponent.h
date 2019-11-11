@@ -6,20 +6,27 @@
 
 namespace Engine
 {
+	struct Transform
+	{
+		glm::mat4 Full_Transform = glm::mat4(1.0f);
+		glm::vec3 Translation = glm::vec3(0.0f);
+		glm::vec3 Rotation = glm::vec3(0.0f);
+		glm::vec3 Scale = glm::vec3(1.0f);
+
+		operator glm::mat4() const { return Full_Transform; }
+	};
+
 	class TransformComponent : public Component
 	{
 	public:
 		void OnImGuiRender() override;
 		void OnUpdate() override;
 
-		glm::mat4& GetTransform() { return m_Transform; }
+		Transform& GetTransform() { return m_Transform; }
 		
-		const glm::vec3& GetPosition() { return { m_Transform[3][1], m_Transform[3][2], m_Transform[3][3] }; }
+		const glm::vec3& GetPosition() { return m_Transform.Translation; }
 
 	private:
-		glm::mat4 m_Transform = glm::mat4(1.0f);
-		glm::vec3 m_Translation = glm::vec3(0.0f);
-		glm::vec3 m_Rotation = glm::vec3(0.0f);
-		glm::vec3 m_Scale = glm::vec3(0.0f);
+		Transform m_Transform;
 	};
 }

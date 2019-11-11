@@ -18,9 +18,9 @@ namespace Engine
 
 		glEnable(GL_MULTISAMPLE);
 
-		//glEnable(GL_STENCIL_TEST);
-		//glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-		//glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+		glEnable(GL_STENCIL_TEST);
+		glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
 		float quadVertices[] = { 
 		// positions   // texCoords

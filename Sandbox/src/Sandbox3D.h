@@ -61,5 +61,7 @@ private:
 	glm::vec3 rayDir = glm::vec3(0.0f);
 
 	Engine::Entity testEntity;
+	Engine::Entity testEntity1;
+	Engine::Entity testEntity2;
 	Engine::Scene testScene;
 };
