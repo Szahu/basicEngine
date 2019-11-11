@@ -28,25 +28,13 @@ private:
 
 	Engine::ShaderLibrary m_ShaderLibrary;
 
-	Engine::Ref<Engine::VertexArray> m_VertexArray;
-	Engine::Ref<Engine::VertexArray> m_LampVertexArray;
-	Engine::Model m_Model;
 	Engine::PointLight m_Light;
 	Engine::PointLight m_Light1;
 	std::vector<Engine::PointLight*> m_Lights;
 	glm::vec3 m_LampPosition = { 2.0f, 0.0f, 0.0f };
 	glm::vec3 m_LampPosition1 = { 0.0f, 0.0f, 0.0f };
-	//Engine::Ref<Engine::Shader> m_MatShader;
-	//Engine::Ref<Engine::Shader> m_FlatColorShader;
-	//Engine::Ref<Engine::Shader> m_BlockShader;
-	//Engine::Ref<Engine::Texture2D> m_DirtTexture;
+	
 	Engine::PerspectiveCameraController m_CameraController;
-	glm::vec3 m_CubeColor = { 0.3f, 0.7f, 0.5f };
-
-	Engine::MousePicker m_MousePicker;
-
-	//Engine::Model m_Model;
-	Engine::Ref<Engine::Shader> m_ModelShader;
 
 	int renderCount = 1;
 
@@ -60,8 +48,5 @@ private:
 	glm::vec3 rayPos = glm::vec3(0.0f);
 	glm::vec3 rayDir = glm::vec3(0.0f);
 
-	Engine::Entity testEntity;
-	Engine::Entity testEntity1;
-	Engine::Entity testEntity2;
 	Engine::Scene testScene;
 };

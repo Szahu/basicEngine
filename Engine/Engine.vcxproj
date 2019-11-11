@@ -197,6 +197,7 @@
     <ClInclude Include="src\Engine\Renderer\Texture.h" />
     <ClInclude Include="src\Engine\Renderer\Vertex.h" />
     <ClInclude Include="src\Engine\Renderer\VertexArray.h" />
+    <ClInclude Include="src\Engine\Toolbox\Samples\BasicMeshes.h" />
     <ClInclude Include="src\Engine\World\Block.h" />
     <ClInclude Include="src\Engine\World\Chunk.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
@@ -612,6 +613,7 @@
     <ClCompile Include="src\Engine\Renderer\Shader.cpp" />
     <ClCompile Include="src\Engine\Renderer\Texture.cpp" />
     <ClCompile Include="src\Engine\Renderer\VertexArray.cpp" />
+    <ClCompile Include="src\Engine\Toolbox\Samples\BasicMeshes.cpp" />
     <ClCompile Include="src\Engine\World\Block.cpp" />
     <ClCompile Include="src\Engine\World\Chunk.cpp" />
     <ClCompile Include="vendor\stb_image\stb_image.cpp" />

@@ -17,7 +17,7 @@ namespace Engine
 		MeshComponent();
 		virtual void OnImGuiRender() override;
 
-		void SetVertexArray(const Ref<VertexArray>& vertexarray) { m_VertexArray = vertexarray; }
+		void SetVertexArray(const Ref<VertexArray> vertexarray) { m_VertexArray = vertexarray; }
 		const Ref<VertexArray>& GetVertexArray() { return m_VertexArray; }
 
 		void SetTransform(Transform* transform) { m_Transform = transform; }

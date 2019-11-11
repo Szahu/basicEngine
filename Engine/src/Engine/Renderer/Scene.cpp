@@ -48,26 +48,23 @@ namespace Engine
 		{
 			if(ImGui::BeginPopup("EnterText"))
 			{
-				ImGui::SameLine();
 				static char text[16];
 				if (ImGui::InputText("Name:", &text[0], IM_ARRAYSIZE(text), ImGuiInputTextFlags_EnterReturnsTrue))
 				{
 					if (text[0] != 0)
 					{
-						Entity new_Entity(text);
-						AddEntity(new_Entity);
+						AddEntity(Entity(text));
 						text[0] = 0;
 					}
-					ImGui::CloseCurrentPopup();
 				}
-				ImGui::SameLine();
 
+				ImGui::SameLine();
+				
 				if (ImGui::Button("Enter")) 
 				{ 
 					if (text[0] != 0)
 					{
-						Entity new_Entity(text);
-						AddEntity(new_Entity);
+						AddEntity(Entity(text));
 						text[0] = 0;
 					}
 					ImGui::CloseCurrentPopup();
@@ -83,7 +80,7 @@ namespace Engine
 
 			ImGui::EndPopup();
 		}
-			
+		
 
 		for (auto& en : m_Entities)
 		{	

@@ -11,7 +11,7 @@ namespace Engine
 		glm::vec3 m_Ambient = glm::vec3(1.0f);
 		glm::vec3 m_Diffuse = glm::vec3(1.0f);
 		glm::vec3 m_Specular = glm::vec3(1.0f);
-		float m_Shininess = 32.0f;
+		float m_Shininess = 0.5f;
 	};
 
 	class MaterialComponent

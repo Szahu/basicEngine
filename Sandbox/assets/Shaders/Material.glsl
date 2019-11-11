@@ -103,7 +103,7 @@ vec4 CalculatePointLight(PointLight light, CommonData data)
 
 	// specular
 	vec3 reflectDir = reflect(-lightDir, data.c_Normal);
-	float spec = pow(max(dot(data.c_ViewDirection, reflectDir), 0.0), u_Material.shininess);
+	float spec = pow(max(dot(data.c_ViewDirection, reflectDir), 0.0), 1 / u_Material.shininess * 1.28f);
 	vec3 specular = light.specular * (spec * u_Material.specular);
 
 	vec3 result = (ambient + diffuse + specular);
