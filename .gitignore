@@ -17,7 +17,8 @@
 *.vcxproj.filters
 *.vcxproj.user
 Engine/src/Engine/Imgui/Fonts
-Sandbox/assets
+Sandbox/assets/Models
+Sandbox/assets/Textures
 Engine/vendor
 bin
 bin-int
