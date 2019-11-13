@@ -25,12 +25,13 @@ namespace Engine
 
 		static void InitScene();
 
-		//static void BeginScene(const Ref<FrameBuffer>& frameBuffer, const PerspectiveCamera& camera, const std::vector<PointLight*>& lights, ShaderLibrary* library);
 		static void BeginScene();
 		static void EndScene();
 
 		static void Submit(const Engine::Ref<VertexArray>& vertexArray, const Material& material, const Transform& transform, bool drawOutline, const std::string& libKey,  uint32_t instances = 0);
 		static void Submit(Model& model, const Material& material, const Transform& transform, bool drawOutline, const std::string& libKey);
+
+		static void ProcessLightsAndMaterial(const Material& material, const Ref<Shader>& shader);
 
 		static inline RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 

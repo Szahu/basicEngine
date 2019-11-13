@@ -63,32 +63,13 @@ namespace Engine
 		{
 			m_SceneData->m_ShadersInUse.push_back(libKey);
 		}
-		m_SceneData->m_ShaderLibrary->Get(libKey)->Bind();
-		m_SceneData->m_ShaderLibrary->Get(libKey)->SetMat4("u_Transform", transform);
 
-		m_SceneData->m_ShaderLibrary->Get(libKey)->SetFloat3("u_Material.ambient", material.m_Ambient);
-		m_SceneData->m_ShaderLibrary->Get(libKey)->SetFloat3("u_Material.diffuse", material.m_Diffuse);
-		m_SceneData->m_ShaderLibrary->Get(libKey)->SetFloat3("u_Material.specular", material.m_Specular);
-		m_SceneData->m_ShaderLibrary->Get(libKey)->SetFloat1("u_Material.shininess", material.m_Shininess);
+		Ref<Shader> shader = m_SceneData->m_ShaderLibrary->Get(libKey);
 
-		if (material.m_DiffuseTexture != nullptr)
-		{
-			m_SceneData->m_ShaderLibrary->Get(libKey)->SetInt1("texture_diffuse1", 0);
-			material.m_DiffuseTexture->Bind();
-		}
+		shader->Bind();
+		shader->SetMat4("u_Transform", transform);
 		
-
-		for (unsigned int i = 0; i < Scene::GetActiveScene().GetLights().size(); i++)
-		{
-			std::string location = "u_PointLights[" + std::to_string(i) + "].position";
-			m_SceneData->m_ShaderLibrary->Get(libKey)->SetFloat3(location, Scene::GetActiveScene().GetLights()[i].GetPosition());
-			location = "u_PointLights[" + std::to_string(i) + "].ambient";
-			m_SceneData->m_ShaderLibrary->Get(libKey)->SetFloat3(location, Scene::GetActiveScene().GetLights()[i].GetAmbient());
-			location = "u_PointLights[" + std::to_string(i) + "].diffuse";
-			m_SceneData->m_ShaderLibrary->Get(libKey)->SetFloat3(location, Scene::GetActiveScene().GetLights()[i].GetDiffuse());
-			location = "u_PointLights[" + std::to_string(i) + "].specular";
-			m_SceneData->m_ShaderLibrary->Get(libKey)->SetFloat3(location, Scene::GetActiveScene().GetLights()[i].GetSpecular());
-		}
+		ProcessLightsAndMaterial(material, shader);
 
 		if (drawOutline)
 		{
@@ -106,8 +87,8 @@ namespace Engine
 			scaledTransform[1][1] += 0.15f;
 			scaledTransform[2][2] += 0.15f;
 
-			m_SceneData->m_ShaderLibrary->Get(libKey)->SetMat4("u_Transform", scaledTransform);
-			m_SceneData->m_ShaderLibrary->Get(libKey)->SetFloat3("u_FlatColor", glm::vec3(1.0f, 165.0f / 255.0f, 0.0f));
+			shader->SetMat4("u_Transform", scaledTransform);
+			shader->SetFloat3("u_FlatColor", glm::vec3(1.0f, 165.0f / 255.0f, 0.0f));
 			RenderCommand::DrawIndexed(vertexArray);
 
 			glStencilFunc(GL_ALWAYS, 1, 0xFF);
@@ -144,25 +125,11 @@ namespace Engine
 			m_SceneData->m_ShadersInUse.push_back(libKey);
 		}
 
-		m_SceneData->m_ShaderLibrary->Get(libKey)->Bind();
-		m_SceneData->m_ShaderLibrary->Get(libKey)->SetMat4("u_Transform", transform);
+		Ref<Shader> shader = m_SceneData->m_ShaderLibrary->Get(libKey);
+		shader->Bind();
+		shader->SetMat4("u_Transform", transform);
 		
-		for (unsigned int i = 0; i < Scene::GetActiveScene().GetLights().size(); i++)
-		{
-			std::string location = "u_PointLights[" + std::to_string(i) + "].position";
-			m_SceneData->m_ShaderLibrary->Get(libKey)->SetFloat3(location, Scene::GetActiveScene().GetLights()[i].GetPosition());
-			location = "u_PointLights[" + std::to_string(i) + "].ambient";
-			m_SceneData->m_ShaderLibrary->Get(libKey)->SetFloat3(location, Scene::GetActiveScene().GetLights()[i].GetAmbient());
-			location = "u_PointLights[" + std::to_string(i) + "].diffuse";
-			m_SceneData->m_ShaderLibrary->Get(libKey)->SetFloat3(location, Scene::GetActiveScene().GetLights()[i].GetDiffuse());
-			location = "u_PointLights[" + std::to_string(i) + "].specular";
-			m_SceneData->m_ShaderLibrary->Get(libKey)->SetFloat3(location, Scene::GetActiveScene().GetLights()[i].GetSpecular());
-		}
-		
-		m_SceneData->m_ShaderLibrary->Get(libKey)->SetFloat3("u_Material.ambient", material.m_Ambient);
-		m_SceneData->m_ShaderLibrary->Get(libKey)->SetFloat3("u_Material.diffuse", material.m_Diffuse);
-		m_SceneData->m_ShaderLibrary->Get(libKey)->SetFloat3("u_Material.specular", material.m_Specular);
-		m_SceneData->m_ShaderLibrary->Get(libKey)->SetFloat1("u_Material.shininess", material.m_Shininess);
+		ProcessLightsAndMaterial(material, shader);
 
 		if (!drawOutline || drawOutline)
 		{
@@ -182,6 +149,33 @@ namespace Engine
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, 0);
 
+	}
+
+	void Renderer::ProcessLightsAndMaterial(const Material& material, const Ref<Shader>& shader)
+	{
+		std::vector<PointLight> lights = Scene::GetActiveScene().GetLights();
+		for (unsigned int i = 0; i < Scene::GetActiveScene().GetLights().size(); i++)
+		{
+			std::string location = "u_PointLights[" + std::to_string(i) + "].position";
+			shader->SetFloat3(location, lights[i].GetPosition());
+			location = "u_PointLights[" + std::to_string(i) + "].ambient";
+			shader->SetFloat3(location, lights[i].GetAmbient());
+			location = "u_PointLights[" + std::to_string(i) + "].diffuse";
+			shader->SetFloat3(location, lights[i].GetDiffuse());
+			location = "u_PointLights[" + std::to_string(i) + "].specular";
+			shader->SetFloat3(location, lights[i].GetSpecular());
+		}
+
+		shader->SetFloat3("u_Material.ambient", material.m_Ambient);
+		shader->SetFloat3("u_Material.diffuse", material.m_Diffuse);
+		shader->SetFloat3("u_Material.specular", material.m_Specular);
+		shader->SetFloat1("u_Material.shininess", material.m_Shininess);
+
+		if (material.m_DiffuseTexture != nullptr)
+		{
+			shader->SetInt1("texture_diffuse1", 0);
+			material.m_DiffuseTexture->Bind();
+		}
 	}
 
 

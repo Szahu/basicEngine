@@ -48,7 +48,7 @@ namespace Engine
 		std::unordered_map<std::string, Entity> m_Entities;
 		MousePicker m_MousePicker;
 
-		glm::vec3 lampPos = { 1.0f, 0.0f, 0.0f };
+		glm::vec3 lampPos = { 0.0f, 0.0f, 0.0f };
 
 		static Scene* s_Instance;
 	};
