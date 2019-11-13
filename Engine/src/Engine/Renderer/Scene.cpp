@@ -11,19 +11,36 @@
 namespace Engine
 {
 
-	Scene::Scene()
-		:m_ShaderLibrary(nullptr), m_MousePicker(Application::Get().GetViewportWindowPointer())
-	{
+	Scene* Scene::s_Instance = nullptr;
 
+	Scene::Scene()
+		:m_MousePicker(Application::Get().GetViewportWindowPointer()), m_Camera(65.0f, 1.6f)
+	{
+		s_Instance = this;
+		PointLight light;
+		m_Lights.push_back(light);
+		
+	}
+
+	void Scene::LoadScene()
+	{
+		m_ShaderLibrary.Load("assets/shaders/Material.glsl");
+		m_ShaderLibrary.Load("assets/shaders/MaterialTexture.glsl");
+		m_ShaderLibrary.Load("assets/shaders/Model.glsl");
+		m_ShaderLibrary.Load("assets/shaders/FlatColor.glsl");
+
+		m_FrameBuffer = Application::Get().GetViewportWindowPointer()->GetFrameBuffer();
+		
+		Renderer::InitScene(); 
 	}
 
 	void Scene::OnUpdate(Timestep ts)
 	{
+		Renderer::BeginScene();
 
-		Renderer::BeginScene(m_FrameBuffer, m_Camera->GetCamera(), m_Lights, m_ShaderLibrary);
-
-		m_Camera->OnUpdate(ts);
-		m_MousePicker.OnUpdate(m_Camera->GetCamera().GetProjectionMatrix(), m_Camera->GetCamera().GetViewMatrix());
+		m_Lights[0].SetPosition(lampPos);
+		m_Camera.OnUpdate(ts);
+		m_MousePicker.OnUpdate(m_Camera.GetCamera().GetProjectionMatrix(), m_Camera.GetCamera().GetViewMatrix());
 
 		for (auto& ent : m_Entities)
 		{
@@ -37,6 +54,7 @@ namespace Engine
 
 	void Scene::OnImGuiRender()
 	{
+
 		ImGui::Begin("Entities in the scene");
 
 		if (ImGui::IsMouseClicked(1) && ImGui::IsWindowHovered())
@@ -98,6 +116,8 @@ namespace Engine
 			}
 			
 		}
+		ImGui::DragFloat3("LampPos", &lampPos.x, 0.5f);
+
 		ImGui::End();
 
 		if(m_ActiveEntity != nullptr) m_ActiveEntity->OnImGuiRender();
@@ -105,17 +125,9 @@ namespace Engine
 
 	void Scene::OnEvent(Event& e)
 	{
-		m_Camera->OnEvent(e);
+		m_Camera.OnEvent(e);
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<MouseButtonPressedEvent>(EG_BIND_EVENT_FN(Scene::OnMouseClick));
-	}
-
-	void Scene::SetSceneData(const Ref<FrameBuffer>& frameBuffer, PerspectiveCameraController* camera, const std::vector<PointLight*>& lights, ShaderLibrary* library)
-	{
-		m_FrameBuffer = frameBuffer;
-		m_Camera = camera;
-		m_ShaderLibrary = library;
-		m_Lights = lights;
 	}
 
 	void Scene::AddEntity(Entity entity)
@@ -128,11 +140,10 @@ namespace Engine
 				return;
 			}
 		}
-		//m_Entities[entity.GetName()] = entity;
 		m_Entities.emplace(std::make_pair(entity.GetName(), entity));
-		//m_Entities.insert(std::make_pair(entity.GetName(), entity));
 		m_ActiveEntity = &m_Entities[entity.GetName()];
 	}
+
 
 	bool Scene::OnMouseClick(MouseButtonPressedEvent& e)
 	{

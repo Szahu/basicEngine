@@ -9,6 +9,8 @@
 
 #include "Engine/Toolbox/Samples/BasicMeshes.h"
 
+#include "Engine/Renderer/Scene.h"
+
 namespace Engine
 {
 	void Entity::AddComponent(ComponentType component)
@@ -19,7 +21,9 @@ namespace Engine
 			EG_CORE_ASSERT(false, "This Entity already owns this component");
 
 		Ref<Component> new_Component = Component::Create(component);
+		new_Component->SetParentID(GetName());
 		m_Components[component] = new_Component;	
+
 
 		if (component == ComponentType::Mesh)
 		{
@@ -38,10 +42,10 @@ namespace Engine
 			switch (type)
 			{
 				case ComponentType::None: EG_CORE_ASSERT(false, "Component of type None is not supported!");  return nullptr;
-				//case ComponentType::Model:  return  std::make_shared<OpenGLVertexArray>();
 				//case ComponentType::Light:  return std::make_shared<OpenGLVertexArray>();
 				case ComponentType::Transform: return m_Components[ComponentType::Transform];
 				case ComponentType::Mesh: return m_Components[ComponentType::Mesh];
+				case ComponentType::Model: return m_Components[ComponentType::Model];
 			}
 	
 			EG_CORE_ASSERT(false, "Unknow Component type");
@@ -82,6 +86,12 @@ namespace Engine
 					AddComponent(ComponentType::Mesh);
 					ImGui::CloseCurrentPopup(); //Ey
 				}
+				if (ImGui::Button("ModelComponent"))
+				{
+					AddComponent(ComponentType::Model);
+					ImGui::CloseCurrentPopup(); //Ey
+				}
+
 				ImGui::EndPopup();
 			}
 
@@ -118,7 +128,7 @@ namespace Engine
 
 	bool Entity::CheckForIntersection(MousePicker* picker)
 	{
-		bool isWorking =  glm::intersectRaySphere(Application::Get().GetEditorCameraPointer()->GetPosition(),
+		bool isWorking = glm::intersectRaySphere(Scene::GetActiveScene().GetCamera().GetCamera().GetPosition(),
 			picker->GetCurrentRay(),
 			GetTransformComponent()->GetPosition(), 0.85f, pickingDistance);	
 		return isWorking;

@@ -97,8 +97,10 @@ namespace Engine
 		glBindFramebuffer(GL_READ_FRAMEBUFFER, m_SampledFrameBuffer);
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_DistFrameBuffer);
 		glBlitFramebuffer(0, 0, m_TextureSize.x, m_TextureSize.y, 0, 0, m_TextureSize.x, m_TextureSize.y, GL_COLOR_BUFFER_BIT, GL_NEAREST);
-
+		glDisable(GL_DEPTH_TEST);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		UnbindTexture();
 
 		/*
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -108,7 +110,7 @@ namespace Engine
 
 	void OpenGLFrameBuffer::BindTexture() const
 	{
-		glBindTexture(GL_TEXTURE_2D, m_TextureColorBuffer);
+		glBindTexture(GL_TEXTURE_2D, m_ScreenTexture);
 	}
 
 	void OpenGLFrameBuffer::UnbindTexture() const

@@ -4,25 +4,30 @@
 #include "glm/glm.hpp"
 #include "Engine/Renderer/Shader.h"
 
+#include "Engine/Renderer/Texture.h"
+
 namespace Engine
 {
-	struct MaterialStruct
+
+	struct Material
 	{
 		glm::vec3 m_Ambient = glm::vec3(1.0f);
 		glm::vec3 m_Diffuse = glm::vec3(1.0f);
 		glm::vec3 m_Specular = glm::vec3(1.0f);
 		float m_Shininess = 0.5f;
+		Ref<Texture2D> m_DiffuseTexture;
 	};
 
 	class MaterialComponent
 	{
 	public:
-		MaterialStruct GetMaterial() { return m_Material; }
+		//MaterialComponent() { m_Material.m_DiffuseTexture = Texture2D::Create("assets/Textures/dirt_tex.jpg"); }
+		Material GetMaterial() { return m_Material; }
 
 		void OnImGuiRender();
 		void OnUpdate() {}
 
 	private:
-		MaterialStruct m_Material;
+		Material m_Material;
 	};
 }

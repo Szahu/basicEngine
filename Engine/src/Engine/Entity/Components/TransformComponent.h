@@ -19,14 +19,17 @@ namespace Engine
 	class TransformComponent : public Component
 	{
 	public:
+
 		void OnImGuiRender() override;
 		void OnUpdate() override;
 
 		Transform& GetTransform() { return m_Transform; }
 		
 		const glm::vec3& GetPosition() { return m_Transform.Translation; }
+		void SetParentID(const std::string& parentID) override { m_EntityParentID = parentID; }
 
 	private:
+		std::string m_EntityParentID = "undefined";
 		Transform m_Transform;
 	};
 }

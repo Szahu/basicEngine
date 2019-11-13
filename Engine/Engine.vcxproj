@@ -158,6 +158,7 @@
     <ClInclude Include="src\Engine\Core\Window.h" />
     <ClInclude Include="src\Engine\Entity\Components\MaterialComponent.h" />
     <ClInclude Include="src\Engine\Entity\Components\MeshComponent.h" />
+    <ClInclude Include="src\Engine\Entity\Components\ModelComponent.h" />
     <ClInclude Include="src\Engine\Entity\Components\TransformComponent.h" />
     <ClInclude Include="src\Engine\Entity\Entity.h" />
     <ClInclude Include="src\Engine\Entity\Component.h" />
@@ -581,6 +582,7 @@
     <ClCompile Include="src\Engine\Entity\Component.cpp" />
     <ClCompile Include="src\Engine\Entity\Components\MaterialComponent.cpp" />
     <ClCompile Include="src\Engine\Entity\Components\MeshComponent.cpp" />
+    <ClCompile Include="src\Engine\Entity\Components\ModelComponent.cpp" />
     <ClCompile Include="src\Engine\Entity\Components\TransformComponent.cpp" />
     <ClCompile Include="src\Engine\Entity\Entity.cpp" />
     <ClCompile Include="src\Engine\GUI\Gui.cpp" />

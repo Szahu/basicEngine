@@ -12,7 +12,7 @@ namespace Engine
 		}
 	}
 
-	void Model::loadModel(string path)
+	bool Model::loadModel(string path)
 	{
 		// read file via ASSIMP
 		Assimp::Importer importer;
@@ -20,14 +20,15 @@ namespace Engine
 		// check for errors
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
 		{
-			std::cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << std::endl;
-			return;
+			EG_CORE_ERROR("ERROR::ASSIMP:: {0}",importer.GetErrorString());
+			return false;
 		}
 		// retrieve the directory path of the filepath
 		directory = path.substr(0, path.find_last_of('/'));
 
 		// process ASSIMP's root node recursively
 		processNode(scene->mRootNode, scene);
+		return true;
 	}
 
 	void Model::processNode(aiNode* node, const aiScene* scene)
@@ -117,16 +118,16 @@ namespace Engine
 		float shininess;
 
 		material->Get(AI_MATKEY_COLOR_DIFFUSE, color);
-		m_Material.Diffuse = glm::vec3(color.r, color.b, color.g);
+		m_Material.m_Diffuse = glm::vec3(color.r, color.b, color.g);
 
 		material->Get(AI_MATKEY_COLOR_AMBIENT, color);
-		m_Material.Ambient = glm::vec3(color.r, color.b, color.g);
+		m_Material.m_Ambient = glm::vec3(color.r, color.b, color.g);
 
 		material->Get(AI_MATKEY_COLOR_SPECULAR, color);
-		m_Material.Specular = glm::vec3(color.r, color.b, color.g);
+		m_Material.m_Specular = glm::vec3(color.r, color.b, color.g);
 
 		material->Get(AI_MATKEY_SHININESS, shininess);
-		m_Material.Shininess = shininess;
+		m_Material.m_Shininess = shininess;
 
 
 		// 1. diffuse maps

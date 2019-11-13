@@ -38,6 +38,8 @@ uniform vec3 u_LightColor;
 uniform vec3 u_LightPosition;
 uniform vec3 u_CameraPosition;
 
+uniform sampler2D texture_diffuse1;
+uniform sampler2D texture_specular1;
 
 #define NR_POINT_LIGHTS 2
 
@@ -74,6 +76,10 @@ vec4 CalculatePointLight(PointLight light, CommonData data);
 
 void main()
 {	
+	if(u_FlatColor.x != 0 || u_FlatColor.y != 0 || u_FlatColor.z != 0) {color = vec4(u_FlatColor, 1.0);}
+
+	else 
+	{
 	// Setting up common Data
 	CommonData s_CommonData;
 	s_CommonData.c_Normal = normalize(Normal);
@@ -86,8 +92,12 @@ void main()
 	{
 		result += CalculatePointLight(u_PointLights[i], s_CommonData);
 	}
-	if(u_FlatColor.x != 0 || u_FlatColor.y != 0 || u_FlatColor.z != 0) {color = vec4(u_FlatColor, 1.0);}
-	else {color = objectColor * result;}
+	
+	vec4 diffTex = texture(texture_diffuse1, TexCoords);
+	if (diffTex.x != 0 || diffTex.y != 0 || diffTex.z != 0) {objectColor *= diffTex;}
+	color = objectColor * result;
+	
+	}
 }
 
 vec4 CalculatePointLight(PointLight light, CommonData data)

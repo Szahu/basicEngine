@@ -5,6 +5,7 @@
 
 #include "Engine/Entity/Components/TransformComponent.h"
 #include "Engine/Entity/Components/MeshComponent.h"
+#include "Engine/Entity/Components/ModelComponent.h"
 
 #include "Engine/Toolbox/MousePicker.h"
 
@@ -22,6 +23,7 @@ namespace Engine
 
 		const Ref<TransformComponent> GetTransformComponent() { auto pm = std::dynamic_pointer_cast<TransformComponent>(m_Components[ComponentType::Transform]); if (pm) return pm; else EG_CORE_ERROR("Casting went wrong In GetTransformComponent"); }
 		const Ref<MeshComponent> GetMeshComponent() { auto pm = std::dynamic_pointer_cast<MeshComponent>(m_Components[ComponentType::Mesh]); if (pm) return pm; else EG_CORE_ERROR("Casting went wrong In GetMeshComponent"); }
+		const Ref<ModelComponent> GetModelComponent() { auto pm = std::dynamic_pointer_cast<ModelComponent>(m_Components[ComponentType::Model]); if (pm) return pm; else EG_CORE_ERROR("Casting went wrong In GetModelComponent"); }
 
 		void OnImGuiRender();
 		void OnUpdate();
@@ -31,6 +33,7 @@ namespace Engine
 		bool CheckForIntersection(MousePicker* picker);
 
 		void CheckIfActive(Entity* ptr) { if (ptr == this) isActive = true; else isActive = false; }
+		bool IsActive() { return isActive; }
 
 		std::string GetName() { return m_EntityName; }
 

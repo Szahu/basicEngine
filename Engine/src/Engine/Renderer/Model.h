@@ -25,16 +25,16 @@ namespace Engine
 	class Model
 	{
 	public:
-		Model(string const& path)
-		{
-			loadModel(path);
-		}
 
 		//operator Ref<VertexArray>() const { return m_Time; }
 
 		~Model() = default;
 
 		const Ref<VertexArray>& GetVertexArray() const { return meshes[0].GetVertexArray(); };
+
+		vector<Mesh>& GetMeshes() { return meshes; }
+
+		bool loadModel(string path);
 
 		void Draw(const Engine::Ref<Engine::Shader>& shader);
 	private:
@@ -44,7 +44,6 @@ namespace Engine
 		vector<Mesh> meshes;
 		string directory;
 
-		void loadModel(string path);
 		void processNode(aiNode* node, const aiScene* scene);
 		Mesh processMesh(aiMesh* mesh, const aiScene* scene);
 		vector<Ref<Texture2D>> loadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName);

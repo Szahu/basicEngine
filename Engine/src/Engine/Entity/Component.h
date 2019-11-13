@@ -2,6 +2,7 @@
 
 #include "Engine/Core/Core.h"
 
+#define GetParentEntity Scene::GetActiveScene().GetEntity(m_EntityParentID)
 
 namespace Engine
 {
@@ -16,6 +17,7 @@ namespace Engine
 
 		virtual void OnImGuiRender() = 0;
 		virtual void OnUpdate() = 0;
+		virtual void SetParentID(const std::string& parentID) = 0;
 
 		static Ref<Component> Create(ComponentType type);
 

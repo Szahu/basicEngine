@@ -14,8 +14,7 @@ namespace Engine
 		int width, height, channels;
 		stbi_set_flip_vertically_on_load(0);
 		stbi_uc* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
-		if (data == NULL) EG_CORE_ERROR("Failed to load Image from path {0}", path);
-		EG_CORE_ASSERT(data, "Failed to load image!");
+		if (data == NULL) { EG_CORE_ERROR("Failed to load Image from path {0}", path); return; }
 		m_Width = width;
 		m_Height = height;
 

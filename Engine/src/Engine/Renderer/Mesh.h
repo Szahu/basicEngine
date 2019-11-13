@@ -12,26 +12,20 @@
 #include "glm/glm.hpp"
 #include "Engine/Renderer/Texture.h"
 
+#include "Engine/Entity/Components/MaterialComponent.h"
 
 using std::vector;
 
 namespace Engine
 {
 
-	struct Material
-	{
-		glm::vec3 Diffuse;
-		glm::vec3 Specular;
-		glm::vec3 Ambient;
-		float Shininess;
-	};
-
-	struct m_Texture
-	{
-		unsigned int id;
-		std::string type;
-		std::string path;
-	};
+	//struct Material
+	//{
+	//	glm::vec3 Diffuse;
+	//	glm::vec3 Specular;
+	//	glm::vec3 Ambient;
+	//	float Shininess;
+	//};
 
 	class Mesh
 	{
@@ -48,6 +42,7 @@ namespace Engine
 		const Ref<VertexArray>& GetVertexArray() const { return m_VertexArray; };
 
 		void Draw(const Engine::Ref<Engine::Shader>& shader);
+		void ProccessMaterial(const Engine::Ref<Engine::Shader>& shader);
 
 	private:
 		unsigned int VAO, VBO, EBO;

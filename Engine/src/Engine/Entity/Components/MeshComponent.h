@@ -21,17 +21,18 @@ namespace Engine
 		const Ref<VertexArray>& GetVertexArray() { return m_VertexArray; }
 
 		void SetTransform(Transform* transform) { m_Transform = transform; }
-		//void SetSelectingBool(bool* ptr) { *IsActive = ptr; }
 
 		void OnUpdate() override;
 
 		bool IsActive = false;
 
+		void SetParentID(const std::string& parentID) override { m_EntityParentID = parentID; }
 
 	private:
 		Ref<VertexArray> m_VertexArray;
 		Transform* m_Transform = nullptr;
 		MaterialComponent m_Material;
+		std::string m_EntityParentID = "undefined";
 	};
 
 }

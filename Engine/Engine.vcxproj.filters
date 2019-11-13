@@ -1300,6 +1300,7 @@
     <ClInclude Include="src\Engine\Renderer\Scene.h" />
     <ClInclude Include="src\Engine\Entity\Components\MaterialComponent.h" />
     <ClInclude Include="src\Engine\Toolbox\Samples\BasicMeshes.h" />
+    <ClInclude Include="src\Engine\Entity\Components\ModelComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EGpch.cpp">
@@ -1406,5 +1407,6 @@
     <ClCompile Include="src\Engine\Entity\Components\MeshComponent.cpp" />
     <ClCompile Include="src\Engine\Entity\Components\MaterialComponent.cpp" />
     <ClCompile Include="src\Engine\Toolbox\Samples\BasicMeshes.cpp" />
+    <ClCompile Include="src\Engine\Entity\Components\ModelComponent.cpp" />
   </ItemGroup>
 </Project>

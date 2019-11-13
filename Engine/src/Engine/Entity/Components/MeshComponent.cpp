@@ -3,7 +3,7 @@
 
 #include "Engine/Renderer/Renderer.h"
 
-
+#include "Engine/Renderer/Scene.h"
 
 namespace Engine
 {
@@ -19,9 +19,12 @@ namespace Engine
 
 	void MeshComponent::OnUpdate()
 	{
-		EG_CORE_ASSERT(m_Transform, "m_Transform is a nullptr in MeshComponent");
-		//EG_CORE_ASSERT(m_VertexArray, "VertexArray not set in MeshComponent");
-		if(m_VertexArray) Renderer::Submit(GetVertexArray(),m_Material.GetMaterial(), *m_Transform, IsActive);
+		if(m_VertexArray) Renderer::Submit(GetVertexArray(),
+			m_Material.GetMaterial(),
+			GetParentEntity->GetTransformComponent()->GetTransform(),
+			GetParentEntity->IsActive(),
+			"Material"
+		);
 	}
 }
 

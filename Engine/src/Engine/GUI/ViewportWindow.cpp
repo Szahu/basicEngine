@@ -31,6 +31,7 @@ namespace Engine
 
 			ImVec2 pos = ImGui::GetCursorScreenPos();
 			ImVec2 mouse_pos = ImGui::GetMousePos();
+			isHovered = ImGui::IsWindowHovered();
 
 			m_RelativeMousePosition = { mouse_pos.x - ImGui::GetWindowPos().x - 1.0f, mouse_pos.y - ImGui::GetWindowPos().y - 8.0f - ImGui::GetFontSize() };
 			auto tex = m_FrameBuffer->GetTextureID();
