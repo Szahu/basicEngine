@@ -152,6 +152,8 @@
     <None Include="assets\Shaders\Material.glsl" />
     <None Include="assets\Shaders\MaterialTexture.glsl" />
     <None Include="assets\Shaders\Model.glsl" />
+    <None Include="assets\Shaders\Reflection.glsl" />
+    <None Include="assets\Shaders\Skybox.glsl" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -74,39 +74,19 @@ uniform vec3 u_FlatColor;
 
 vec4 CalculatePointLight(PointLight light, CommonData data);
 
-//uniform samplerCube u_SkyboxTexture;
+uniform samplerCube u_SkyboxTexture;
 
 void main()
 {	
-	if(u_FlatColor.x != 0 || u_FlatColor.y != 0 || u_FlatColor.z != 0) {color = vec4(u_FlatColor, 1.0);}
-
-	else 
-	{
 	// Setting up common Data
 	CommonData s_CommonData;
 	s_CommonData.c_Normal = normalize(Normal);
 	s_CommonData.c_ViewDirection = normalize(u_CameraPosition - FragPos);
 
-	vec4 objectColor = vec4(1.0f);
-		
-	vec4 result = vec4(0.0);
-	for(int i = 0;i < u_PointLights.length();i ++)
-	{
-		result += CalculatePointLight(u_PointLights[i], s_CommonData);
-	}
-	
-	vec4 diffTex = texture(texture_diffuse1, TexCoords);
-	if (diffTex.x != 0 || diffTex.y != 0 || diffTex.z != 0) {objectColor *= diffTex;}
-
-	//float ratio = 1.00 / 2.42;
-	//vec3 I = normalize(FragPos - u_CameraPosition);
-    //vec3 R = refract(I, normalize(s_CommonData.c_Normal), ratio);
-    //vec4 Reflection_Color = vec4(texture(u_SkyboxTexture, R).rgb, 1.0);
-
-
-	color = objectColor * result;
-	
-	}
+	float ratio = 1.00 / 2.42;
+	vec3 I = normalize(FragPos - u_CameraPosition);
+    vec3 R = refract(I, normalize(s_CommonData.c_Normal), ratio);
+    color = vec4(texture(u_SkyboxTexture, R).rgb, 1.0);
 }
 
 vec4 CalculatePointLight(PointLight light, CommonData data)

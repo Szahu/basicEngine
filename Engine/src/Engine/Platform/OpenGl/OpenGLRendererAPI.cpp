@@ -14,7 +14,8 @@ namespace Engine
 		glCullFace(GL_BACK);
 
 		glEnable(GL_DEPTH_TEST);
-		glDepthFunc(GL_LESS);
+		//glDepthFunc(GL_LESS);
+		glDepthFunc(GL_LEQUAL);
 
 		glEnable(GL_MULTISAMPLE);
 

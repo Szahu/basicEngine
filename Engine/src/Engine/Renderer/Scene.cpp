@@ -28,9 +28,12 @@ namespace Engine
 		m_ShaderLibrary.Load("assets/shaders/MaterialTexture.glsl");
 		m_ShaderLibrary.Load("assets/shaders/Model.glsl");
 		m_ShaderLibrary.Load("assets/shaders/FlatColor.glsl");
+		m_ShaderLibrary.Load("assets/shaders/Reflection.glsl");
 
 		m_FrameBuffer = Application::Get().GetViewportWindowPointer()->GetFrameBuffer();
 		
+		m_Skybox.Load("assets/textures/skyboxes/waterAndSky");
+
 		Renderer::InitScene(); 
 	}
 
@@ -41,6 +44,8 @@ namespace Engine
 		m_Lights[0].SetPosition(lampPos);
 		m_Camera.OnUpdate(ts);
 		m_MousePicker.OnUpdate(m_Camera.GetCamera().GetProjectionMatrix(), m_Camera.GetCamera().GetViewMatrix());
+
+		m_Skybox.Draw(m_Camera.GetCamera());
 
 		for (auto& ent : m_Entities)
 		{

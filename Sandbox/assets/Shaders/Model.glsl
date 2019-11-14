@@ -72,6 +72,8 @@ uniform vec3 u_FlatColor;
 uniform sampler2D texture_diffuse1;
 uniform sampler2D texture_specular1;
 
+uniform samplerCube u_SkyboxTexture;
+
 vec4 CalculatePointLight(PointLight light, CommonData data);
 
 void main()
@@ -87,6 +89,11 @@ void main()
 
 	vec4 objectColor = vec4(1.0f);
 		
+	float ratio = 1.00 / 2.42;
+	vec3 I = normalize(FragPos - u_CameraPosition);
+    vec3 R = refract(I, normalize(s_CommonData.c_Normal), ratio);
+    //vec4 Reflected_Color = vec4(texture(u_SkyboxTexture, R).rgb, 1.0);
+
 	vec4 result = vec4(0.0);
 	for(int i = 0;i < u_PointLights.length();i ++)
 	{

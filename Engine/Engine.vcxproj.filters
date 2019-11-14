@@ -1301,6 +1301,7 @@
     <ClInclude Include="src\Engine\Entity\Components\MaterialComponent.h" />
     <ClInclude Include="src\Engine\Toolbox\Samples\BasicMeshes.h" />
     <ClInclude Include="src\Engine\Entity\Components\ModelComponent.h" />
+    <ClInclude Include="src\Engine\Renderer\Skybox.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EGpch.cpp">
@@ -1408,5 +1409,6 @@
     <ClCompile Include="src\Engine\Entity\Components\MaterialComponent.cpp" />
     <ClCompile Include="src\Engine\Toolbox\Samples\BasicMeshes.cpp" />
     <ClCompile Include="src\Engine\Entity\Components\ModelComponent.cpp" />
+    <ClCompile Include="src\Engine\Renderer\Skybox.cpp" />
   </ItemGroup>
 </Project>

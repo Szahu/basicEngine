@@ -22,6 +22,7 @@ public:
 	void OnEvent(Engine::Event& event) override;
 
 private:
+	unsigned int LoadCubemap(std::vector<std::string> faces);
 
 private:
 	Engine::ViewportWindow m_Window;

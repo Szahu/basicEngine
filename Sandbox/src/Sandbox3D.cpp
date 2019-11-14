@@ -9,6 +9,8 @@
 #include "Engine/Entity/Component.h"
 #include "Engine/Toolbox/Samples/basicMeshes.h"
 
+#include "stb_image.h"
+
 Sandbox3D::Sandbox3D()
 	:Layer("Sandbox3D"), m_CameraController(65.0f, 1280.0f / 720.0f, &m_Window)
 {
@@ -37,6 +39,7 @@ void Sandbox3D::OnAttach()
 		testScene.GetEntity("Entity " + std::to_string(i))->AddComponent(Engine::ComponentType::Model);
 		testScene.GetEntity("Entity " + std::to_string(i))->GetModelComponent()->LoadModel("assets/models/sf_fighter/sCIfI_fIGHTER.FBX");
 	}
+
 }
 
 void Sandbox3D::OnDetach()
@@ -46,15 +49,23 @@ void Sandbox3D::OnDetach()
 
 void Sandbox3D::OnUpdate(Engine::Timestep ts)
 {
-	
+	FPS = 1.0f / ts;
+
 
 	testScene.OnUpdate(ts);
-	FPS = 1.0f / ts;
+
+
+	/* Playground:
+	Engine::Application::Get().GetViewportWindowPointer()->GetFrameBuffer()->Bind();
+	Engine::RenderCommand::Clear();
+	Engine::RenderCommand::SetClearColor({ 0.53f, 0.81f, 0.98f, 1.0f });
+	glStencilMask(0xFF);
+	
+	
+	Engine::Application::Get().GetViewportWindowPointer()->GetFrameBuffer()->Unbind();
+	Engine::RenderCommand::Clear();
 	glStencilMask(0x00);
-
-
-	glm::mat4 lampTransform1 = glm::translate(glm::mat4(1.0f), m_LampPosition1) * glm::scale(glm::mat4(1.0f), { 0.5f, 0.5f, 0.5 });
-	m_Light1.SetPosition(glm::vec3(lampTransform1[3][0], lampTransform1[3][1], lampTransform1[3][2]));
+	*/
 
 }
 
@@ -69,7 +80,6 @@ void Sandbox3D::OnImGuiRender()
 	ImGui::Begin("Inspector");
 	testScene.OnImGuiRender();
 	ImGui::Text("FPS: %i", FPS);
-	//ImGui::DragFloat3("LightPos", &m_LampPosition1.x, 0.3f);
 	ImGui::End();
 }
 

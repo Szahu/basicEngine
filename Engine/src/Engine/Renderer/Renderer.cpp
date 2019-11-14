@@ -30,6 +30,8 @@ namespace Engine
 
 	void Renderer::BeginScene()
 	{
+
+
 		Application::Get().GetViewportWindowPointer()->GetFrameBuffer()->Bind();
 
 		Engine::RenderCommand::Clear();
@@ -51,6 +53,8 @@ namespace Engine
 		Application::Get().GetViewportWindowPointer()->GetFrameBuffer()->Unbind();
 
 		Engine::RenderCommand::Clear();
+
+		glStencilMask(0x00);
 
 		//m_SceneData->m_FrameBuffer->BindTexture();
 		//Engine::RenderCommand::RenderToScreen();
@@ -138,6 +142,8 @@ namespace Engine
 			for (int i = 0; i < model.GetMeshes().size(); i++)
 			{
 				model.GetMeshes()[i].ProccessMaterial(m_SceneData->m_ShaderLibrary->Get(libKey));
+				glBindTexture(GL_TEXTURE_CUBE_MAP, Scene::GetActiveScene().GetSkybox().GetTexture());
+				shader->SetInt1("u_SkyboxTexture", 0);
 				model.GetMeshes()[i].GetVertexArray()->Bind();
 				RenderCommand::DrawIndexed(model.GetMeshes()[i].GetVertexArray());
 				model.GetMeshes()[i].GetVertexArray()->Unbind();
