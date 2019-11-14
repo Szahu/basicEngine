@@ -23,7 +23,7 @@ namespace Engine
 		m_Window->SetVSync(false);
 
 		Renderer::Init();
-		//Renderer2D::Init();
+		Renderer2D::Init();
 
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);

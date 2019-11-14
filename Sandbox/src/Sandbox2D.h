@@ -13,13 +13,16 @@ public:
 	virtual void OnAttach() override;
 	virtual void OnDetach() override;
 
-	void OnUpdate(Engine::Timestep ts) override;
+	virtual void OnUpdate(Engine::Timestep ts) override;
 	virtual void OnImGuiRender() override;
-	void OnEvent(Engine::Event& event) override;
+	virtual void OnEvent(Engine::Event& event) override;
 
 private:
 	Engine::OrtographicCameraController m_CameraController;
-	Engine::PerspectiveCamera m_PerspectiveCamera;
 	Engine::Ref<Engine::Shader> m_Shader;
 	Engine::Ref<Engine::VertexArray> m_VertexArray;
+
+	Engine::Ref<Engine::Texture2D> dirt_tex;
+
+	glm::vec3 pos = { 0.0f, 0.0f, 0.0f };
 };
