@@ -84,7 +84,6 @@ namespace Engine
 		m_CubeVA = Engine::VertexArray::Create();
 		m_CubeVA->AddVertexBuffer(t_VertexBuffer);
 		m_CubeVA->SetIndexBuffer(t_IndexBuffer);
-
 		return m_CubeVA;
 	}
 }

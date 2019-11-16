@@ -17,7 +17,8 @@ namespace Engine
 		virtual void AddVertexBuffer(const Engine::Ref<VertexBuffer>& vertexBuffer, bool instancing = false, uint32_t divisor = 1) override;
 		virtual void SetIndexBuffer(const Engine::Ref<IndexBuffer>& indexBuffer, int drawingMode = 0) override;
 
-		virtual const Ref<VertexBuffer>& GetVertexBuffer(unsigned int index) const override { return m_VertexBuffers[index]; }
+		virtual const std::vector<Ref<VertexBuffer>>& GetVertexBuffers() const override { return m_VertexBuffers; }
+		virtual const uint32_t GetVertexBuffersSize() const override { return m_BuffersSize; }
 
 		const GLenum GetDrawingMode() const override { return m_GlDrawingMode; }
 
@@ -28,7 +29,8 @@ namespace Engine
 		std::vector<Ref<VertexBuffer>> m_VertexBuffers;
 		Engine::Ref<IndexBuffer> m_IndexBuffer;
 		GLenum m_GlDrawingMode;
-	private:
+		
+		uint32_t m_BuffersSize = 0;
 		uint32_t m_RendererID;
 		unsigned int index = 0;
 	};

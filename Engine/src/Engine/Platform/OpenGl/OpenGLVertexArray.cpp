@@ -57,6 +57,7 @@ namespace Engine
 			index++;
 		}
 
+		m_BuffersSize += vertexBuffer->GetSize();
 		m_VertexBuffers.push_back(vertexBuffer);
 		glBindVertexArray(0);
 	}

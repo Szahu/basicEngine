@@ -15,6 +15,8 @@ namespace Engine
 		glm::vec3 m_Diffuse = glm::vec3(1.0f);
 		glm::vec3 m_Specular = glm::vec3(1.0f);
 		float m_Shininess = 0.5f;
+		float OverExposure = 1.0f;
+		float Reflectivness = 0.0f;
 		Ref<Texture2D> m_DiffuseTexture;
 	};
 

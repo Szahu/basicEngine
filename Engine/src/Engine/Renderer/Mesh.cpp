@@ -13,7 +13,7 @@ namespace Engine
 		this->textures = textures;
 		this->HasTextures = true;
 
-		setupMesh();
+		//setupMesh();
 	}
 
 	Mesh::Mesh(vector<Vertex> vertices, vector<unsigned int> indices, Material material)
@@ -23,7 +23,7 @@ namespace Engine
 		this->m_material = material;
 		this->HasTextures = false;
 
-		setupMesh();
+		//setupMesh();
 	}
 
 	void Mesh::setupMesh()

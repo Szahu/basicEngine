@@ -38,13 +38,20 @@ namespace Engine
 		Engine::RenderCommand::SetClearColor({ 0.53f, 0.81f, 0.98f, 1.0f });
 		glStencilMask(0xFF);
 
+		glActiveTexture(GL_TEXTURE0 + 3);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, Scene::GetActiveScene().GetSkybox().GetTexture());
+
 		for (int i = 0; i < m_SceneData->m_ShadersInUse.size(); i++)
 		{
 			m_SceneData->m_ShaderLibrary->Get(m_SceneData->m_ShadersInUse[i])->Bind();
 			m_SceneData->m_ShaderLibrary->Get(m_SceneData->m_ShadersInUse[i])->SetFloat3("u_FlatColor", glm::vec3(0.0f, 0.0f, 0.0f));
 			m_SceneData->m_ShaderLibrary->Get(m_SceneData->m_ShadersInUse[i])->SetMat4("u_ViewProjectionMatrix", m_SceneData->m_Camera->GetViewProjectionMatrix());
 			m_SceneData->m_ShaderLibrary->Get(m_SceneData->m_ShadersInUse[i])->SetFloat3("u_CameraPosition", m_SceneData->m_Camera->GetPosition());
+			m_SceneData->m_ShaderLibrary->Get(m_SceneData->m_ShadersInUse[i])->SetInt1("u_SkyboxTexture", 3);
 		}
+
+		
+		
 
 	}
 
@@ -142,13 +149,15 @@ namespace Engine
 			for (int i = 0; i < model.GetMeshes().size(); i++)
 			{
 				model.GetMeshes()[i].ProccessMaterial(m_SceneData->m_ShaderLibrary->Get(libKey));
-				glBindTexture(GL_TEXTURE_CUBE_MAP, Scene::GetActiveScene().GetSkybox().GetTexture());
-				shader->SetInt1("u_SkyboxTexture", 0);
-				model.GetMeshes()[i].GetVertexArray()->Bind();
-				RenderCommand::DrawIndexed(model.GetMeshes()[i].GetVertexArray());
-				model.GetMeshes()[i].GetVertexArray()->Unbind();
+				//model.GetMeshes()[i].GetVertexArray()->Bind();
+				//RenderCommand::DrawIndexed(model.GetMeshes()[i].GetVertexArray());
+				//model.GetMeshes()[i].GetVertexArray()->Unbind();
 			}
-			
+
+			model.GetVertexArray()->Bind();
+			RenderCommand::DrawIndexed(model.GetVertexArray());
+			model.GetVertexArray()->Unbind();
+
 			glEnable(GL_STENCIL_TEST);
 		}
 

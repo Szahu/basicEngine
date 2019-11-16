@@ -1,6 +1,7 @@
 #include "EGpch.h"
 #include "Model.h"
 
+#include "glad/glad.h"
 
 namespace Engine
 {
@@ -28,6 +29,8 @@ namespace Engine
 
 		// process ASSIMP's root node recursively
 		processNode(scene->mRootNode, scene);
+
+		SetupVertexArray();
 		return true;
 	}
 
@@ -190,7 +193,66 @@ namespace Engine
 		return textures;
 	}
 
+	void Model::SetupVertexArray()
+	{
+		m_FinalVA = VertexArray::Create();
 
+		std::vector<float> vertexBufferData;
+		std::vector<unsigned int> indexBufferData;
+
+		unsigned int indexOffset = 0;
+
+		for (int i = 0; i < meshes.size(); i++)
+		{
+			for (int t = 0; t < meshes[i].vertices.size(); t++)
+			{
+				vertexBufferData.push_back(meshes[i].vertices[t].Position.x);
+				vertexBufferData.push_back(meshes[i].vertices[t].Position.y);
+				vertexBufferData.push_back(meshes[i].vertices[t].Position.z);
+
+				vertexBufferData.push_back(meshes[i].vertices[t].Normal.x);
+				vertexBufferData.push_back(meshes[i].vertices[t].Normal.y);
+				vertexBufferData.push_back(meshes[i].vertices[t].Normal.z);
+
+				vertexBufferData.push_back(meshes[i].vertices[t].TexCoords.x);
+				vertexBufferData.push_back(meshes[i].vertices[t].TexCoords.y);
+
+				vertexBufferData.push_back(meshes[i].vertices[t].Tangent.x);
+				vertexBufferData.push_back(meshes[i].vertices[t].Tangent.y);
+				vertexBufferData.push_back(meshes[i].vertices[t].Tangent.z);
+
+				vertexBufferData.push_back(meshes[i].vertices[t].Bitangent.x);
+				vertexBufferData.push_back(meshes[i].vertices[t].Bitangent.y);
+				vertexBufferData.push_back(meshes[i].vertices[t].Bitangent.z);
+			}
+
+			for (int t = 0; t < meshes[i].indices.size(); t++)
+			{
+				unsigned int temp = meshes[i].indices[t];
+				temp += indexOffset;
+				indexBufferData.push_back(temp);
+			}
+
+			//indexOffset += meshes[i].indices.size();
+			auto it = std::max_element(std::begin(meshes[i].indices), std::end(meshes[i].indices));
+			indexOffset += *it + 1;
+
+		}
+
+		Ref<VertexBuffer> vb = VertexBuffer::Create(&vertexBufferData[0], sizeof(float) * vertexBufferData.size());
+		vb->SetLayout(BufferLayout{
+			{ShaderDataType::Float3, "a_Positions"},
+			{ShaderDataType::Float3, "a_Normals"},
+			{ShaderDataType::Float2, "a_TexCoords"},
+			{ShaderDataType::Float3, "a_Tangents"},
+			{ShaderDataType::Float3, "a_BiTangents"}
+		});
+
+		Ref<IndexBuffer> ib = IndexBuffer::Create(&indexBufferData[0], indexBufferData.size());
+
+		m_FinalVA->AddVertexBuffer(vb);
+		m_FinalVA->SetIndexBuffer(ib);
+	}
 
 }
 

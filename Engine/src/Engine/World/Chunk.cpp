@@ -179,7 +179,7 @@ namespace Engine
 		ImGui::InputInt3("Block coords:", &m_BlockPicker[0]);
 		if (ImGui::Button("Change block state"))
 		{
-			Ref<VertexBuffer> buffer = m_VertexArray->GetVertexBuffer(1);
+			//Ref<VertexBuffer> buffer = m_VertexArray->GetVertexBuffer(1);
 			buffer->Bind();
 
 			unsigned int index = m_BlocksInChunk[m_BlockPicker[0]][m_BlockPicker[1]][m_BlockPicker[2]].GetIndex();

@@ -18,7 +18,8 @@ namespace Engine
 		virtual void AddVertexBuffer(const Engine::Ref<VertexBuffer>& vertexBuffer, bool instancing = false, uint32_t divisor = 1) = 0;
 		virtual void SetIndexBuffer(const Engine::Ref<IndexBuffer>& indexBuffer, int drawingMode = 0) = 0; //Change drawingMode for enum
 
-		virtual const Ref<VertexBuffer>& GetVertexBuffer(unsigned int index) const = 0;
+		virtual const std::vector<Ref<VertexBuffer>>& GetVertexBuffers() const = 0;
+		virtual const uint32_t GetVertexBuffersSize() const = 0;
 
 		virtual const unsigned int GetDrawingMode() const = 0;
 

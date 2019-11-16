@@ -19,12 +19,15 @@ namespace Engine
 
 	void MeshComponent::OnUpdate()
 	{
-		if(m_VertexArray) Renderer::Submit(GetVertexArray(),
-			m_Material.GetMaterial(),
-			GetParentEntity->GetTransformComponent()->GetTransform(),
-			GetParentEntity->IsActive(),
-			"Material"
-		);
+		if (m_VertexArray)
+		{
+			Renderer::Submit(GetVertexArray(),
+				m_Material.GetMaterial(),
+				GetParentEntity->GetTransformComponent()->GetTransform(),
+				GetParentEntity->IsActive(),
+				"Material"
+			);
+		}
 	}
 }
 

@@ -70,6 +70,7 @@ uniform PointLight u_PointLight;
 uniform vec3 u_FlatColor;
 
 uniform sampler2D texture_diffuse1;
+uniform sampler2D texture_diffuse2;
 uniform sampler2D texture_specular1;
 
 uniform samplerCube u_SkyboxTexture;
@@ -88,11 +89,6 @@ void main()
 	s_CommonData.c_ViewDirection = normalize(u_CameraPosition - FragPos);
 
 	vec4 objectColor = vec4(1.0f);
-		
-	float ratio = 1.00 / 2.42;
-	vec3 I = normalize(FragPos - u_CameraPosition);
-    vec3 R = refract(I, normalize(s_CommonData.c_Normal), ratio);
-    //vec4 Reflected_Color = vec4(texture(u_SkyboxTexture, R).rgb, 1.0);
 
 	vec4 result = vec4(0.0);
 	for(int i = 0;i < u_PointLights.length();i ++)
@@ -100,8 +96,13 @@ void main()
 		result += CalculatePointLight(u_PointLights[i], s_CommonData);
 	}
 	
+	//float ratio = 1.00 / 3.42;
+	//vec3 I = normalize(FragPos - u_CameraPosition);
+    //vec3 R = refract(I, normalize(s_CommonData.c_Normal), ratio);
+    //vec4 Reflect_Color = vec4(texture(u_SkyboxTexture, R).rgb, 1.0);
+
+	//color = result + vec4(0.1) * Reflect_Color;
 	color = objectColor * result;
-	
 	}
 }
 
@@ -110,21 +111,24 @@ vec4 CalculatePointLight(PointLight light, CommonData data)
 	vec3 specTex = texture(texture_specular1, TexCoords).rgb;
 	if (specTex.x == 0 && specTex.y == 0 && specTex.z == 0) { specTex = vec3(1.0); }
 
-	vec3 diffTex = texture(texture_diffuse1, TexCoords).rgb;
-	if (diffTex.x == 0 && diffTex.y == 0 && diffTex.z == 0) { diffTex = vec3(1.0); }
+	vec3 diffTex1 = texture(texture_diffuse1, TexCoords).rgb;
+	if (diffTex1.x == 0 && diffTex1.y == 0 && diffTex1.z == 0) { diffTex1 = vec3(1.0); }
+
+	vec3 diffTex2 = texture(texture_diffuse2, TexCoords).rgb;
+	if (diffTex2.x == 0 && diffTex2.y == 0 && diffTex2.z == 0) { diffTex2 = vec3(1.0); }
 
 	// ambient
-	vec3 ambient = u_Material.ambient * light.ambient * diffTex;
+	vec3 ambient = u_Material.ambient * light.ambient * diffTex1 * diffTex2;
 
 	// diffuse 
 	vec3 lightDir = normalize(light.position - FragPos);
 	float diff = max(dot(data.c_Normal, lightDir), 0.0);
-	vec3 diffuse = (diff * u_Material.diffuse) * light.diffuse * diffTex;
+	vec3 diffuse = (diff * u_Material.diffuse) * light.diffuse * diffTex1 * diffTex2;
 
 	// specular
 	vec3 reflectDir = reflect(-lightDir, data.c_Normal);
 	float spec = pow(max(dot(data.c_ViewDirection, reflectDir), 0.0), (1 / u_Material.shininess * 1.28f));
-	vec3 specular = light.specular * (spec * u_Material.specular * specTex.x);
+	vec3 specular = light.specular * (spec * u_Material.specular) * specTex;
 
 	vec3 result = (ambient + diffuse + specular);
 	return vec4(result, 1.0);
