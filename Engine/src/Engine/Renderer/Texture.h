@@ -6,6 +6,11 @@
 
 namespace Engine
 {
+	enum class TextureType
+	{
+		None = 0, Diffuse, Specular, Normal, Height
+	};
+
 	class Texture
 	{
 	public:
@@ -18,8 +23,8 @@ namespace Engine
 
 		virtual const uint32_t GetID() const = 0;
 
-		virtual const std::string& GetType() const = 0;
-		virtual const void SetType(const std::string& type) = 0;
+		virtual const TextureType& GetType() const = 0;
+		virtual const void SetType(const TextureType& type) = 0;
 
 		virtual const std::string& GetPath() const = 0;
 

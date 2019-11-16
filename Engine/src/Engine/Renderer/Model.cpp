@@ -9,7 +9,7 @@ namespace Engine
 	{
 		for (unsigned int i = 0; i < meshes.size(); i++)
 		{
-			meshes[i].Draw(shader);
+			//meshes[i].Draw(shader);
 		}
 	}
 
@@ -134,16 +134,16 @@ namespace Engine
 
 
 		// 1. diffuse maps
-		vector<Ref<Texture2D>> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+		vector<Ref<Texture2D>> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, TextureType::Diffuse);
 		textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 		// 2. specular maps
-		vector<Ref<Texture2D>> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
+		vector<Ref<Texture2D>> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, TextureType::Specular);
 		textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 		// 3. normal maps
-		std::vector<Ref<Texture2D>> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
+		std::vector<Ref<Texture2D>> normalMaps = loadMaterialTextures(material, aiTextureType_NORMALS, TextureType::Normal);
 		textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
 		// 4. height maps
-		std::vector<Ref<Texture2D>> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
+		std::vector<Ref<Texture2D>> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, TextureType::Height);
 		textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
 		// return a mesh object created from the extracted mesh data
@@ -152,7 +152,7 @@ namespace Engine
 		else return Mesh(vertices, indices, textures);
 	}
 
-	vector<Ref<Texture2D>> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName)
+	vector<Ref<Texture2D>> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, TextureType typeName)
 	{
 		vector<Ref<Texture2D>> textures;
 		for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
@@ -172,21 +172,28 @@ namespace Engine
 			}
 			if (!skip)
 			{   // if texture hasn't been loaded already, load it
-				/*m_Texture texture;
-				std::string strs = str.C_Str();
-				std::string path = "assets/models/" + strs + '/' + this->directory;
-				Ref<Texture2D> tex = Texture2D::Create(this->directory + '/' + str.C_Str());
-				unsigned int id = tex->GetID();
-				texture.id = id;
-				texture.type = typeName;
-				texture.path = str.C_Str();
-				textures.push_back(texture);
-				textures_loaded.push_back(texture);  // store it as texture loaded for entire model, to ensure we won't unnecesery load duplicate textures.
-				*/
 
 				Ref<Texture2D> tex = Texture2D::Create(this->directory + '/' + str.C_Str());
 				tex->SetType(typeName);
 				textures.push_back(tex);
+
+				switch (typeName)
+				{
+					case TextureType::Diffuse:
+						Diffs++;
+						m_DiffTextures.push_back(tex);
+						break;
+
+					case TextureType::Specular:
+						Specs++;
+						m_SpecTextures.push_back(tex);
+						break;
+
+					case TextureType::Normal:
+						Norms++;
+						m_NormTextures.push_back(tex);
+						break;
+				}
 			}
 		}
 
@@ -204,6 +211,20 @@ namespace Engine
 
 		for (int i = 0; i < meshes.size(); i++)
 		{
+			unsigned int DiffTosend = 0;
+			unsigned int SpecTosend = 0;
+			unsigned int NormTosend = 0;
+
+			if (meshes[i].HasTextureOfType(TextureType::Diffuse)) { DiffTosend = DiffsUsed; DiffsUsed++; }
+			else DiffTosend = -1;
+
+			if (meshes[i].HasTextureOfType(TextureType::Specular)) { SpecTosend = SpecsUsed + 6; SpecsUsed++; }
+			else SpecTosend = -1;
+
+			if (meshes[i].HasTextureOfType(TextureType::Normal)) { NormTosend = NormsUsed + 12; NormsUsed++; }
+			else NormTosend = -1;
+
+
 			for (int t = 0; t < meshes[i].vertices.size(); t++)
 			{
 				vertexBufferData.push_back(meshes[i].vertices[t].Position.x);
@@ -216,6 +237,10 @@ namespace Engine
 
 				vertexBufferData.push_back(meshes[i].vertices[t].TexCoords.x);
 				vertexBufferData.push_back(meshes[i].vertices[t].TexCoords.y);
+
+				vertexBufferData.push_back(DiffTosend);
+				vertexBufferData.push_back(SpecTosend);
+				vertexBufferData.push_back(NormTosend);
 
 				vertexBufferData.push_back(meshes[i].vertices[t].Tangent.x);
 				vertexBufferData.push_back(meshes[i].vertices[t].Tangent.y);
@@ -233,7 +258,6 @@ namespace Engine
 				indexBufferData.push_back(temp);
 			}
 
-			//indexOffset += meshes[i].indices.size();
 			auto it = std::max_element(std::begin(meshes[i].indices), std::end(meshes[i].indices));
 			indexOffset += *it + 1;
 
@@ -244,6 +268,7 @@ namespace Engine
 			{ShaderDataType::Float3, "a_Positions"},
 			{ShaderDataType::Float3, "a_Normals"},
 			{ShaderDataType::Float2, "a_TexCoords"},
+			{ShaderDataType::Int3, "a_TexSamples"},
 			{ShaderDataType::Float3, "a_Tangents"},
 			{ShaderDataType::Float3, "a_BiTangents"}
 		});
@@ -252,6 +277,26 @@ namespace Engine
 
 		m_FinalVA->AddVertexBuffer(vb);
 		m_FinalVA->SetIndexBuffer(ib);
+	}
+
+	void Model::ProccesTextures(const Ref<Shader>& shader)
+	{
+		for (int i = 0; i < m_DiffTextures.size(); i++)
+		{
+			m_DiffTextures[i]->Bind(i);
+			shader->SetInt1("u_texture_diffuse_" + std::to_string(i), i);
+		}
+		for (int i = 0; i < m_SpecTextures.size(); i++)
+		{
+			m_SpecTextures[i]->Bind(i + 6);
+			shader->SetInt1("u_texture_specular_" + std::to_string(i), i + 6);
+		}
+		for (int i = 0; i < m_NormTextures.size(); i++)
+		{
+			m_NormTextures[i]->Bind(i + 12);
+			shader->SetInt1("u_texture_diffuse_" + std::to_string(i), i + 12);
+		}
+		
 	}
 
 }

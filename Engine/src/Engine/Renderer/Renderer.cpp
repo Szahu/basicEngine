@@ -149,14 +149,15 @@ namespace Engine
 			for (int i = 0; i < model.GetMeshes().size(); i++)
 			{
 				model.GetMeshes()[i].ProccessMaterial(m_SceneData->m_ShaderLibrary->Get(libKey));
-				//model.GetMeshes()[i].GetVertexArray()->Bind();
-				//RenderCommand::DrawIndexed(model.GetMeshes()[i].GetVertexArray());
-				//model.GetMeshes()[i].GetVertexArray()->Unbind();
+				model.GetMeshes()[i].GetVertexArray()->Bind();
+				RenderCommand::DrawIndexed(model.GetMeshes()[i].GetVertexArray());
+				model.GetMeshes()[i].GetVertexArray()->Unbind();
 			}
 
-			model.GetVertexArray()->Bind();
-			RenderCommand::DrawIndexed(model.GetVertexArray());
-			model.GetVertexArray()->Unbind();
+			//model.GetVertexArray()->Bind();
+			//model.ProccesTextures(shader);
+			//RenderCommand::DrawIndexed(model.GetVertexArray());
+			//model.GetVertexArray()->Unbind();
 
 			glEnable(GL_STENCIL_TEST);
 		}

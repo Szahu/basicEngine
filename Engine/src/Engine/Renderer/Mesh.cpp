@@ -13,7 +13,7 @@ namespace Engine
 		this->textures = textures;
 		this->HasTextures = true;
 
-		//setupMesh();
+		setupMesh();
 	}
 
 	Mesh::Mesh(vector<Vertex> vertices, vector<unsigned int> indices, Material material)
@@ -23,7 +23,7 @@ namespace Engine
 		this->m_material = material;
 		this->HasTextures = false;
 
-		//setupMesh();
+		setupMesh();
 	}
 
 	void Mesh::setupMesh()
@@ -46,6 +46,8 @@ namespace Engine
 
 		m_VertexArray->Unbind();
 	}
+
+	/*
 	void Mesh::Draw(const Engine::Ref<Engine::Shader>& shader)
 	{
 		
@@ -94,7 +96,7 @@ namespace Engine
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, 0);
 
-	}
+	} */
 
 	void Mesh::ProccessMaterial(const Engine::Ref<Engine::Shader>& shader)
 	{
@@ -106,26 +108,34 @@ namespace Engine
 
 		for (unsigned int i = 0; i < textures.size(); i++)
 		{
-			//textures[i]->Bind(0x84C0 + i);
-			glActiveTexture(GL_TEXTURE0 + i);
 			// retrieve texture number (the N in diffuse_textureN)
 			std::string number;
-			std::string name = textures[i]->GetType();
-			if (name == "texture_diffuse")
-				number = std::to_string(diffuseNr++);
-			else if (name == "texture_specular")
-				number = std::to_string(specularNr++); // transfer unsigned int to stream
-			else if (name == "texture_normal")
-				number = std::to_string(normalNr++); // transfer unsigned int to stream
-			else if (name == "texture_height")
-				number = std::to_string(heightNr++); // transfer unsigned int to stream
+			TextureType type = textures[i]->GetType();
 
-														// now set the sampler to the correct texture unit
-			shader->SetInt1((name + number).c_str(), i);
-			// and finally bind the texture
-			glBindTexture(GL_TEXTURE_2D, textures[i]->GetID());
+			switch (type)
+			{
+				case TextureType::Diffuse: 
+					number = std::to_string(diffuseNr++);
+					shader->SetInt1(("texture_diffuse" + number).c_str(), i);
+					break;
 
-			//textures[i]->Bind(0x84C0 + i);
+				case TextureType::Specular: 
+					number = std::to_string(specularNr++); 
+					shader->SetInt1(("texture_specular" + number).c_str(), i);
+					break;
+
+				case TextureType::Normal: 
+					number = std::to_string(normalNr++);
+					shader->SetInt1(("texture_normal" + number).c_str(), i);
+					break;
+
+				case TextureType::Height:
+					number = std::to_string(heightNr++); 
+					shader->SetInt1(("texture_height" + number).c_str(), i);
+					break;
+			}
+
+			textures[i]->Bind(i);
 		}
 
 		if (!HasTextures)
@@ -135,6 +145,21 @@ namespace Engine
 			shader->SetFloat3("u_Material.specular", m_material.m_Specular);
 			shader->SetFloat1("u_Material.shininess", m_material.m_Shininess);
 		}
+	}
+
+	bool Mesh::HasTextureOfType(TextureType type)
+	{
+		if (!HasTextures) return false;
+		else 
+		{
+			for (int i = 0; i < textures.size(); i++)
+			{
+				if (textures[i]->GetType() == type) return true;
+			}
+			return false;
+		}
+
+		return false;
 	}
 
 }

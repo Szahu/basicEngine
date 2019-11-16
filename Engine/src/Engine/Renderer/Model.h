@@ -25,9 +25,6 @@ namespace Engine
 	class Model
 	{
 	public:
-
-		//operator Ref<VertexArray>() const { return m_Time; }
-
 		~Model() = default;
 
 		const Ref<VertexArray>& GetVertexArray() const { return m_FinalVA; };
@@ -38,17 +35,28 @@ namespace Engine
 
 		void Draw(const Engine::Ref<Engine::Shader>& shader);
 
+		void ProccesTextures(const Ref<Shader>& shader);
+		
 	private:
 		void processNode(aiNode* node, const aiScene* scene);
 		Mesh processMesh(aiMesh* mesh, const aiScene* scene);
-		vector<Ref<Texture2D>> loadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName);
+		vector<Ref<Texture2D>> loadMaterialTextures(aiMaterial* mat, aiTextureType type, TextureType typeName);
 		void SetupVertexArray();
 
 	private:
 		vector<Ref<Texture2D>> m_LoadedTextures;
-
+		vector<Ref<Texture2D>> m_DiffTextures;
+		vector<Ref<Texture2D>> m_SpecTextures;
+		vector<Ref<Texture2D>> m_NormTextures;
 		vector<Mesh> meshes;
 		string directory;
+
+		unsigned int m_MaxTextures = 5;
+			
+		unsigned int Diffs, Specs, Norms = 0;
+		unsigned int DiffsUsed = 0;
+		unsigned int SpecsUsed = 0;
+		unsigned int NormsUsed = 0;
 
 		Ref<VertexArray> m_FinalVA;
 	};

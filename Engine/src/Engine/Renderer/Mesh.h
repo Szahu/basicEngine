@@ -34,6 +34,9 @@ namespace Engine
 		vector<Vertex> vertices;
 		vector<unsigned int> indices;
 		vector<Ref<Texture2D>> textures;
+		vector<std::pair<unsigned int, unsigned int>> diffBinds; // index, slot
+		vector<std::pair<unsigned int, unsigned int>> specBinds; // index, slot
+		vector<std::pair<unsigned int, unsigned int>> normBinds; // index, slot
 		Material m_material;
 
 		Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Ref<Texture2D>> textures);
@@ -41,8 +44,9 @@ namespace Engine
 
 		const Ref<VertexArray>& GetVertexArray() const { return m_VertexArray; };
 
-		void Draw(const Engine::Ref<Engine::Shader>& shader);
+		//void Draw(const Engine::Ref<Engine::Shader>& shader);
 		void ProccessMaterial(const Engine::Ref<Engine::Shader>& shader);
+		bool HasTextureOfType(TextureType type);
 
 	private:
 		unsigned int VAO, VBO, EBO;

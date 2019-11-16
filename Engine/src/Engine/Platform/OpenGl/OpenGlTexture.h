@@ -19,8 +19,8 @@ namespace Engine
 
 		virtual const uint32_t GetID() const override { return m_RendererID; }
 		
-		virtual const void SetType(const std::string& type) override { m_Type = type; }
-		virtual const std::string& GetType() const override { return m_Type; }
+		virtual const void SetType(const TextureType& type) override { m_Type = type; }
+		virtual const TextureType& GetType() const override { return m_Type; }
 
 		virtual const std::string& GetPath() const override { return m_Path; }
 
@@ -29,7 +29,7 @@ namespace Engine
 
 	private:
 		std::string m_Path;
-		std::string m_Type;
+		TextureType m_Type;
 		uint32_t m_Width;
 		uint32_t m_Height;
 		uint32_t m_RendererID;
