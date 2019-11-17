@@ -4,6 +4,9 @@
 
 namespace Engine
 {
+	Gui::Style* Gui::m_Style = new Gui::Style;
+
+
 	const void Gui::InitDocspace()
 	{
 		//Docking code
@@ -96,5 +99,6 @@ namespace Engine
 		ImGui::PopStyleVar();
 		ImGui::PopStyleVar();
 	}
+
 
 }

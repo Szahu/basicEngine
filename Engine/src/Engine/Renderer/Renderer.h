@@ -43,6 +43,7 @@ namespace Engine
 			std::vector<PointLight*> m_Lights;
 			ShaderLibrary* m_ShaderLibrary;
 			std::vector<std::string> m_ShadersInUse;
+			unsigned int testUniformBuffer;
 		};
 
 		static SceneData* m_SceneData;

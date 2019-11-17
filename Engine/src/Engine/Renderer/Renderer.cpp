@@ -5,6 +5,7 @@
 
 #include "glad/glad.h" //Temporary
 #include "glm/gtc/matrix_transform.hpp"
+#include <glm/gtc/type_ptr.hpp>
 
 #include "Engine/Renderer/Scene.h"
 
@@ -26,6 +27,12 @@ namespace Engine
 	{
 		m_SceneData->m_Camera = &Scene::GetActiveScene().GetCamera().GetCamera();
 		m_SceneData->m_ShaderLibrary = &Scene::GetActiveScene().GetShaderLibrary();
+
+		glGenBuffers(1, &m_SceneData->testUniformBuffer);
+		glBindBuffer(GL_UNIFORM_BUFFER, m_SceneData->testUniformBuffer);
+		glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), NULL, GL_STATIC_DRAW);
+		glBindBuffer(GL_UNIFORM_BUFFER, 0);
+		glBindBufferBase(GL_UNIFORM_BUFFER, 0, m_SceneData->testUniformBuffer);
 	}
 
 	void Renderer::BeginScene()
@@ -38,20 +45,19 @@ namespace Engine
 		Engine::RenderCommand::SetClearColor({ 0.53f, 0.81f, 0.98f, 1.0f });
 		glStencilMask(0xFF);
 
-		glActiveTexture(GL_TEXTURE0 + 3);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, Scene::GetActiveScene().GetSkybox().GetTexture());
+		glBindBuffer(GL_UNIFORM_BUFFER, m_SceneData->testUniformBuffer);
+		glm::vec3 flatColor = glm::vec3(0.0f, 0.0f, 0.0f);
+		glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), &m_SceneData->m_Camera->GetViewProjectionMatrix()[0][0]);
+		glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
 
 		for (int i = 0; i < m_SceneData->m_ShadersInUse.size(); i++)
 		{
 			m_SceneData->m_ShaderLibrary->Get(m_SceneData->m_ShadersInUse[i])->Bind();
 			m_SceneData->m_ShaderLibrary->Get(m_SceneData->m_ShadersInUse[i])->SetFloat3("u_FlatColor", glm::vec3(0.0f, 0.0f, 0.0f));
-			m_SceneData->m_ShaderLibrary->Get(m_SceneData->m_ShadersInUse[i])->SetMat4("u_ViewProjectionMatrix", m_SceneData->m_Camera->GetViewProjectionMatrix());
 			m_SceneData->m_ShaderLibrary->Get(m_SceneData->m_ShadersInUse[i])->SetFloat3("u_CameraPosition", m_SceneData->m_Camera->GetPosition());
-			m_SceneData->m_ShaderLibrary->Get(m_SceneData->m_ShadersInUse[i])->SetInt1("u_SkyboxTexture", 3);
 		}
 
-		
-		
 
 	}
 

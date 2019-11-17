@@ -3,25 +3,28 @@
 layout (location = 0) in vec3 a_Positions;
 layout (location = 1) in vec3 a_Normals;
 layout (location = 2) in vec2 a_TexCoords;
-//layout (location = 3) in vec3 a_Translations;
 
-out vec2 TexCoords;
-out vec3 Normal;
-out vec3 FragPos;
+out VS_OUT
+{
+	vec2 TexCoords;
+	vec3 Normal;
+	vec3 FragPos;
+} vs_out;
 
-uniform mat4 u_ViewProjectionMatrix;
+layout (std140, binding = 0) uniform u_Data
+{
+	mat4 ViewProjectionMatrix;
+};
+
 uniform mat4 u_Transform;
 
 void main()
 {
-	TexCoords = a_TexCoords;
+	vs_out.TexCoords = a_TexCoords;
+	vs_out.FragPos = vec3(u_Transform * vec4(a_Positions, 1.0));
+	vs_out.Normal = mat3(transpose(inverse(u_Transform))) * a_Normals;
 
-	FragPos = vec3(u_Transform * vec4(a_Positions, 1.0));
-
-	Normal = mat3(transpose(inverse(u_Transform))) * a_Normals;
-
-	//gl_Position = u_ViewProjectionMatrix * u_Transform * vec4(a_Positions.x + a_Translations.x, a_Positions.y + a_Translations.y, a_Positions.z + a_Translations.z, 1.0);
-	gl_Position = u_ViewProjectionMatrix * u_Transform * vec4(a_Positions, 1.0);
+	gl_Position = ViewProjectionMatrix * u_Transform * vec4(a_Positions, 1.0);
 }
 
 
@@ -30,12 +33,14 @@ void main()
 #version 330 core
 out vec4 color;
 
-in vec2 TexCoords;
-in vec3 Normal;
-in vec3 FragPos;
+in VS_OUT
+{
+	vec2 TexCoords;
+	vec3 Normal;
+	vec3 FragPos;
+} fs_in;
 
-uniform vec3 u_LightColor;
-uniform vec3 u_LightPosition;
+
 uniform vec3 u_CameraPosition;
 
 #define NR_POINT_LIGHTS 1
@@ -66,7 +71,6 @@ struct CommonData
 };
 
 uniform PointLight u_PointLights[NR_POINT_LIGHTS];
-uniform PointLight u_PointLight;
 uniform vec3 u_FlatColor;
 
 uniform sampler2D texture_diffuse1;
@@ -85,8 +89,8 @@ void main()
 	{
 	// Setting up common Data
 	CommonData s_CommonData;
-	s_CommonData.c_Normal = normalize(Normal);
-	s_CommonData.c_ViewDirection = normalize(u_CameraPosition - FragPos);
+	s_CommonData.c_Normal = normalize(fs_in.Normal);
+	s_CommonData.c_ViewDirection = normalize(u_CameraPosition - fs_in.FragPos);
 
 	vec4 objectColor = vec4(1.0f);
 
@@ -108,20 +112,20 @@ void main()
 
 vec4 CalculatePointLight(PointLight light, CommonData data)
 {
-	vec3 specTex = texture(texture_specular1, TexCoords).rgb;
+	vec3 specTex = texture(texture_specular1, fs_in.TexCoords).rgb;
 	if (specTex.x == 0 && specTex.y == 0 && specTex.z == 0) { specTex = vec3(1.0); }
 
-	vec3 diffTex1 = texture(texture_diffuse1, TexCoords).rgb;
+	vec3 diffTex1 = texture(texture_diffuse1, fs_in.TexCoords).rgb;
 	if (diffTex1.x == 0 && diffTex1.y == 0 && diffTex1.z == 0) { diffTex1 = vec3(1.0); }
 
-	vec3 diffTex2 = texture(texture_diffuse2, TexCoords).rgb;
+	vec3 diffTex2 = texture(texture_diffuse2, fs_in.TexCoords).rgb;
 	if (diffTex2.x == 0 && diffTex2.y == 0 && diffTex2.z == 0) { diffTex2 = vec3(1.0); }
 
 	// ambient
 	vec3 ambient = u_Material.ambient * light.ambient * diffTex1 * diffTex2;
 
 	// diffuse 
-	vec3 lightDir = normalize(light.position - FragPos);
+	vec3 lightDir = normalize(light.position - fs_in.FragPos);
 	float diff = max(dot(data.c_Normal, lightDir), 0.0);
 	vec3 diffuse = (diff * u_Material.diffuse) * light.diffuse * diffTex1 * diffTex2;
 
