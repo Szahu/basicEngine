@@ -28,17 +28,8 @@ namespace Engine
 		m_SceneData->m_Camera = &Scene::GetActiveScene().GetCamera().GetCamera();
 		m_SceneData->m_ShaderLibrary = &Scene::GetActiveScene().GetShaderLibrary();
 
-		glGenBuffers(1, &m_SceneData->testUniformBuffer);
-		glBindBuffer(GL_UNIFORM_BUFFER, m_SceneData->testUniformBuffer);
-		glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4) + sizeof(glm::vec3), NULL, GL_STATIC_DRAW);
-		glBindBuffer(GL_UNIFORM_BUFFER, 0);
-		glBindBufferBase(GL_UNIFORM_BUFFER, 0, m_SceneData->testUniformBuffer);
-
-		glGenBuffers(1, &m_SceneData->LightsUniformBuffer);
-		glBindBuffer(GL_UNIFORM_BUFFER, m_SceneData->LightsUniformBuffer);
-		glBufferData(GL_UNIFORM_BUFFER, sizeof(PointLight), &Scene::GetActiveScene().GetLights()[0], GL_STATIC_DRAW);
-		glBindBuffer(GL_UNIFORM_BUFFER, 0);
-		glBindBufferBase(GL_UNIFORM_BUFFER, 1, m_SceneData->LightsUniformBuffer);
+		m_SceneData->m_MatricesUniformBuffer = UniformBuffer::Create(sizeof(glm::mat4) + sizeof(glm::vec3), 0);
+		m_SceneData->m_LightsUniformBuffer = UniformBuffer::Create(sizeof(PointLight) * Scene::GetActiveScene().GetLights().size(), 1);
 	}
 
 	void Renderer::BeginScene()
@@ -49,14 +40,17 @@ namespace Engine
 		Engine::RenderCommand::SetClearColor({ 0.53f, 0.81f, 0.98f, 1.0f });
 		glStencilMask(0xFF);
 
-		glBindBuffer(GL_UNIFORM_BUFFER, m_SceneData->testUniformBuffer);
-		glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), &m_SceneData->m_Camera->GetViewProjectionMatrix()[0][0]);
-		glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::vec3), &m_SceneData->m_Camera->GetPosition().x);
+		m_SceneData->m_MatricesUniformBuffer->Bind();
+		m_SceneData->m_MatricesUniformBuffer->AddSubData(0, sizeof(glm::mat4), &m_SceneData->m_Camera->GetViewProjectionMatrix()[0][0]);
+		m_SceneData->m_MatricesUniformBuffer->AddSubData(sizeof(glm::mat4), sizeof(glm::vec3), &m_SceneData->m_Camera->GetPosition().x);
 
-		glBindBuffer(GL_UNIFORM_BUFFER, m_SceneData->LightsUniformBuffer);
+		m_SceneData->m_LightsUniformBuffer->Bind();
 		std::vector<PointLight> lights = Scene::GetActiveScene().GetLights();
-		glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(PointLight), &lights[0]);
-		glBindBuffer(GL_UNIFORM_BUFFER, 0);
+		for (int i = 0; i < lights.size(); i++)
+		{
+			m_SceneData->m_LightsUniformBuffer->AddSubData(i * sizeof(PointLight), sizeof(PointLight), &Scene::GetActiveScene().GetLights()[i].Position.x);
+		}
+		m_SceneData->m_LightsUniformBuffer->Unbind();
 	}
 
 	void Renderer::EndScene()
@@ -84,7 +78,7 @@ namespace Engine
 		shader->Bind();
 		shader->SetMat4("u_Transform", transform);
 		
-		ProcessLightsAndMaterial(material, shader);
+		ProcessMaterial(material, shader);
 
 		if (drawOutline)
 		{
@@ -144,7 +138,7 @@ namespace Engine
 		shader->Bind();
 		shader->SetMat4("u_Transform", transform);
 		
-		ProcessLightsAndMaterial(material, shader);
+		ProcessMaterial(material, shader);
 
 		if (!drawOutline || drawOutline)
 		{
@@ -171,20 +165,8 @@ namespace Engine
 
 	}
 
-	void Renderer::ProcessLightsAndMaterial(const Material& material, const Ref<Shader>& shader)
+	void Renderer::ProcessMaterial(const Material& material, const Ref<Shader>& shader)
 	{
-		std::vector<PointLight> lights = Scene::GetActiveScene().GetLights();
-		for (unsigned int i = 0; i < Scene::GetActiveScene().GetLights().size(); i++)
-		{
-			std::string location = "u_PointLights[" + std::to_string(i) + "].position";
-			shader->SetFloat3(location, lights[i].Position);
-			location = "u_PointLights[" + std::to_string(i) + "].ambient";
-			shader->SetFloat3(location, lights[i].Ambient);
-			location = "u_PointLights[" + std::to_string(i) + "].diffuse";
-			shader->SetFloat3(location, lights[i].Diffuse);
-			location = "u_PointLights[" + std::to_string(i) + "].specular";
-			shader->SetFloat3(location, lights[i].Specular);
-		}
 
 		shader->SetFloat3("u_Material.ambient", material.m_Ambient);
 		shader->SetFloat3("u_Material.diffuse", material.m_Diffuse);

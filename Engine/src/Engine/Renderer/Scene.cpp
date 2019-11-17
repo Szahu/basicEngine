@@ -18,8 +18,9 @@ namespace Engine
 	{
 		s_Instance = this;
 		PointLight light;
-		light.Specular = glm::vec3(1.0f);
+		PointLight light1;
 		m_Lights.push_back(light);
+		m_Lights.push_back(light1);
 		
 	}
 
@@ -42,7 +43,6 @@ namespace Engine
 	{
 		Renderer::BeginScene();
 
-		m_Lights[0].Position = lampPos;
 		m_Camera.OnUpdate(ts);
 		m_MousePicker.OnUpdate(m_Camera.GetCamera().GetProjectionMatrix(), m_Camera.GetCamera().GetViewMatrix());
 
@@ -63,74 +63,16 @@ namespace Engine
 
 		ImGui::Begin("Entities in the scene");
 
-		if (ImGui::IsMouseClicked(1) && ImGui::IsWindowHovered())
-		{
-			ImGui::OpenPopup("Test_popup"); 
-		}
-
-		if(ImGui::BeginPopup("Test_popup"))
-		{
-			if(ImGui::BeginPopup("EnterText"))
-			{
-				static char text[16];
-				if (ImGui::InputText("Name:", &text[0], IM_ARRAYSIZE(text), ImGuiInputTextFlags_EnterReturnsTrue))
-				{
-					if (text[0] != 0)
-					{
-						AddEntity(Entity(text));
-						text[0] = 0;
-					}
-				}
-
-				ImGui::SameLine();
-				
-				if (ImGui::Button("Enter")) 
-				{ 
-					if (text[0] != 0)
-					{
-						AddEntity(Entity(text));
-						text[0] = 0;
-					}
-					ImGui::CloseCurrentPopup();
-				} 
-
-				ImGui::EndPopup();
-			}
-
-			if (ImGui::Button("Add new Entity!"))
-			{
-				ImGui::OpenPopup("EnterText");
-			}
-
-			ImGui::EndPopup();
-		}
-		
+		AddingEntityPopUp();
 		EntityInspectorWindowContent();
 
-		//for (auto& en : m_Entities)
-		//{	
-		//	if (m_ActiveEntity == &en.second)
-		//	{
-		//		if (ImGui::TreeNode(en.second.GetName().c_str(), (en.second.GetName() + " (Active)").c_str()), ImGuiTreeNodeFlags_OpenOnArrow)
-		//		{
-		//			ImGui::Text("Text");
-		//			//ImGui::TreePop();
-		//		}
-		//
-		//	}
-		//	
-		//	else
-		//	{
-		//		if (ImGui::TreeNode(en.second.GetName().c_str(), en.second.GetName().c_str()), ImGuiTreeNodeFlags_None)
-		//		{
-		//			m_ActiveEntity = &en.second;
-		//			ImGui::TreePop();
-		//		}
-		//
-		//	}
-		//
-		//}
-		ImGui::DragFloat3("LampPos", &lampPos.x, 0.5f);
+		ImGui::Separator();
+
+		ImGui::Text("Lights in the scene:");
+		for (int i = 0; i < m_Lights.size(); i++)
+		{
+			ImGui::DragFloat3(("Light " + std::to_string(i)).c_str(), &m_Lights[i].Position.x, 0.5f);
+		}
 
 		ImGui::End();
 
@@ -188,7 +130,7 @@ namespace Engine
 			if (m_ActiveEntity == &en.second) node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_Selected;
 			else node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
 			i++;
-			bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, "Selectable Node %d", i);
+			bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, en.first.c_str(), i);
 			if (ImGui::IsItemClicked())
 			{
 				node_clicked = i;
@@ -202,6 +144,51 @@ namespace Engine
 				ImGui::TreePop();
 			}
 
+		}
+	}
+
+	void Scene::AddingEntityPopUp()
+	{
+		if (ImGui::IsMouseClicked(1) && ImGui::IsWindowHovered())
+		{
+			ImGui::OpenPopup("Test_popup");
+		}
+
+		if (ImGui::BeginPopup("Test_popup"))
+		{
+			if (ImGui::BeginPopup("EnterText"))
+			{
+				static char text[16];
+				if (ImGui::InputText("Name:", &text[0], IM_ARRAYSIZE(text), ImGuiInputTextFlags_EnterReturnsTrue))
+				{
+					if (text[0] != 0)
+					{
+						AddEntity(Entity(text));
+						text[0] = 0;
+					}
+				}
+
+				ImGui::SameLine();
+
+				if (ImGui::Button("Enter"))
+				{
+					if (text[0] != 0)
+					{
+						AddEntity(Entity(text));
+						text[0] = 0;
+					}
+					ImGui::CloseCurrentPopup();
+				}
+
+				ImGui::EndPopup();
+			}
+
+			if (ImGui::Button("Add new Entity!"))
+			{
+				ImGui::OpenPopup("EnterText");
+			}
+
+			ImGui::EndPopup();
 		}
 	}
 

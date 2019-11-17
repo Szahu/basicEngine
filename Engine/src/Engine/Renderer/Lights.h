@@ -6,9 +6,9 @@ namespace Engine
 {
 	struct PointLight
 	{
-		glm::vec3 Position = glm::vec3(0.0f);
-		glm::vec3 Ambient = glm::vec3(0.25f);
-		glm::vec3 Diffuse = glm::vec3(1.0f);
-		glm::vec3 Specular = glm::vec3(1.0f, 1.0f, 1.0f);
+		glm::vec4 Position = { 0.0f, 0.0f, 15.0f, 1.0f };
+		glm::vec4 Ambient = glm::vec4(0.25f, 0.25f, 0.25f, 1.0f);
+		glm::vec4 Diffuse =  glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+		glm::vec4 Specular = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	};
 }

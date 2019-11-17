@@ -35,6 +35,18 @@ namespace Engine
 		return nullptr;
 		
 	}
+
+	Ref<UniformBuffer> UniformBuffer::Create(uint32_t size, uint32_t baseIndex)
+	{
+		switch (Renderer::GetAPI())
+		{
+			case RendererAPI::API::None: EG_CORE_ASSERT(false, "RendereAPI None is not supprtoed!");  return nullptr;
+			case RendererAPI::API::OpenGL:  return CreateRef<OpenGLUniformBuffer>(size, baseIndex);
+		}
+
+		EG_CORE_ASSERT(false, "Unknow RendererAPI!");
+		return nullptr;
+	}
 }
 
 

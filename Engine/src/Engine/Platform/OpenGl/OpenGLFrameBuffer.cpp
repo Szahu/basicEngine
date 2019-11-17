@@ -75,11 +75,10 @@ namespace Engine
 
 	void OpenGLFrameBuffer::Bind() const
 	{
-		
+
 		glBindFramebuffer(GL_FRAMEBUFFER, m_SampledFrameBuffer);
 		glEnable(GL_DEPTH_TEST);
 		glViewport(0, 0, m_TextureSize.x, m_TextureSize.y);
-
 		glStencilMask(0xFF);
 
 
@@ -99,7 +98,6 @@ namespace Engine
 		glBlitFramebuffer(0, 0, m_TextureSize.x, m_TextureSize.y, 0, 0, m_TextureSize.x, m_TextureSize.y, GL_COLOR_BUFFER_BIT, GL_NEAREST);
 		glDisable(GL_DEPTH_TEST);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
 		UnbindTexture();
 
 		/*

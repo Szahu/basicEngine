@@ -31,7 +31,7 @@ namespace Engine
 		static void Submit(const Engine::Ref<VertexArray>& vertexArray, const Material& material, const Transform& transform, bool drawOutline, const std::string& libKey,  uint32_t instances = 0);
 		static void Submit(Model& model, const Material& material, const Transform& transform, bool drawOutline, const std::string& libKey);
 
-		static void ProcessLightsAndMaterial(const Material& material, const Ref<Shader>& shader);
+		static void ProcessMaterial(const Material& material, const Ref<Shader>& shader);
 
 		static inline RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 
@@ -44,7 +44,8 @@ namespace Engine
 			ShaderLibrary* m_ShaderLibrary;
 			std::vector<std::string> m_ShadersInUse;
 			unsigned int testUniformBuffer;
-			uint32_t LightsUniformBuffer;
+			Ref<UniformBuffer> m_LightsUniformBuffer;
+			Ref<UniformBuffer> m_MatricesUniformBuffer;
 		};
 
 		static SceneData* m_SceneData;

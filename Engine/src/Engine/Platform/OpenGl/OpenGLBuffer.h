@@ -42,4 +42,22 @@ namespace Engine
 		uint32_t m_Count;
 		uint32_t m_BufferSizeInBytes = 0;
 	};
+
+	class OpenGLUniformBuffer : public UniformBuffer
+	{
+	public:
+		OpenGLUniformBuffer(uint32_t size, uint32_t baseIndex);
+		virtual ~OpenGLUniformBuffer();
+
+		virtual void Bind() const override;
+		virtual void Unbind() const override;
+
+		virtual void AddSubData(uint32_t offset, uint32_t size, const float* data) const override;
+
+		virtual const uint32_t GetSize() const override { return m_BufferSizeInBytes; }
+
+	private:
+		uint32_t m_RendererID;
+		uint32_t m_BufferSizeInBytes;
+	};
 }

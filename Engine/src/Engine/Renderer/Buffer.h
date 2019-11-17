@@ -146,5 +146,21 @@ namespace Engine
 		static Ref<IndexBuffer> Create(uint32_t* indices, uint32_t count);
 	};
 
+	////////////////////////////////////////////////////////////
+	// UniformBuffer ///////////////////////////////////////////
+	class UniformBuffer
+	{
+	public:
+		virtual ~UniformBuffer() {}
+
+		virtual void Bind() const = 0;
+		virtual void Unbind() const = 0;
+
+		virtual void AddSubData(uint32_t offset, uint32_t size, const float* data) const = 0;
+
+		virtual const uint32_t GetSize() const = 0;
+
+		static Ref<UniformBuffer> Create(uint32_t size, uint32_t baseIndex);
+	};
 
 }

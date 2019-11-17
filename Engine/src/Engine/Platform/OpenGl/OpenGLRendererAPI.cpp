@@ -14,7 +14,6 @@ namespace Engine
 		glCullFace(GL_BACK);
 
 		glEnable(GL_DEPTH_TEST);
-		//glDepthFunc(GL_LESS);
 		glDepthFunc(GL_LEQUAL);
 
 		glEnable(GL_MULTISAMPLE);
@@ -22,7 +21,6 @@ namespace Engine
 		glEnable(GL_STENCIL_TEST);
 		glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
 		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-
 
 		//float quadVertices[] = { 
 		//// positions   // texCoords

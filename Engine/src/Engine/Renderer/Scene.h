@@ -41,7 +41,7 @@ namespace Engine
 		bool OnMouseClick(MouseButtonPressedEvent& e);
 
 		void EntityInspectorWindowContent();
-
+		void AddingEntityPopUp();
 	private:
 		Entity* m_ActiveEntity = nullptr;
 		Ref<FrameBuffer> m_FrameBuffer;
@@ -51,7 +51,6 @@ namespace Engine
 		std::unordered_map<std::string, Entity> m_Entities;
 		MousePicker m_MousePicker;
 
-		glm::vec3 lampPos = { 0.0f, 0.0f, 15.0f };
 		Skybox m_Skybox;
 
 		static Scene* s_Instance;

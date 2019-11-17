@@ -44,7 +44,7 @@ in VS_OUT
 	vec3 CameraPosition;
 } fs_in;
 
-#define NR_POINT_LIGHTS 1
+#define NR_POINT_LIGHTS 2
 
 struct Material
 {
@@ -58,10 +58,10 @@ uniform Material u_Material;
 
 struct PointLight
 {
-	vec3 position;
-	vec3 ambient;
-	vec3 diffuse;
-	vec3 specular;
+	vec4 position;
+	vec4 ambient;
+	vec4 diffuse;
+	vec4 specular;
 };
 
 struct CommonData
@@ -75,12 +75,12 @@ layout (std140, binding = 1) uniform u_Lights
 	PointLight[NR_POINT_LIGHTS] u_PointLights;
 };
 
-//uniform PointLight u_PointLights[NR_POINT_LIGHTS];
 uniform vec3 u_FlatColor;
 
 uniform sampler2D texture_diffuse1;
 uniform sampler2D texture_diffuse2;
 uniform sampler2D texture_specular1;
+uniform sampler2D texture_normal1;
 
 uniform samplerCube u_SkyboxTexture;
 
@@ -109,9 +109,12 @@ void main()
 	//vec3 I = normalize(FragPos - u_CameraPosition);
     //vec3 R = refract(I, normalize(s_CommonData.c_Normal), ratio);
     //vec4 Reflect_Color = vec4(texture(u_SkyboxTexture, R).rgb, 1.0);
-
+	//
 	//color = result + vec4(0.1) * Reflect_Color;
-	color = objectColor * result;
+	
+	float gamma = 1;
+
+	color = vec4(pow(result.rgb, vec3(1.0f / gamma)), 1.0f);
 	}
 }
 
@@ -126,19 +129,23 @@ vec4 CalculatePointLight(PointLight light, CommonData data)
 	vec3 diffTex2 = texture(texture_diffuse2, fs_in.TexCoords).rgb;
 	if (diffTex2.x == 0 && diffTex2.y == 0 && diffTex2.z == 0) { diffTex2 = vec3(1.0); }
 
+	vec3 normTex = texture(texture_normal1, fs_in.TexCoords).rgb;
+	vec3 Norm = normalize(normTex * 2.0 - 1.0);
+	if (normTex.x == 0 && normTex.y == 0 && normTex.z == 0) { normTex = vec3(1.0); Norm = data.c_Normal; }
+
 	// ambient
-	vec3 ambient = u_Material.ambient * light.ambient * diffTex1 * diffTex2;
+	vec3 ambient = u_Material.ambient * vec3(light.ambient) * diffTex1 * diffTex2;
 
 	// diffuse 
-	vec3 lightDir = normalize(light.position - fs_in.FragPos);
+	vec3 lightDir = normalize(vec3(light.position) - fs_in.FragPos);
 	vec3 halfwayDir = normalize(lightDir + data.c_ViewDirection);
-	float diff = max(dot(data.c_Normal, halfwayDir), 0.0);
-	vec3 diffuse = (diff * u_Material.diffuse) * light.diffuse * diffTex1 * diffTex2;
+	float diff = max(dot(Norm, halfwayDir), 0.0);
+	vec3 diffuse = (diff * u_Material.diffuse) * vec3(light.diffuse) * diffTex1 * diffTex2;
 
 	// specular
-	vec3 reflectDir = reflect(-lightDir, data.c_Normal);
+	vec3 reflectDir = reflect(-lightDir, Norm);
 	float spec = pow(max(dot(data.c_ViewDirection, reflectDir), 0.0), (1 / u_Material.shininess * 1.28f));
-	vec3 specular = light.specular * (spec * u_Material.specular) * specTex;
+	vec3 specular = vec3(light.specular) * (spec * u_Material.specular) * specTex;
 
 	vec3 result = (ambient + diffuse + specular);
 	return vec4(result, 1.0);

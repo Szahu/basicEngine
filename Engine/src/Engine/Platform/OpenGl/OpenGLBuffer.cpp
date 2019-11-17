@@ -53,6 +53,37 @@ namespace Engine
 	{
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
+
+	///////////////////////////////////////////////////////////////
+	// Uniform Buffer /////////////////////////////////////////////
+	OpenGLUniformBuffer::OpenGLUniformBuffer(uint32_t size, uint32_t baseIndex)
+	{
+		glGenBuffers(1, &m_RendererID);
+		Bind();
+		glBufferData(GL_UNIFORM_BUFFER, size, NULL, GL_STATIC_DRAW);
+		Unbind();
+		glBindBufferBase(GL_UNIFORM_BUFFER, baseIndex, m_RendererID);
+	}
+
+	OpenGLUniformBuffer::~OpenGLUniformBuffer()
+	{
+		glDeleteBuffers(GL_UNIFORM_BUFFER, &m_RendererID);
+	}
+
+	void OpenGLUniformBuffer::Bind() const
+	{
+		glBindBuffer(GL_UNIFORM_BUFFER, m_RendererID);
+	}
+
+	void OpenGLUniformBuffer::Unbind() const
+	{
+		glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	}
+
+	void OpenGLUniformBuffer::AddSubData(uint32_t offset, uint32_t size, const float* data) const
+	{
+		glBufferSubData(GL_UNIFORM_BUFFER, offset, size, data);
+	}
 }
 
 

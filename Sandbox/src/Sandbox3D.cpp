@@ -32,8 +32,8 @@ void Sandbox3D::OnAttach()
 	{
 		testScene.AddEntity(Engine::Entity("Entity " + std::to_string(i)));
 		testScene.GetEntity("Entity " + std::to_string(i))->AddComponent(Engine::ComponentType::Model);
-		//testScene.GetEntity("Entity " + std::to_string(i))->GetModelComponent()->LoadModel("assets/models/SF_FIGHTER/Scifi_Fighter.fbx");
-		testScene.GetEntity("Entity " + std::to_string(i))->GetModelComponent()->LoadModel("assets/models/nanosuit/scene.gltf");
+		testScene.GetEntity("Entity " + std::to_string(i))->GetModelComponent()->LoadModel("assets/models/SF_FIGHTER/Scifi_Fighter.fbx");
+		//testScene.GetEntity("Entity " + std::to_string(i))->GetModelComponent()->LoadModel("assets/models/nanosuit/scene.gltf");
 		//testScene.GetEntity("Entity " + std::to_string(i))->GetModelComponent()->LoadModel("assets/models/the Shrek/scene.gltf");
 	}
 
@@ -68,6 +68,7 @@ void Sandbox3D::OnUpdate(Engine::Timestep ts)
 
 void Sandbox3D::OnImGuiRender()
 {
+
 	Engine::Gui::InitDocspace();
 
 	m_Window.OnImGuiRender();
@@ -78,6 +79,7 @@ void Sandbox3D::OnImGuiRender()
 	testScene.OnImGuiRender();
 	ImGui::Text("FPS: %i", FPS);
 	ImGui::End();
+
 }
 
 void Sandbox3D::OnEvent(Engine::Event& event)
