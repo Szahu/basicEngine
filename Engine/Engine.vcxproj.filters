@@ -10,8 +10,17 @@
     <Filter Include="src\Engine\Core">
       <UniqueIdentifier>{AA407579-16CC-E23D-1FDD-65328BE73E3E}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Engine\Entity">
+      <UniqueIdentifier>{1E8561B0-8A9B-5F46-D312-EB673F6830CE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Engine\Entity\Components">
+      <UniqueIdentifier>{733BF69A-5FF6-E546-08AE-5E91F44730D7}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Engine\Events">
       <UniqueIdentifier>{B624EAB0-223B-E846-6BB2-7368D707B9CE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Engine\GUI">
+      <UniqueIdentifier>{26D9FB39-12A7-EF3F-FB3A-6066E7A7CBA4}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Engine\Imgui">
       <UniqueIdentifier>{DCA388A8-C89C-A7FA-F1CE-8C7FDD268706}</UniqueIdentifier>
@@ -27,6 +36,12 @@
     </Filter>
     <Filter Include="src\Engine\Renderer">
       <UniqueIdentifier>{F838018B-649A-DE98-ED07-254B59681558}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Engine\Toolbox">
+      <UniqueIdentifier>{08BE3741-F4A1-F896-5D02-F3E94905E318}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Engine\Toolbox\Samples">
+      <UniqueIdentifier>{2C2569C7-1835-1598-81EE-79B66D1D0431}</UniqueIdentifier>
     </Filter>
     <Filter Include="vendor">
       <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
@@ -93,6 +108,24 @@
     <ClInclude Include="src\Engine\Core\Window.h">
       <Filter>src\Engine\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Entity\Component.h">
+      <Filter>src\Engine\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Entity\Components\MaterialComponent.h">
+      <Filter>src\Engine\Entity\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Entity\Components\MeshComponent.h">
+      <Filter>src\Engine\Entity\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Entity\Components\ModelComponent.h">
+      <Filter>src\Engine\Entity\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Entity\Components\TransformComponent.h">
+      <Filter>src\Engine\Entity\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Entity\Entity.h">
+      <Filter>src\Engine\Entity</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Events\ApplicationEvent.h">
       <Filter>src\Engine\Events</Filter>
     </ClInclude>
@@ -105,6 +138,12 @@
     <ClInclude Include="src\Engine\Events\MouseEvent.h">
       <Filter>src\Engine\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\GUI\Gui.h">
+      <Filter>src\Engine\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\GUI\ViewportWindow.h">
+      <Filter>src\Engine\GUI</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Imgui\ImGuiLayer.h">
       <Filter>src\Engine\Imgui</Filter>
     </ClInclude>
@@ -112,6 +151,9 @@
       <Filter>src\Engine\Platform\OpenGl</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Platform\OpenGl\OpenGLContext.h">
+      <Filter>src\Engine\Platform\OpenGl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Platform\OpenGl\OpenGLFrameBuffer.h">
       <Filter>src\Engine\Platform\OpenGl</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Platform\OpenGl\OpenGLRendererAPI.h">
@@ -135,7 +177,13 @@
     <ClInclude Include="src\Engine\Renderer\Buffer.h">
       <Filter>src\Engine\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Renderer\FrameBuffer.h">
+      <Filter>src\Engine\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Renderer\GraphicsContext.h">
+      <Filter>src\Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Renderer\Lights.h">
       <Filter>src\Engine\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Renderer\Mesh.h">
@@ -156,14 +204,41 @@
     <ClInclude Include="src\Engine\Renderer\RendererAPI.h">
       <Filter>src\Engine\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Renderer\Scene.h">
+      <Filter>src\Engine\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Renderer\Shader.h">
+      <Filter>src\Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Renderer\Skybox.h">
       <Filter>src\Engine\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Renderer\Texture.h">
       <Filter>src\Engine\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Renderer\Vertex.h">
+      <Filter>src\Engine\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Renderer\VertexArray.h">
       <Filter>src\Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Toolbox\MousePicker.h">
+      <Filter>src\Engine\Toolbox</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Toolbox\OrtographicCamera.h">
+      <Filter>src\Engine\Toolbox</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Toolbox\OrtographicCameraController.h">
+      <Filter>src\Engine\Toolbox</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Toolbox\PerspectiveCamera.h">
+      <Filter>src\Engine\Toolbox</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Toolbox\PerspectiveCameraController.h">
+      <Filter>src\Engine\Toolbox</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Toolbox\Samples\BasicMeshes.h">
+      <Filter>src\Engine\Toolbox\Samples</Filter>
     </ClInclude>
     <ClInclude Include="vendor\glm\glm\common.hpp">
       <Filter>vendor\glm\glm</Filter>
@@ -1272,34 +1347,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Renderer\Vertex.h" />
-    <ClInclude Include="src\Engine\Renderer\Lights.h" />
-    <ClInclude Include="src\Engine\Renderer\FrameBuffer.h" />
-    <ClInclude Include="src\Engine\Platform\OpenGl\OpenGLFrameBuffer.h" />
-    <ClInclude Include="src\Engine\Toolbox\OrtographicCamera.h">
-      <Filter>src\Engine\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Toolbox\OrtographicCameraController.h">
-      <Filter>src\Engine\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Toolbox\PerspectiveCamera.h">
-      <Filter>src\Engine\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Toolbox\PerspectiveCameraController.h">
-      <Filter>src\Engine\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Toolbox\MousePicker.h" />
-    <ClInclude Include="src\Engine\GUI\Gui.h" />
-    <ClInclude Include="src\Engine\GUI\ViewportWindow.h" />
-    <ClInclude Include="src\Engine\Entity\Entity.h" />
-    <ClInclude Include="src\Engine\Entity\Component.h" />
-    <ClInclude Include="src\Engine\Entity\Components\MeshComponent.h" />
-    <ClInclude Include="src\Engine\Entity\Components\TransformComponent.h" />
-    <ClInclude Include="src\Engine\Renderer\Scene.h" />
-    <ClInclude Include="src\Engine\Entity\Components\MaterialComponent.h" />
-    <ClInclude Include="src\Engine\Toolbox\Samples\BasicMeshes.h" />
-    <ClInclude Include="src\Engine\Entity\Components\ModelComponent.h" />
-    <ClInclude Include="src\Engine\Renderer\Skybox.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EGpch.cpp">
@@ -1317,6 +1364,30 @@
     <ClCompile Include="src\Engine\Core\Log.cpp">
       <Filter>src\Engine\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Entity\Component.cpp">
+      <Filter>src\Engine\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Entity\Components\MaterialComponent.cpp">
+      <Filter>src\Engine\Entity\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Entity\Components\MeshComponent.cpp">
+      <Filter>src\Engine\Entity\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Entity\Components\ModelComponent.cpp">
+      <Filter>src\Engine\Entity\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Entity\Components\TransformComponent.cpp">
+      <Filter>src\Engine\Entity\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Entity\Entity.cpp">
+      <Filter>src\Engine\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\GUI\Gui.cpp">
+      <Filter>src\Engine\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\GUI\ViewportWindow.cpp">
+      <Filter>src\Engine\GUI</Filter>
+    </ClCompile>
     <ClCompile Include="src\Engine\Imgui\ImGuiBuild.cpp">
       <Filter>src\Engine\Imgui</Filter>
     </ClCompile>
@@ -1327,6 +1398,9 @@
       <Filter>src\Engine\Platform\OpenGl</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Platform\OpenGl\OpenGLContext.cpp">
+      <Filter>src\Engine\Platform\OpenGl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Platform\OpenGl\OpenGLFrameBuffer.cpp">
       <Filter>src\Engine\Platform\OpenGl</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Platform\OpenGl\OpenGLRendererAPI.cpp">
@@ -1350,6 +1424,9 @@
     <ClCompile Include="src\Engine\Renderer\Buffer.cpp">
       <Filter>src\Engine\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Renderer\FrameBuffer.cpp">
+      <Filter>src\Engine\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Engine\Renderer\Mesh.cpp">
       <Filter>src\Engine\Renderer</Filter>
     </ClCompile>
@@ -1368,7 +1445,13 @@
     <ClCompile Include="src\Engine\Renderer\RendererAPI.cpp">
       <Filter>src\Engine\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Renderer\Scene.cpp">
+      <Filter>src\Engine\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Engine\Renderer\Shader.cpp">
+      <Filter>src\Engine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Renderer\Skybox.cpp">
       <Filter>src\Engine\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Renderer\Texture.cpp">
@@ -1377,34 +1460,26 @@
     <ClCompile Include="src\Engine\Renderer\VertexArray.cpp">
       <Filter>src\Engine\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Toolbox\MousePicker.cpp">
+      <Filter>src\Engine\Toolbox</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Toolbox\OrtographicCamera.cpp">
+      <Filter>src\Engine\Toolbox</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Toolbox\OrtographicCameraController.cpp">
+      <Filter>src\Engine\Toolbox</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Toolbox\PerspectiveCamera.cpp">
+      <Filter>src\Engine\Toolbox</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Toolbox\PerspectiveCameraController.cpp">
+      <Filter>src\Engine\Toolbox</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Toolbox\Samples\BasicMeshes.cpp">
+      <Filter>src\Engine\Toolbox\Samples</Filter>
+    </ClCompile>
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\Renderer\FrameBuffer.cpp" />
-    <ClCompile Include="src\Engine\Platform\OpenGl\OpenGLFrameBuffer.cpp" />
-    <ClCompile Include="src\Engine\Toolbox\OrtographicCamera.cpp">
-      <Filter>src\Engine\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Engine\Toolbox\OrtographicCameraController.cpp">
-      <Filter>src\Engine\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Engine\Toolbox\PerspectiveCamera.cpp">
-      <Filter>src\Engine\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Engine\Toolbox\PerspectiveCameraController.cpp">
-      <Filter>src\Engine\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Engine\Toolbox\MousePicker.cpp" />
-    <ClCompile Include="src\Engine\GUI\Gui.cpp" />
-    <ClCompile Include="src\Engine\GUI\ViewportWindow.cpp" />
-    <ClCompile Include="src\Engine\Entity\Entity.cpp" />
-    <ClCompile Include="src\Engine\Entity\Component.cpp" />
-    <ClCompile Include="src\Engine\Entity\Components\TransformComponent.cpp" />
-    <ClCompile Include="src\Engine\Renderer\Scene.cpp" />
-    <ClCompile Include="src\Engine\Entity\Components\MeshComponent.cpp" />
-    <ClCompile Include="src\Engine\Entity\Components\MaterialComponent.cpp" />
-    <ClCompile Include="src\Engine\Toolbox\Samples\BasicMeshes.cpp" />
-    <ClCompile Include="src\Engine\Entity\Components\ModelComponent.cpp" />
-    <ClCompile Include="src\Engine\Renderer\Skybox.cpp" />
   </ItemGroup>
 </Project>

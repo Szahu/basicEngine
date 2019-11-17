@@ -40,6 +40,8 @@ namespace Engine
 	private:
 		bool OnMouseClick(MouseButtonPressedEvent& e);
 
+		void EntityInspectorWindowContent();
+
 	private:
 		Entity* m_ActiveEntity = nullptr;
 		Ref<FrameBuffer> m_FrameBuffer;

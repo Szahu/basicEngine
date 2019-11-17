@@ -21,13 +21,9 @@ public:
 	virtual void OnImGuiRender() override;
 	void OnEvent(Engine::Event& event) override;
 
-private:
-	unsigned int LoadCubemap(std::vector<std::string> faces);
 
 private:
 	Engine::ViewportWindow m_Window;
-
-	Engine::ShaderLibrary m_ShaderLibrary;
 
 	Engine::PointLight m_Light;
 	Engine::PointLight m_Light1;

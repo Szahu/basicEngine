@@ -44,6 +44,7 @@ namespace Engine
 			ShaderLibrary* m_ShaderLibrary;
 			std::vector<std::string> m_ShadersInUse;
 			unsigned int testUniformBuffer;
+			uint32_t LightsUniformBuffer;
 		};
 
 		static SceneData* m_SceneData;

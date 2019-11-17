@@ -25,7 +25,7 @@ namespace Engine
 				m_Material.GetMaterial(),
 				GetParentEntity->GetTransformComponent()->GetTransform(),
 				GetParentEntity->IsActive(),
-				"Material"
+				"Model"
 			);
 		}
 	}

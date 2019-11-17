@@ -18,6 +18,7 @@ namespace Engine
 	{
 		s_Instance = this;
 		PointLight light;
+		light.Specular = glm::vec3(1.0f);
 		m_Lights.push_back(light);
 		
 	}
@@ -41,7 +42,7 @@ namespace Engine
 	{
 		Renderer::BeginScene();
 
-		m_Lights[0].SetPosition(lampPos);
+		m_Lights[0].Position = lampPos;
 		m_Camera.OnUpdate(ts);
 		m_MousePicker.OnUpdate(m_Camera.GetCamera().GetProjectionMatrix(), m_Camera.GetCamera().GetViewMatrix());
 
@@ -104,23 +105,31 @@ namespace Engine
 			ImGui::EndPopup();
 		}
 		
+		EntityInspectorWindowContent();
 
-		for (auto& en : m_Entities)
-		{	
-			if (m_ActiveEntity == &en.second)
-			{
-				ImGui::Button((en.second.GetName() + " (Active)").c_str());
-			}
-
-			else
-			{
-				if (ImGui::Button(en.second.GetName().c_str()))
-				{
-					m_ActiveEntity = &en.second;
-				}
-			}
-			
-		}
+		//for (auto& en : m_Entities)
+		//{	
+		//	if (m_ActiveEntity == &en.second)
+		//	{
+		//		if (ImGui::TreeNode(en.second.GetName().c_str(), (en.second.GetName() + " (Active)").c_str()), ImGuiTreeNodeFlags_OpenOnArrow)
+		//		{
+		//			ImGui::Text("Text");
+		//			//ImGui::TreePop();
+		//		}
+		//
+		//	}
+		//	
+		//	else
+		//	{
+		//		if (ImGui::TreeNode(en.second.GetName().c_str(), en.second.GetName().c_str()), ImGuiTreeNodeFlags_None)
+		//		{
+		//			m_ActiveEntity = &en.second;
+		//			ImGui::TreePop();
+		//		}
+		//
+		//	}
+		//
+		//}
 		ImGui::DragFloat3("LampPos", &lampPos.x, 0.5f);
 
 		ImGui::End();
@@ -167,6 +176,33 @@ namespace Engine
 
 		return false;
 
+	}
+
+	void Scene::EntityInspectorWindowContent()
+	{
+		int i = 0;
+		int node_clicked = -1;
+		ImGuiTreeNodeFlags node_flags;
+		for (auto& en : m_Entities)
+		{
+			if (m_ActiveEntity == &en.second) node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_Selected;
+			else node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+			i++;
+			bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, "Selectable Node %d", i);
+			if (ImGui::IsItemClicked())
+			{
+				node_clicked = i;
+				m_ActiveEntity = &en.second;
+			}
+				
+			if (node_open)
+			{
+				ImGui::Text("Blah blah\nBlah Blah");
+				
+				ImGui::TreePop();
+			}
+
+		}
 	}
 
 }

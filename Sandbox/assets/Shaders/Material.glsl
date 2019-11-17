@@ -5,22 +5,29 @@ layout (location = 1) in vec3 a_Normals;
 layout (location = 2) in vec2 a_TexCoords;
 //layout (location = 3) in vec3 a_Translations;
 
-out vec2 TexCoords;
-out vec3 Normal;
-out vec3 FragPos;
+out VS_OUT
+{
+	vec2 TexCoords;
+	vec3 Normal;
+	vec3 FragPos;
+	vec3 CameraPosition;
+} vs_out;
 
-uniform mat4 u_ViewProjectionMatrix;
+layout (std140, binding = 0) uniform u_Data
+{
+	mat4 u_ViewProjectionMatrix;
+	vec3 u_CameraPosition;
+};
+
 uniform mat4 u_Transform;
 
 void main()
 {
-	TexCoords = a_TexCoords;
+	vs_out.TexCoords = a_TexCoords;
+	vs_out.CameraPosition = u_CameraPosition;
+	vs_out.FragPos = vec3(u_Transform * vec4(a_Positions, 1.0));
+	vs_out.Normal = mat3(transpose(inverse(u_Transform))) * a_Normals;
 
-	FragPos = vec3(u_Transform * vec4(a_Positions, 1.0));
-
-	Normal = mat3(transpose(inverse(u_Transform))) * a_Normals;
-
-	//gl_Position = u_ViewProjectionMatrix * u_Transform * vec4(a_Positions.x + a_Translations.x, a_Positions.y + a_Translations.y, a_Positions.z + a_Translations.z, 1.0);
 	gl_Position = u_ViewProjectionMatrix * u_Transform * vec4(a_Positions, 1.0);
 }
 
@@ -30,13 +37,14 @@ void main()
 #version 330 core
 out vec4 color;
 
-in vec2 TexCoords;
-in vec3 Normal;
-in vec3 FragPos;
+in VS_OUT
+{
+	vec2 TexCoords;
+	vec3 Normal;
+	vec3 FragPos;
+	vec3 CameraPosition;
+} fs_in;
 
-uniform vec3 u_LightColor;
-uniform vec3 u_LightPosition;
-uniform vec3 u_CameraPosition;
 
 uniform sampler2D texture_diffuse1;
 uniform sampler2D texture_specular1;
@@ -84,8 +92,8 @@ void main()
 	{
 	// Setting up common Data
 	CommonData s_CommonData;
-	s_CommonData.c_Normal = normalize(Normal);
-	s_CommonData.c_ViewDirection = normalize(u_CameraPosition - FragPos);
+	s_CommonData.c_Normal = normalize(fs_in.Normal);
+	s_CommonData.c_ViewDirection = normalize(fs_in.CameraPosition - fs_in.FragPos);
 
 	vec4 objectColor = vec4(1.0f);
 		
@@ -95,7 +103,7 @@ void main()
 		result += CalculatePointLight(u_PointLights[i], s_CommonData);
 	}
 	
-	vec4 diffTex = texture(texture_diffuse1, TexCoords);
+	vec4 diffTex = texture(texture_diffuse1, fs_in.TexCoords);
 	if (diffTex.x != 0 || diffTex.y != 0 || diffTex.z != 0) {objectColor *= diffTex;}
 
 	//float ratio = 1.00 / 2.42;
@@ -116,7 +124,7 @@ vec4 CalculatePointLight(PointLight light, CommonData data)
 
 	// diffuse 
 	//vec3 norm = normalize(Normal);
-	vec3 lightDir = normalize(light.position - FragPos);
+	vec3 lightDir = normalize(light.position - fs_in.FragPos);
 	float diff = max(dot(data.c_Normal, lightDir), 0.0);
 	vec3 diffuse = (diff * u_Material.diffuse) * light.diffuse;
 

@@ -23,11 +23,6 @@ void Sandbox3D::OnAttach()
 
 	EG_INFO("Sanbox3D online");
 
-	m_ShaderLibrary.Load("assets/shaders/Material.glsl");
-	m_ShaderLibrary.Load("assets/shaders/MaterialTexture.glsl");
-	m_ShaderLibrary.Load("assets/shaders/Model.glsl");
-	m_ShaderLibrary.Load("assets/shaders/FlatColor.glsl");
-
 	//m_Lights.push_back(&m_Light);
 	m_Lights.push_back(&m_Light1);
 

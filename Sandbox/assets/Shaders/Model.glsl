@@ -9,11 +9,13 @@ out VS_OUT
 	vec2 TexCoords;
 	vec3 Normal;
 	vec3 FragPos;
+	vec3 CameraPosition;
 } vs_out;
 
 layout (std140, binding = 0) uniform u_Data
 {
-	mat4 ViewProjectionMatrix;
+	mat4 u_ViewProjectionMatrix;
+	vec3 u_CameraPosition;
 };
 
 uniform mat4 u_Transform;
@@ -23,8 +25,9 @@ void main()
 	vs_out.TexCoords = a_TexCoords;
 	vs_out.FragPos = vec3(u_Transform * vec4(a_Positions, 1.0));
 	vs_out.Normal = mat3(transpose(inverse(u_Transform))) * a_Normals;
+	vs_out.CameraPosition = u_CameraPosition;
 
-	gl_Position = ViewProjectionMatrix * u_Transform * vec4(a_Positions, 1.0);
+	gl_Position = u_ViewProjectionMatrix * u_Transform * vec4(a_Positions, 1.0);
 }
 
 
@@ -38,10 +41,8 @@ in VS_OUT
 	vec2 TexCoords;
 	vec3 Normal;
 	vec3 FragPos;
+	vec3 CameraPosition;
 } fs_in;
-
-
-uniform vec3 u_CameraPosition;
 
 #define NR_POINT_LIGHTS 1
 
@@ -58,7 +59,6 @@ uniform Material u_Material;
 struct PointLight
 {
 	vec3 position;
-
 	vec3 ambient;
 	vec3 diffuse;
 	vec3 specular;
@@ -70,7 +70,12 @@ struct CommonData
 	vec3 c_ViewDirection;
 };
 
-uniform PointLight u_PointLights[NR_POINT_LIGHTS];
+layout (std140, binding = 1) uniform u_Lights
+{
+	PointLight[NR_POINT_LIGHTS] u_PointLights;
+};
+
+//uniform PointLight u_PointLights[NR_POINT_LIGHTS];
 uniform vec3 u_FlatColor;
 
 uniform sampler2D texture_diffuse1;
@@ -83,14 +88,14 @@ vec4 CalculatePointLight(PointLight light, CommonData data);
 
 void main()
 {	
-	if(u_FlatColor.x != 0 || u_FlatColor.y != 0 || u_FlatColor.z != 0) {color = vec4(u_FlatColor, 1.0);}
-
+	//if(u_FlatColor.x != 0 || u_FlatColor.y != 0 || u_FlatColor.z != 0) {color = vec4(u_FlatColor, 1.0);}
+	if(false) {}
 	else 
 	{
 	// Setting up common Data
 	CommonData s_CommonData;
 	s_CommonData.c_Normal = normalize(fs_in.Normal);
-	s_CommonData.c_ViewDirection = normalize(u_CameraPosition - fs_in.FragPos);
+	s_CommonData.c_ViewDirection = normalize(fs_in.CameraPosition - fs_in.FragPos);
 
 	vec4 objectColor = vec4(1.0f);
 
@@ -126,7 +131,8 @@ vec4 CalculatePointLight(PointLight light, CommonData data)
 
 	// diffuse 
 	vec3 lightDir = normalize(light.position - fs_in.FragPos);
-	float diff = max(dot(data.c_Normal, lightDir), 0.0);
+	vec3 halfwayDir = normalize(lightDir + data.c_ViewDirection);
+	float diff = max(dot(data.c_Normal, halfwayDir), 0.0);
 	vec3 diffuse = (diff * u_Material.diffuse) * light.diffuse * diffTex1 * diffTex2;
 
 	// specular
