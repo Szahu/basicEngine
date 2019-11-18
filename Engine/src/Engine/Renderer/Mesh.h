@@ -46,6 +46,7 @@ namespace Engine
 
 		//void Draw(const Engine::Ref<Engine::Shader>& shader);
 		void ProccessMaterial(const Engine::Ref<Engine::Shader>& shader);
+		void UnbindTextures();
 		bool HasTextureOfType(TextureType type);
 
 	private:

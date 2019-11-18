@@ -46,6 +46,7 @@ namespace Engine
 			unsigned int testUniformBuffer;
 			Ref<UniformBuffer> m_LightsUniformBuffer;
 			Ref<UniformBuffer> m_MatricesUniformBuffer;
+			Ref<Texture2D> WhiteTexture;
 		};
 
 		static SceneData* m_SceneData;

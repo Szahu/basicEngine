@@ -32,7 +32,12 @@ void Sandbox3D::OnAttach()
 	{
 		testScene.AddEntity(Engine::Entity("Entity " + std::to_string(i)));
 		testScene.GetEntity("Entity " + std::to_string(i))->AddComponent(Engine::ComponentType::Model);
-		testScene.GetEntity("Entity " + std::to_string(i))->GetModelComponent()->LoadModel("assets/models/SF_FIGHTER/Scifi_Fighter.fbx");
+		testScene.GetEntity("Entity " + std::to_string(i))->GetModelComponent()->LoadModel("assets/models/nanosuit/scene.gltf");
+
+		//testScene.AddEntity(Engine::Entity("Entity " + std::to_string(i + 1)));
+		//testScene.GetEntity("Entity " + std::to_string(i + 1))->AddComponent(Engine::ComponentType::Model);
+		//testScene.GetEntity("Entity " + std::to_string(i + 1))->GetModelComponent()->LoadModel("assets/models/SF_FIGHTER/Scifi_Fighter.FBX");
+	
 		//testScene.GetEntity("Entity " + std::to_string(i))->GetModelComponent()->LoadModel("assets/models/nanosuit/scene.gltf");
 		//testScene.GetEntity("Entity " + std::to_string(i))->GetModelComponent()->LoadModel("assets/models/the Shrek/scene.gltf");
 	}

@@ -31,7 +31,7 @@ namespace Engine
 
 
 		void AddLight(const PointLight& light) { m_Lights.push_back(light); }
-		const std::vector<PointLight>& GetLights() { return m_Lights; }
+		std::vector<PointLight>& GetLights() { return m_Lights; }
 		ShaderLibrary& GetShaderLibrary() { return m_ShaderLibrary; }
 		PerspectiveCameraController& GetCamera() { return m_Camera; }
 
@@ -42,8 +42,10 @@ namespace Engine
 
 		void EntityInspectorWindowContent();
 		void AddingEntityPopUp();
+		void EnvironmentWindow();
 	private:
 		Entity* m_ActiveEntity = nullptr;
+		unsigned int m_ActiveLight = 0;
 		Ref<FrameBuffer> m_FrameBuffer;
 		PerspectiveCameraController m_Camera;
 		ShaderLibrary m_ShaderLibrary;

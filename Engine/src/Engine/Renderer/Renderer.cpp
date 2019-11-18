@@ -29,7 +29,11 @@ namespace Engine
 		m_SceneData->m_ShaderLibrary = &Scene::GetActiveScene().GetShaderLibrary();
 
 		m_SceneData->m_MatricesUniformBuffer = UniformBuffer::Create(sizeof(glm::mat4) + sizeof(glm::vec3), 0);
-		m_SceneData->m_LightsUniformBuffer = UniformBuffer::Create(sizeof(PointLight) * Scene::GetActiveScene().GetLights().size(), 1);
+		m_SceneData->m_LightsUniformBuffer = UniformBuffer::Create(sizeof(PointLightData) * Scene::GetActiveScene().GetLights().size(), 1);
+
+		m_SceneData->WhiteTexture = Texture2D::Create(1, 1);
+		uint32_t WhiteTextureData = 0xffffffff;
+		m_SceneData->WhiteTexture->SetData(&WhiteTextureData, sizeof(WhiteTextureData));
 	}
 
 	void Renderer::BeginScene()
@@ -48,7 +52,7 @@ namespace Engine
 		std::vector<PointLight> lights = Scene::GetActiveScene().GetLights();
 		for (int i = 0; i < lights.size(); i++)
 		{
-			m_SceneData->m_LightsUniformBuffer->AddSubData(i * sizeof(PointLight), sizeof(PointLight), &Scene::GetActiveScene().GetLights()[i].Position.x);
+			m_SceneData->m_LightsUniformBuffer->AddSubData(i * sizeof(PointLightData), sizeof(PointLightData), &Scene::GetActiveScene().GetLights()[i].GetLightData().Position.x);
 		}
 		m_SceneData->m_LightsUniformBuffer->Unbind();
 	}
@@ -159,14 +163,16 @@ namespace Engine
 
 			glEnable(GL_STENCIL_TEST);
 		}
-
+		
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, 0);
-
 	}
 
 	void Renderer::ProcessMaterial(const Material& material, const Ref<Shader>& shader)
 	{
+
+		m_SceneData->WhiteTexture->Bind(0);
+		m_SceneData->WhiteTexture->Bind(1);
+		m_SceneData->WhiteTexture->Bind(2);
 
 		shader->SetFloat3("u_Material.ambient", material.m_Ambient);
 		shader->SetFloat3("u_Material.diffuse", material.m_Diffuse);

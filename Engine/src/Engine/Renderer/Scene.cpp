@@ -66,13 +66,7 @@ namespace Engine
 		AddingEntityPopUp();
 		EntityInspectorWindowContent();
 
-		ImGui::Separator();
-
-		ImGui::Text("Lights in the scene:");
-		for (int i = 0; i < m_Lights.size(); i++)
-		{
-			ImGui::DragFloat3(("Light " + std::to_string(i)).c_str(), &m_Lights[i].Position.x, 0.5f);
-		}
+		EnvironmentWindow();
 
 		ImGui::End();
 
@@ -190,6 +184,38 @@ namespace Engine
 
 			ImGui::EndPopup();
 		}
+	}
+
+	void Scene::EnvironmentWindow()
+	{
+		ImGui::Begin("Environment");
+
+		int node_clicked = -1;
+		ImGuiTreeNodeFlags node_flags;
+		for (int i = 0;i < m_Lights.size();i ++)
+		{
+			if (m_ActiveLight == i) node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_Selected;
+			else node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+			bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, ("PointLight" + std::to_string(i)).c_str(), i);
+			if (ImGui::IsItemClicked())
+			{
+				node_clicked = i;
+				m_ActiveLight = i;
+			}
+				
+			if (node_open)
+			{
+				ImGui::Text("Blah blah\nBlah Blah");
+				
+				ImGui::TreePop();
+			}
+
+		}
+
+		if(m_Lights.size() > 0 && m_ActiveLight < m_Lights.size() && m_ActiveLight >= 0)
+			m_Lights[m_ActiveLight].OnImGuiRender();
+
+		ImGui::End();
 	}
 
 }
