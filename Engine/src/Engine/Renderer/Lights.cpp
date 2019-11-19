@@ -5,6 +5,11 @@
 
 namespace Engine
 {
+	PointLight::PointLight()
+	{
+		m_GuiTexture = Texture2D::Create("assets/textures/test.png");
+	}
+
 	void PointLight::OnImGuiRender()
 	{
 		ImGui::DragFloat3("Position", &m_Data.Position.x, 0.5f);

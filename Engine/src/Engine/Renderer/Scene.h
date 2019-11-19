@@ -36,6 +36,7 @@ namespace Engine
 		PerspectiveCameraController& GetCamera() { return m_Camera; }
 
 		const Skybox& GetSkybox() { return m_Skybox; }
+		void DrawGui();
 
 	private:
 		bool OnMouseClick(MouseButtonPressedEvent& e);
@@ -52,7 +53,7 @@ namespace Engine
 		std::vector<PointLight> m_Lights;
 		std::unordered_map<std::string, Entity> m_Entities;
 		MousePicker m_MousePicker;
-
+		Ref<VertexArray> GuiQuad;
 		Skybox m_Skybox;
 
 		static Scene* s_Instance;

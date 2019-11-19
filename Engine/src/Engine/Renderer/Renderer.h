@@ -43,7 +43,6 @@ namespace Engine
 			std::vector<PointLight*> m_Lights;
 			ShaderLibrary* m_ShaderLibrary;
 			std::vector<std::string> m_ShadersInUse;
-			unsigned int testUniformBuffer;
 			Ref<UniformBuffer> m_LightsUniformBuffer;
 			Ref<UniformBuffer> m_MatricesUniformBuffer;
 			Ref<Texture2D> WhiteTexture;

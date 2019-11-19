@@ -8,6 +8,8 @@
 
 #include "Engine/Core/Input.h"
 
+#include "glad/glad.h"
+
 namespace Engine
 {
 
@@ -26,22 +28,47 @@ namespace Engine
 
 	void Scene::LoadScene()
 	{
-		m_ShaderLibrary.Load("assets/shaders/Material.glsl");
-		m_ShaderLibrary.Load("assets/shaders/MaterialTexture.glsl");
+		m_ShaderLibrary.Load("assets/shaders/GuiQuad.glsl");
 		m_ShaderLibrary.Load("assets/shaders/Model.glsl");
 		m_ShaderLibrary.Load("assets/shaders/FlatColor.glsl");
 		m_ShaderLibrary.Load("assets/shaders/Reflection.glsl");
+
+		m_ShaderLibrary.Get("GuiQuad")->Bind();
+		m_ShaderLibrary.Get("GuiQuad")->SetInt1("texture_sample", 0);
+		m_ShaderLibrary.Get("GuiQuad")->Unbind();
 
 		m_FrameBuffer = Application::Get().GetViewportWindowPointer()->GetFrameBuffer();
 		
 		m_Skybox.Load("assets/textures/skyboxes/waterAndSky");
 
 		Renderer::InitScene(); 
+
+		glm::vec4 quad_vertices[4] = {
+			{-0.5f, -0.5f, 0.0f, 0.0f},
+			{ 0.5f, -0.5f, 1.0f, 0.0f},
+			{ 0.5f,  0.5f, 1.0f, 1.0f},
+			{-0.5f,  0.5f, 0.0f, 1.0f}
+		};
+
+		unsigned int quad_indices[6] = {
+			0, 1, 2, 0, 2, 3
+		};
+
+		Ref<IndexBuffer> gui_quad_indices = IndexBuffer::Create(quad_indices, 6);
+		Ref<VertexBuffer> gui_quad_vertices = VertexBuffer::Create(&quad_vertices[0].x, sizeof(float) * 4 * 4);
+		gui_quad_vertices->SetLayout(BufferLayout{
+			{ ShaderDataType::Float2, "a_Positions" },
+			{ ShaderDataType::Float2, "a_TexCoords" }
+			});
+		GuiQuad = VertexArray::Create();
+		GuiQuad->AddVertexBuffer(gui_quad_vertices);
+		GuiQuad->SetIndexBuffer(gui_quad_indices);
 	}
 
 	void Scene::OnUpdate(Timestep ts)
 	{
 		Renderer::BeginScene();
+
 
 		m_Camera.OnUpdate(ts);
 		m_MousePicker.OnUpdate(m_Camera.GetCamera().GetProjectionMatrix(), m_Camera.GetCamera().GetViewMatrix());
@@ -55,6 +82,8 @@ namespace Engine
 			ent.second.CheckIfActive(m_ActiveEntity);
 		}
 
+		DrawGui();
+
 		Renderer::EndScene();
 	}
 
@@ -67,6 +96,7 @@ namespace Engine
 		EntityInspectorWindowContent();
 
 		EnvironmentWindow();
+
 
 		ImGui::End();
 
@@ -216,6 +246,20 @@ namespace Engine
 			m_Lights[m_ActiveLight].OnImGuiRender();
 
 		ImGui::End();
+	}
+
+	void Scene::DrawGui()
+	{
+		glDisable(GL_STENCIL_TEST);
+		GuiQuad->Bind();
+		m_ShaderLibrary.Get("GuiQuad")->Bind();
+		m_ShaderLibrary.Get("GuiQuad")->SetMat4("u_Transform", glm::mat4(1.0f));
+		m_Lights[0].GetTexture()->Bind();
+		RenderCommand::DrawIndexed(GuiQuad);
+		GuiQuad->Unbind();
+		m_ShaderLibrary.Get("GuiQuad")->Unbind();
+		glDisable(GL_DEPTH_TEST);
+
 	}
 
 }

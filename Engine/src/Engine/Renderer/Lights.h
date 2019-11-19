@@ -1,6 +1,8 @@
 #pragma once
 
 #include "glm/glm.hpp"
+#include "Engine/Renderer/Texture.h"
+
 
 namespace Engine
 {
@@ -16,9 +18,12 @@ namespace Engine
 	class PointLight
 	{
 	public:
+		PointLight();
 		void OnImGuiRender();
 		const PointLightData& GetLightData() { return m_Data; }
+		const Ref<Texture2D>& GetTexture() { return m_GuiTexture; }
 	private:
+		Ref<Texture2D> m_GuiTexture;
 		PointLightData m_Data;
 	};
 }

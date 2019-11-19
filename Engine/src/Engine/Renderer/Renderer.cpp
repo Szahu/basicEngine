@@ -41,7 +41,7 @@ namespace Engine
 		Application::Get().GetViewportWindowPointer()->GetFrameBuffer()->Bind();
 
 		Engine::RenderCommand::Clear();
-		Engine::RenderCommand::SetClearColor({ 0.53f, 0.81f, 0.98f, 1.0f });
+		Engine::RenderCommand::SetClearColor({ 0.0f, 0.0f, 0.0f, 0.0f });
 		glStencilMask(0xFF);
 
 		m_SceneData->m_MatricesUniformBuffer->Bind();
@@ -55,10 +55,13 @@ namespace Engine
 			m_SceneData->m_LightsUniformBuffer->AddSubData(i * sizeof(PointLightData), sizeof(PointLightData), &Scene::GetActiveScene().GetLights()[i].GetLightData().Position.x);
 		}
 		m_SceneData->m_LightsUniformBuffer->Unbind();
+
+		
 	}
 
 	void Renderer::EndScene()
 	{
+		
 		Application::Get().GetViewportWindowPointer()->GetFrameBuffer()->Unbind();
 
 		Engine::RenderCommand::Clear();
@@ -78,6 +81,7 @@ namespace Engine
 		}
 
 		Ref<Shader> shader = m_SceneData->m_ShaderLibrary->Get(libKey);
+
 
 		shader->Bind();
 		shader->SetMat4("u_Transform", transform);

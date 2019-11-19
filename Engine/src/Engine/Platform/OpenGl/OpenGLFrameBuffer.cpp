@@ -9,12 +9,13 @@ namespace Engine
 {
 	OpenGLFrameBuffer::OpenGLFrameBuffer(const glm::vec2& size)
 	{
+		//MultiSampled Buffer
 		glGenFramebuffers(1, &m_SampledFrameBuffer);
 		glBindFramebuffer(GL_FRAMEBUFFER, m_SampledFrameBuffer);
 		// create a multisampled color attachment texture
 		glGenTextures(1, &m_TextureColorBuffer);
 		glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, m_TextureColorBuffer);
-		glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, GL_RGB, size.x, size.y, GL_TRUE);
+		glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, GL_RGBA, size.x, size.y, GL_TRUE);
 		glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, m_TextureColorBuffer, 0);
 		// create a (also multisampled) renderbuffer object for depth and stencil attachments
@@ -29,13 +30,13 @@ namespace Engine
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 
-
+		//Standard buffer
 		glGenFramebuffers(1, &m_DistFrameBuffer);
 		glBindFramebuffer(GL_FRAMEBUFFER, m_DistFrameBuffer);
 		// create a color attachment texture
 		glGenTextures(1, &m_ScreenTexture);
 		glBindTexture(GL_TEXTURE_2D, m_ScreenTexture);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, size.x, size.y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size.x, size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_ScreenTexture, 0);
@@ -93,9 +94,15 @@ namespace Engine
 
 	void OpenGLFrameBuffer::Unbind() const
 	{
+
 		glBindFramebuffer(GL_READ_FRAMEBUFFER, m_SampledFrameBuffer);
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_DistFrameBuffer);
-		glBlitFramebuffer(0, 0, m_TextureSize.x, m_TextureSize.y, 0, 0, m_TextureSize.x, m_TextureSize.y, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+		glBlitFramebuffer(0, 0, m_TextureSize.x, m_TextureSize.y, 0, 0, m_TextureSize.x, m_TextureSize.y, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
+		//glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+
+
+		//glDisable(GL_BLEND);
 		glDisable(GL_DEPTH_TEST);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		UnbindTexture();
@@ -141,11 +148,11 @@ namespace Engine
 	{
 
 		glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, m_TextureColorBuffer);
-		glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, GL_RGB, m_TextureSize.x, m_TextureSize.y, GL_TRUE);
+		glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, GL_RGBA, m_TextureSize.x, m_TextureSize.y, GL_TRUE);
 		glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0);
 
 		glBindTexture(GL_TEXTURE_2D, m_ScreenTexture);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_TextureSize.x, m_TextureSize.y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_TextureSize.x, m_TextureSize.y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
 		glBindRenderbuffer(GL_RENDERBUFFER, m_RenderBuffer);
