@@ -53,7 +53,9 @@ in VS_OUT
 	mat3 TBN;
 } fs_in;
 
-#define NR_POINT_LIGHTS 2
+//HAS TO MATCH Max number of lights in Renderer.h!!
+#define MAX_NR_POINT_LIGHTS 5
+#define MAX_NR_SPOT_LIGHTS 5 
 
 struct Material
 {
@@ -73,6 +75,22 @@ struct PointLight
 	vec4 specular;
 };
 
+struct SpotLight
+{
+	vec4 Position;
+	vec4 Direction;
+	float InnerCutOff;
+	float OuterCutOff;
+	vec2 PADDING;
+	vec4 Ambient;
+	vec4 Diffuse;
+	vec4 Specular;
+	float Constant;
+	float Linear;
+	float Quadratic;
+	float PADDING1;
+};
+
 struct CommonData
 {
 	vec3 c_Normal;
@@ -81,7 +99,9 @@ struct CommonData
 
 layout (std140, binding = 1) uniform u_Lights
 {
-	PointLight[NR_POINT_LIGHTS] u_PointLights;
+	vec2 AmountOfLights; // .x are PointLights, .y are SpotLights
+	PointLight[MAX_NR_POINT_LIGHTS] u_PointLights;
+	SpotLight[MAX_NR_SPOT_LIGHTS] u_SpotLights;
 };
 
 uniform vec3 u_FlatColor;
@@ -93,6 +113,7 @@ uniform sampler2D texture_normal1;
 uniform samplerCube u_SkyboxTexture;
 
 vec4 CalculatePointLight(PointLight light, CommonData data);
+vec4 CalculateSpotLight(SpotLight light, CommonData data);
 
 void main()
 {	
@@ -108,11 +129,16 @@ void main()
 	vec4 objectColor = vec4(1.0f);
 
 	vec4 result = vec4(0.0);
-	for(int i = 0;i < u_PointLights.length();i ++)
+	for(int i = 0;i < AmountOfLights.x;i ++)
 	{
 		result += CalculatePointLight(u_PointLights[i], s_CommonData);
 	}
 	
+	for(int i = 0;i < AmountOfLights.y;i++)
+	{
+		result += CalculateSpotLight(u_SpotLights[i], s_CommonData);
+	}
+
 	//float ratio = 1.00 / 3.42;
 	//vec3 I = normalize(FragPos - u_CameraPosition);
     //vec3 R = refract(I, normalize(s_CommonData.c_Normal), ratio);
@@ -154,4 +180,43 @@ vec4 CalculatePointLight(PointLight light, CommonData data)
 
 	vec3 result = (ambient + diffuse + specular);
 	return vec4(result, 1.0);
+}
+
+vec4 CalculateSpotLight(SpotLight light, CommonData data)
+{
+	vec3 specTex = texture(texture_specular1, fs_in.TexCoords).rgb;
+
+	vec3 diffTex1 = texture(texture_diffuse1, fs_in.TexCoords).rgb;
+
+	vec3 normTex = texture(texture_normal1, fs_in.TexCoords).rgb;
+	vec3 Norm = data.c_Normal;
+
+	vec3 ambient = u_Material.ambient * vec3(light.Ambient) * diffTex1;
+    
+    // diffuse 
+    vec3 lightDir = normalize(vec3(light.Position) - fs_in.FragPos);
+    float diff = max(dot(data.c_Normal, lightDir), 0.0);
+    vec3 diffuse = vec3(light.Diffuse) * u_Material.diffuse * diffTex1;  
+    
+    // specular
+    vec3 reflectDir = reflect(-lightDir, data.c_Normal);  
+    float spec = pow(max(dot(data.c_ViewDirection, reflectDir), 0.0), u_Material.shininess);
+    vec3 specular = vec3(light.Specular) * u_Material.specular * specTex;  
+    
+    // spotlight (soft edges)
+    float theta = dot(vec3(lightDir), normalize(-vec3(light.Direction))); 
+    float epsilon = (light.InnerCutOff - light.OuterCutOff);
+    float intensity = clamp((theta - light.OuterCutOff) / epsilon, 0.0, 1.0);
+    diffuse  *= intensity;
+    specular *= intensity;
+    
+    // attenuation
+    float distance    = length(vec3(light.Position) - fs_in.FragPos);
+    float attenuation = 1.0 / (light.Constant + light.Linear * distance + light.Quadratic * (distance * distance));    
+    ambient  *= attenuation; 
+    diffuse   *= attenuation;
+    specular *= attenuation;   
+        
+    vec3 result = ambient + diffuse + specular;
+	return vec4(result, 1.0f);
 }

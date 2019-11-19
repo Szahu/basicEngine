@@ -35,6 +35,9 @@ namespace Engine
 
 		static inline RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 
+		const static unsigned int MAX_NUMBER_OF_POINTLIGHTS = 5;
+		const static unsigned int MAX_NUMBER_OF_SPOTLIGHTS = 5;
+
 	private:
 		struct SceneData
 		{

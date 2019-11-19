@@ -29,7 +29,7 @@ namespace Engine
 		m_SceneData->m_ShaderLibrary = &Scene::GetActiveScene().GetShaderLibrary();
 
 		m_SceneData->m_MatricesUniformBuffer = UniformBuffer::Create(sizeof(glm::mat4) + sizeof(glm::vec3), 0);
-		m_SceneData->m_LightsUniformBuffer = UniformBuffer::Create(sizeof(PointLightData) * Scene::GetActiveScene().GetLights().size(), 1);
+		m_SceneData->m_LightsUniformBuffer = UniformBuffer::Create(sizeof(glm::vec4) + sizeof(PointLightData) * MAX_NUMBER_OF_POINTLIGHTS + sizeof(SpotLight) * MAX_NUMBER_OF_SPOTLIGHTS, 1);
 
 		m_SceneData->WhiteTexture = Texture2D::Create(1, 1);
 		uint32_t WhiteTextureData = 0xffffffff;
@@ -49,11 +49,25 @@ namespace Engine
 		m_SceneData->m_MatricesUniformBuffer->AddSubData(sizeof(glm::mat4), sizeof(glm::vec3), &m_SceneData->m_Camera->GetPosition().x);
 
 		m_SceneData->m_LightsUniformBuffer->Bind();
-		std::vector<PointLight> lights = Scene::GetActiveScene().GetLights();
-		for (int i = 0; i < lights.size(); i++)
+
+		std::vector<PointLight> pointlights = Scene::GetActiveScene().GetPointLights();
+		std::vector<SpotLight> spotlights = Scene::GetActiveScene().GetSpotLights();
+
+		glm::vec4 amountOfLights;
+		amountOfLights.x = (float)Scene::GetActiveScene().GetPointLights().size();
+		amountOfLights.y = (float)Scene::GetActiveScene().GetSpotLights().size();
+		m_SceneData->m_LightsUniformBuffer->AddSubData(0, sizeof(glm::vec4), &amountOfLights.x);
+
+		for (int i = 0; i < pointlights.size(); i++)
 		{
-			m_SceneData->m_LightsUniformBuffer->AddSubData(i * sizeof(PointLightData), sizeof(PointLightData), &Scene::GetActiveScene().GetLights()[i].GetLightData().Position.x);
+			m_SceneData->m_LightsUniformBuffer->AddSubData(sizeof(glm::vec4) + i * sizeof(PointLightData), sizeof(PointLightData), &pointlights[i].GetLightData().Position.x);
 		}
+
+		for (int i = 0; i < spotlights.size(); i++)
+		{
+			m_SceneData->m_LightsUniformBuffer->AddSubData(sizeof(glm::vec4) + MAX_NUMBER_OF_POINTLIGHTS * sizeof(PointLightData) + i * sizeof(SpotLightData), sizeof(SpotLightData), &spotlights[i].GetLightData().Position.x);
+		}
+
 		m_SceneData->m_LightsUniformBuffer->Unbind();
 
 		

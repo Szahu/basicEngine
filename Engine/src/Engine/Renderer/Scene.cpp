@@ -21,8 +21,13 @@ namespace Engine
 		s_Instance = this;
 		PointLight light;
 		PointLight light1;
-		m_Lights.push_back(light);
-		m_Lights.push_back(light1);
+		m_PointLights.push_back(light);
+		m_PointLights.push_back(light1);
+
+		SpotLight slight;
+		SpotLight slight1;
+		m_SpotLights.push_back(slight);
+		m_SpotLights.push_back(slight1);
 		
 	}
 
@@ -222,7 +227,7 @@ namespace Engine
 
 		int node_clicked = -1;
 		ImGuiTreeNodeFlags node_flags;
-		for (int i = 0;i < m_Lights.size();i ++)
+		for (int i = 0;i < m_PointLights.size();i ++)
 		{
 			if (m_ActiveLight == i) node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_Selected;
 			else node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
@@ -242,8 +247,21 @@ namespace Engine
 
 		}
 
-		if(m_Lights.size() > 0 && m_ActiveLight < m_Lights.size() && m_ActiveLight >= 0)
-			m_Lights[m_ActiveLight].OnImGuiRender();
+		if(m_PointLights.size() > 0 && m_ActiveLight < m_PointLights.size() && m_ActiveLight >= 0)
+			m_PointLights[m_ActiveLight].OnImGuiRender();
+
+		if (ImGui::Button("Add Light!"))
+		{
+			if (m_PointLights.size() < Renderer::MAX_NUMBER_OF_POINTLIGHTS)
+			{
+				PointLight light;
+				m_PointLights.push_back(light);
+			}
+			else
+				EG_CORE_WARN("Reached max amount of Pointlights!");
+		}
+
+		ImGui::DragFloat3("Spot pos", &m_SpotLights[0].GetLightData().Position.x, 0.05f);
 
 		ImGui::End();
 	}
@@ -262,9 +280,9 @@ namespace Engine
 		m_ShaderLibrary.Get("GuiQuad")->SetFloat3("u_CameraRight", camRight);
 		m_ShaderLibrary.Get("GuiQuad")->SetFloat3("u_CameraUp", camUp);
 
-		for (int i = 0; i < m_Lights.size(); i++)
+		for (int i = 0; i < m_PointLights.size(); i++)
 		{
-			glm::vec4 pos = Scene::GetActiveScene().GetLights()[i].GetLightData().Position;
+			glm::vec4 pos = Scene::GetActiveScene().GetPointLights()[i].GetLightData().Position;
 			glm::mat4 transform = glm::translate(glm::mat4(1.0f), glm::vec3(pos));
 			m_ShaderLibrary.Get("GuiQuad")->SetMat4("u_Transform", transform);
 			RenderCommand::DrawIndexed(GuiQuad);

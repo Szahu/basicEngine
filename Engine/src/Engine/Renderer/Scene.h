@@ -30,8 +30,12 @@ namespace Engine
 		Entity* GetEntity(const std::string& name) { return &m_Entities[name]; }
 
 
-		void AddLight(const PointLight& light) { m_Lights.push_back(light); }
-		std::vector<PointLight>& GetLights() { return m_Lights; }
+		void AddPointLight(const PointLight& light) { m_PointLights.push_back(light); }
+		std::vector<PointLight>& GetPointLights() { return m_PointLights; }
+
+		void AddSpotLight(const SpotLight& light) { m_SpotLights.push_back(light); }
+		std::vector<SpotLight>& GetSpotLights() { return m_SpotLights; }
+
 		ShaderLibrary& GetShaderLibrary() { return m_ShaderLibrary; }
 		PerspectiveCameraController& GetCamera() { return m_Camera; }
 
@@ -51,7 +55,8 @@ namespace Engine
 		unsigned int m_ActiveLight = 0;
 		PerspectiveCameraController m_Camera;
 		ShaderLibrary m_ShaderLibrary;
-		std::vector<PointLight> m_Lights;
+		std::vector<PointLight> m_PointLights;
+		std::vector<SpotLight> m_SpotLights;
 		std::unordered_map<std::string, Entity> m_Entities;
 		MousePicker m_MousePicker;
 		Ref<VertexArray> GuiQuad;
