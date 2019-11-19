@@ -36,8 +36,6 @@ namespace Engine
 		m_ShaderLibrary.Get("GuiQuad")->Bind();
 		m_ShaderLibrary.Get("GuiQuad")->SetInt1("texture_sample", 0);
 		m_ShaderLibrary.Get("GuiQuad")->Unbind();
-
-		m_FrameBuffer = Application::Get().GetViewportWindowPointer()->GetFrameBuffer();
 		
 		m_Skybox.Load("assets/textures/skyboxes/waterAndSky");
 
@@ -63,6 +61,8 @@ namespace Engine
 		GuiQuad = VertexArray::Create();
 		GuiQuad->AddVertexBuffer(gui_quad_vertices);
 		GuiQuad->SetIndexBuffer(gui_quad_indices);
+
+		m_LightGuiTexture = Texture2D::Create("assets/textures/lightBulb.png", true);
 	}
 
 	void Scene::OnUpdate(Timestep ts)
@@ -253,9 +253,22 @@ namespace Engine
 		glDisable(GL_STENCIL_TEST);
 		GuiQuad->Bind();
 		m_ShaderLibrary.Get("GuiQuad")->Bind();
-		m_ShaderLibrary.Get("GuiQuad")->SetMat4("u_Transform", glm::mat4(1.0f));
-		m_Lights[0].GetTexture()->Bind();
-		RenderCommand::DrawIndexed(GuiQuad);
+		m_LightGuiTexture->Bind();
+
+		glm::mat4 ViewMatrix = m_Camera.GetCamera().GetViewMatrix();
+		glm::vec3 camRight = { ViewMatrix[0][0], ViewMatrix[1][0], ViewMatrix[2][0] };
+		glm::vec3 camUp = { ViewMatrix[0][1], ViewMatrix[1][1], ViewMatrix[2][1] };
+
+		m_ShaderLibrary.Get("GuiQuad")->SetFloat3("u_CameraRight", camRight);
+		m_ShaderLibrary.Get("GuiQuad")->SetFloat3("u_CameraUp", camUp);
+
+		for (int i = 0; i < m_Lights.size(); i++)
+		{
+			glm::vec4 pos = Scene::GetActiveScene().GetLights()[i].GetLightData().Position;
+			glm::mat4 transform = glm::translate(glm::mat4(1.0f), glm::vec3(pos));
+			m_ShaderLibrary.Get("GuiQuad")->SetMat4("u_Transform", transform);
+			RenderCommand::DrawIndexed(GuiQuad);
+		}
 		GuiQuad->Unbind();
 		m_ShaderLibrary.Get("GuiQuad")->Unbind();
 		glDisable(GL_DEPTH_TEST);

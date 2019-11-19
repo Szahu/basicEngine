@@ -11,6 +11,8 @@ layout (std140, binding = 0) uniform u_Data
 };			
 			
 uniform mat4 u_Transform;
+uniform vec3 u_CameraRight;
+uniform vec3 u_CameraUp;
 
 out vec2 TexCoord;
 
@@ -18,7 +20,9 @@ void main()
 {
 	TexCoord = a_TexCoords;
 	vec3 Positions = vec3(a_Positions, 0.0f);
-	gl_Position = u_ViewProjectionMatrix * u_Transform * vec4(Positions, 1.0);
+	vec3 pos_worldspace = u_CameraRight * Positions.x * 1.0f + u_CameraUp * Positions.y * 1.0f;
+
+	gl_Position = u_ViewProjectionMatrix * u_Transform * vec4(pos_worldspace, 1.0);
 }
 
 

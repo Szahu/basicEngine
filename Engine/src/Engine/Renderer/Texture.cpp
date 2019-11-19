@@ -7,12 +7,12 @@
 
 namespace Engine
 {
-	Ref<Texture2D> Engine::Texture2D::Create(const std::string& path)
+	Ref<Texture2D> Engine::Texture2D::Create(const std::string& path, bool flipOnLoad)
 	{
 		switch (Renderer::GetAPI())
 		{
 			case RendererAPI::API::None: EG_CORE_ASSERT(false, "RendereAPI None is not supprtoed!");  return nullptr;
-			case RendererAPI::API::OpenGL:  return  CreateRef<OpenGLTexture2D>(path);
+			case RendererAPI::API::OpenGL:  return  CreateRef<OpenGLTexture2D>(path, flipOnLoad);
 		}
 
 		EG_CORE_ASSERT(false, "Unknow RendererAPI!");

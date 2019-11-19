@@ -22,11 +22,11 @@ namespace Engine
 
 	}
 
-	Engine::OpenGLTexture2D::OpenGLTexture2D(const std::string& path)
+	Engine::OpenGLTexture2D::OpenGLTexture2D(const std::string& path, bool flipOnLoad)
 		: m_Path(path)
 	{
 		int width, height, channels;
-		stbi_set_flip_vertically_on_load(0);
+		stbi_set_flip_vertically_on_load(flipOnLoad);
 		stbi_uc* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
 		if (data == NULL) { EG_CORE_ERROR("Failed to load Image from path {0}", path); return; }
 		m_Width = width;

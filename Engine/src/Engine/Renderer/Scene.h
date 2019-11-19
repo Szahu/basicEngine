@@ -36,7 +36,6 @@ namespace Engine
 		PerspectiveCameraController& GetCamera() { return m_Camera; }
 
 		const Skybox& GetSkybox() { return m_Skybox; }
-		void DrawGui();
 
 	private:
 		bool OnMouseClick(MouseButtonPressedEvent& e);
@@ -44,10 +43,12 @@ namespace Engine
 		void EntityInspectorWindowContent();
 		void AddingEntityPopUp();
 		void EnvironmentWindow();
+
+		void DrawGui();
+
 	private:
 		Entity* m_ActiveEntity = nullptr;
 		unsigned int m_ActiveLight = 0;
-		Ref<FrameBuffer> m_FrameBuffer;
 		PerspectiveCameraController m_Camera;
 		ShaderLibrary m_ShaderLibrary;
 		std::vector<PointLight> m_Lights;
@@ -55,7 +56,7 @@ namespace Engine
 		MousePicker m_MousePicker;
 		Ref<VertexArray> GuiQuad;
 		Skybox m_Skybox;
-
+		Ref<Texture2D> m_LightGuiTexture;
 		static Scene* s_Instance;
 	};
 }
