@@ -102,7 +102,7 @@ namespace Engine
 		
 		ProcessMaterial(material, shader);
 
-		if (drawOutline)
+		if (false)//(drawOutline)
 		{
 			glStencilFunc(GL_ALWAYS, 1, 0xFF);
 			glStencilMask(0xFF);
@@ -128,7 +128,7 @@ namespace Engine
 			return;
 		}
 
-		if (!drawOutline)
+		if (!drawOutline || drawOutline)
 		{
 			glDisable(GL_STENCIL_TEST);
 
@@ -201,6 +201,24 @@ namespace Engine
 		{
 			shader->SetInt1("texture_diffuse1", 0);
 			material.m_DiffuseTexture->Bind();
+		}
+
+		if (material.m_NormalMap != nullptr)
+		{
+			shader->SetInt1("texture_normal1", 1);
+			material.m_NormalMap->Bind(1);
+		}
+
+		if (material.m_HeightMap != nullptr)
+		{
+			shader->SetInt1("texture_height1", 2);
+			material.m_HeightMap->Bind(2);
+		}
+
+		if (material.m_AmbientMap != nullptr)
+		{
+			shader->SetInt1("texture_specular1", 3);
+			material.m_AmbientMap->Bind(3);
 		}
 	}
 

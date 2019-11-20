@@ -28,11 +28,17 @@ void Sandbox3D::OnAttach()
 
 	testScene.LoadScene();
 
+	testScene.AddEntity(Engine::Entity("Material Test"));
+	testScene.GetEntity("Material Test")->AddComponent(Engine::ComponentType::Mesh);
+	//testScene.GetEntity("Material Test")->GetMeshComponent()->GetMaterial().m_DiffuseTexture = Engine::Texture2D::Create("assets/textures/brickwall/diffuse.jpg");
+
 	for (int i = 0; i < 1; i++)
 	{
 		testScene.AddEntity(Engine::Entity("Entity " + std::to_string(i)));
 		testScene.GetEntity("Entity " + std::to_string(i))->AddComponent(Engine::ComponentType::Model);
 		testScene.GetEntity("Entity " + std::to_string(i))->GetModelComponent()->LoadModel("assets/models/nanosuit/scene.gltf");
+
+		
 
 		//testScene.AddEntity(Engine::Entity("Entity " + std::to_string(i + 1)));
 		//testScene.GetEntity("Entity " + std::to_string(i + 1))->AddComponent(Engine::ComponentType::Model);

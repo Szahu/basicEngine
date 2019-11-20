@@ -4,12 +4,16 @@
 #include "Engine/Renderer/Renderer.h"
 
 #include "Engine/Renderer/Scene.h"
+#include "Engine/Renderer/Model.h"
 
 namespace Engine
 {
 	MeshComponent::MeshComponent()
 	{
-
+		//GetMeshComponent()->SetVertexArray(BasicMeshes::Cube());
+		Model model;
+		model.loadModel("assets/models/hdcube.obj");
+		m_VertexArray = model.GetMeshes()[0].GetVertexArray();
 	}
 
 	void MeshComponent::OnImGuiRender()
@@ -25,7 +29,7 @@ namespace Engine
 				m_Material.GetMaterial(),
 				GetParentEntity->GetTransformComponent()->GetTransform(),
 				GetParentEntity->IsActive(),
-				"Model"
+				"Material"
 			);
 		}
 	}

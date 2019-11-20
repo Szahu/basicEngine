@@ -30,7 +30,6 @@ namespace Engine
 			auto pm = std::dynamic_pointer_cast<MeshComponent>(m_Components[component]);
 			if (pm) pm->SetTransform(&GetTransformComponent()->GetTransform());
 			else EG_CORE_ERROR("Casting in Entity.cpp when wrong");
-			GetMeshComponent()->SetVertexArray(BasicMeshes::Cube());
 		}
 	}
 

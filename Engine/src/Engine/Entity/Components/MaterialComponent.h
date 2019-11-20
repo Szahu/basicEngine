@@ -18,6 +18,9 @@ namespace Engine
 		float OverExposure = 1.0f;
 		float Reflectivness = 0.0f;
 		Ref<Texture2D> m_DiffuseTexture;
+		Ref<Texture2D> m_NormalMap;
+		Ref<Texture2D> m_HeightMap;
+		Ref<Texture2D> m_AmbientMap;
 	};
 
 	class MaterialComponent

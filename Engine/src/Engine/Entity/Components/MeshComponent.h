@@ -28,6 +28,8 @@ namespace Engine
 
 		void SetParentID(const std::string& parentID) override { m_EntityParentID = parentID; }
 
+		Material& GetMaterial() { return m_Material.GetMaterial(); }
+		
 	private:
 		Ref<VertexArray> m_VertexArray;
 		Transform* m_Transform = nullptr;

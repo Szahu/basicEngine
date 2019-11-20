@@ -35,6 +35,7 @@ namespace Engine
 	{
 		m_ShaderLibrary.Load("assets/shaders/GuiQuad.glsl");
 		m_ShaderLibrary.Load("assets/shaders/Model.glsl");
+		m_ShaderLibrary.Load("assets/shaders/Material.glsl");
 		m_ShaderLibrary.Load("assets/shaders/FlatColor.glsl");
 		m_ShaderLibrary.Load("assets/shaders/Reflection.glsl");
 

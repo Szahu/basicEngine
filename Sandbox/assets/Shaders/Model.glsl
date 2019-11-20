@@ -213,7 +213,7 @@ vec4 CalculateSpotLight(SpotLight light, CommonData data)
     
     // attenuation
     float distance    = length(vec3(light.Position) - fs_in.FragPos);
-    float attenuation = 1.0 / (light.Constant + light.Linear * distance + light.Quadratic * (distance * distance));    
+    float attenuation = 5.0 / (light.Constant + light.Linear * distance + light.Quadratic * (distance * distance));    
     ambient  *= attenuation; 
     diffuse   *= attenuation;
     specular *= attenuation;   
