@@ -6,6 +6,11 @@
 
 namespace Engine
 {
+	enum class LightType
+	{
+		None = 0, Point, Spot
+	};
+
 	struct PointLightData
 	{
 		glm::vec4 Position = { 0.0f, 0.0f, 15.0f, 1.0f };

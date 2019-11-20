@@ -229,13 +229,14 @@ namespace Engine
 		ImGuiTreeNodeFlags node_flags;
 		for (int i = 0;i < m_PointLights.size();i ++)
 		{
-			if (m_ActiveLight == i) node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_Selected;
+			if (m_ActivePointLight == i && m_ActiveLightType == LightType::Point) node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_Selected;
 			else node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
 			bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, ("PointLight" + std::to_string(i)).c_str(), i);
 			if (ImGui::IsItemClicked())
 			{
 				node_clicked = i;
-				m_ActiveLight = i;
+				m_ActivePointLight = i;
+				m_ActiveLightType = LightType::Point;
 			}
 				
 			if (node_open)
@@ -247,10 +248,35 @@ namespace Engine
 
 		}
 
-		if(m_PointLights.size() > 0 && m_ActiveLight < m_PointLights.size() && m_ActiveLight >= 0)
-			m_PointLights[m_ActiveLight].OnImGuiRender();
+		for (int i = 0; i < m_SpotLights.size(); i++)
+		{
+			if (m_ActiveSpotLight == i && m_ActiveLightType == LightType::Spot) node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_Selected;
+			else node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+			bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, ("SpotLight" + std::to_string(i)).c_str(), i);
+			if (ImGui::IsItemClicked())
+			{
+				node_clicked = i;
+				m_ActiveSpotLight = i;
+				m_ActiveLightType = LightType::Spot;
+			}
 
-		if (ImGui::Button("Add Light!"))
+			if (node_open)
+			{
+				ImGui::Text("Blah blah\nBlah Blah");
+
+				ImGui::TreePop();
+			}
+
+		}
+
+		if(m_PointLights.size() > 0 && m_ActivePointLight < m_PointLights.size() && m_ActivePointLight >= 0 && m_ActiveLightType == LightType::Point)
+			m_PointLights[m_ActivePointLight].OnImGuiRender();
+
+
+		if (m_SpotLights.size() > 0 && m_ActiveSpotLight < m_SpotLights.size() && m_ActiveSpotLight >= 0 && m_ActiveLightType == LightType::Spot)
+			m_SpotLights[m_ActiveSpotLight].OnImGuiRender();
+
+		if (ImGui::Button("Add PointLight!"))
 		{
 			if (m_PointLights.size() < Renderer::MAX_NUMBER_OF_POINTLIGHTS)
 			{
@@ -261,7 +287,18 @@ namespace Engine
 				EG_CORE_WARN("Reached max amount of Pointlights!");
 		}
 
-		ImGui::DragFloat3("Spot pos", &m_SpotLights[0].GetLightData().Position.x, 0.05f);
+		if (ImGui::Button("Add SpotLight!"))
+		{
+			if (m_SpotLights.size() < Renderer::MAX_NUMBER_OF_SPOTLIGHTS)
+			{
+				SpotLight light;
+				m_SpotLights.push_back(light);
+			}
+			else
+				EG_CORE_WARN("Reached max amount of Spotlights!");
+		}
+
+		//ImGui::DragFloat3("Spot pos", &m_SpotLights[1].GetLightData().Position.x, 0.05f);
 
 		ImGui::End();
 	}

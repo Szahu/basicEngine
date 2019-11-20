@@ -199,9 +199,10 @@ vec4 CalculateSpotLight(SpotLight light, CommonData data)
     vec3 diffuse = vec3(light.Diffuse) * u_Material.diffuse * diffTex1;  
     
     // specular
-    vec3 reflectDir = reflect(-lightDir, data.c_Normal);  
-    float spec = pow(max(dot(data.c_ViewDirection, reflectDir), 0.0), u_Material.shininess);
-    vec3 specular = vec3(light.Specular) * u_Material.specular * specTex;  
+	vec3 halfwayDir = normalize(lightDir + data.c_ViewDirection);
+    vec3 reflectDir = reflect(-halfwayDir, data.c_Normal);  
+    float spec = pow(max(dot(data.c_ViewDirection, reflectDir), 0.0), (1 / u_Material.shininess * 1.28f));
+    vec3 specular = vec3(light.Specular) * (spec * u_Material.specular * specTex);  
     
     // spotlight (soft edges)
     float theta = dot(vec3(lightDir), normalize(-vec3(light.Direction))); 

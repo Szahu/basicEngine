@@ -52,7 +52,9 @@ namespace Engine
 
 	private:
 		Entity* m_ActiveEntity = nullptr;
-		unsigned int m_ActiveLight = 0;
+		unsigned int m_ActivePointLight = 0;
+		unsigned int m_ActiveSpotLight = 0;
+		LightType m_ActiveLightType = LightType::None;
 		PerspectiveCameraController m_Camera;
 		ShaderLibrary m_ShaderLibrary;
 		std::vector<PointLight> m_PointLights;
