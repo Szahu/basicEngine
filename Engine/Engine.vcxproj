@@ -25,7 +25,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>NotSet</CharacterSet>
     <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -200,6 +200,7 @@
     <ClInclude Include="src\Engine\Toolbox\PerspectiveCamera.h" />
     <ClInclude Include="src\Engine\Toolbox\PerspectiveCameraController.h" />
     <ClInclude Include="src\Engine\Toolbox\Samples\BasicMeshes.h" />
+    <ClInclude Include="src\Engine\Toolbox\WindowsUtilities.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_features.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_fixes.hpp" />
@@ -617,6 +618,7 @@
     <ClCompile Include="src\Engine\Toolbox\PerspectiveCamera.cpp" />
     <ClCompile Include="src\Engine\Toolbox\PerspectiveCameraController.cpp" />
     <ClCompile Include="src\Engine\Toolbox\Samples\BasicMeshes.cpp" />
+    <ClCompile Include="src\Engine\Toolbox\WindowsUtilities.cpp" />
     <ClCompile Include="vendor\stb_image\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>

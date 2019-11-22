@@ -8,6 +8,7 @@
 #include "Engine/Renderer/Scene.h"
 #include "glm/glm.hpp"
 
+
 namespace Engine
 {
 	void ModelComponent::OnUpdate()
@@ -28,16 +29,13 @@ namespace Engine
 
 		if (!model_loaded)
 		{
-			static char path[60];
-			ImGui::InputText("Path: ", path, IM_ARRAYSIZE(path));
-			ImGui::SameLine();
 			if (ImGui::Button("Load Model"))
 			{
-				EG_CORE_INFO("Loadin a model");
-				LoadModel("assets/models/" + std::string(path));
+				LoadModel(WindowsUtilities::GetFileOpen());
 			}
 		}
 		
+	
 		ImGui::Separator();
 	}
 

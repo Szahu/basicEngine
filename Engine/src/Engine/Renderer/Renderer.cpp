@@ -188,9 +188,11 @@ namespace Engine
 	void Renderer::ProcessMaterial(const Material& material, const Ref<Shader>& shader)
 	{
 
-		m_SceneData->WhiteTexture->Bind(0);
-		m_SceneData->WhiteTexture->Bind(1);
-		m_SceneData->WhiteTexture->Bind(2);
+		//m_SceneData->WhiteTexture->Bind(0);
+		//m_SceneData->WhiteTexture->Bind(1);
+		//m_SceneData->WhiteTexture->Bind(2);
+		//m_SceneData->WhiteTexture->Bind(3);
+		//m_SceneData->WhiteTexture->Bind(4);
 
 		shader->SetFloat3("u_Material.ambient", material.m_Ambient);
 		shader->SetFloat3("u_Material.diffuse", material.m_Diffuse);
@@ -200,7 +202,7 @@ namespace Engine
 		if (material.m_DiffuseTexture != nullptr)
 		{
 			shader->SetInt1("texture_diffuse1", 0);
-			material.m_DiffuseTexture->Bind();
+			material.m_DiffuseTexture->Bind(0);
 		}
 
 		if (material.m_NormalMap != nullptr)
@@ -217,8 +219,14 @@ namespace Engine
 
 		if (material.m_AmbientMap != nullptr)
 		{
-			shader->SetInt1("texture_specular1", 3);
+			shader->SetInt1("texture_ambient1", 3);
 			material.m_AmbientMap->Bind(3);
+		}
+
+		if (material.m_SpecularMap != nullptr)
+		{
+			shader->SetInt1("texture_specular1", 4);
+			material.m_SpecularMap->Bind(4);
 		}
 	}
 

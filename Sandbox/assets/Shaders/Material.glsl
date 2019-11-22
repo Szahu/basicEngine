@@ -39,7 +39,7 @@ void main()
 	vec4 heightTex = texture(texture_height1, a_TexCoords);
 
 	vec3 newPos = a_Normals * vec3(heightTex); 
-	float range = 1.25f;
+	float range = 1.0f;
 	vec4 new_Positions = vec4(a_Positions.x + newPos.x * range, a_Positions.y + newPos.y * range, a_Positions.z + newPos.z * range, 1.0f);
 	
 	//gl_Position = u_ViewProjectionMatrix * u_Transform * vec4(a_Positions, 1.0);
@@ -212,7 +212,7 @@ vec4 CalculateSpotLight(SpotLight light, CommonData data)
     
     // specular
 	vec3 halfwayDir = normalize(lightDir + data.c_ViewDirection);
-    vec3 reflectDir = reflect(-halfwayDir, data.c_Normal);  
+    vec3 reflectDir = reflect(-lightDir, data.c_Normal);  
     float spec = pow(max(dot(data.c_ViewDirection, reflectDir), 0.0), (1 / u_Material.shininess * 1.28f));
     vec3 specular = vec3(light.Specular) * (spec * u_Material.specular * specTex);  
     

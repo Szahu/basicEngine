@@ -6,6 +6,9 @@
 
 #include "Engine/Entity/Components/MaterialComponent.h"
 
+#include "Engine/Toolbox/WindowsUtilities.h"
+
+
 namespace Engine
 {
 	class ModelComponent : public Component

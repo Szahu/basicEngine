@@ -21,6 +21,7 @@ namespace Engine
 		Ref<Texture2D> m_NormalMap;
 		Ref<Texture2D> m_HeightMap;
 		Ref<Texture2D> m_AmbientMap;
+		Ref<Texture2D> m_SpecularMap;
 	};
 
 	class MaterialComponent

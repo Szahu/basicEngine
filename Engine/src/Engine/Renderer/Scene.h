@@ -10,6 +10,10 @@
 
 #include "Engine/Renderer/Skybox.h"
 
+//Temporary
+#include <windows.h>
+#include <Commdlg.h>
+
 namespace Engine
 {
 

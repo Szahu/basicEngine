@@ -22,12 +22,12 @@ namespace Engine
 		PointLight light;
 		PointLight light1;
 		m_PointLights.push_back(light);
-		m_PointLights.push_back(light1);
+		//m_PointLights.push_back(light1);
 
 		SpotLight slight;
 		SpotLight slight1;
 		m_SpotLights.push_back(slight);
-		m_SpotLights.push_back(slight1);
+		//m_SpotLights.push_back(slight1);
 		
 	}
 
@@ -330,5 +330,6 @@ namespace Engine
 		glDisable(GL_DEPTH_TEST);
 
 	}
+
 
 }
