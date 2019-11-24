@@ -35,6 +35,8 @@ namespace Engine
 
 		inline static void DrawIndexed(const Engine::Ref<VertexArray>& vertexArray)
 		{
+			PROFILE_FUNCTION();
+
 			s_RendererAPI->DrawIndexed(vertexArray);
 		}
 

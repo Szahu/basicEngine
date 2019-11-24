@@ -76,7 +76,6 @@ namespace Engine
 
 	void OpenGLFrameBuffer::Bind() const
 	{
-
 		glBindFramebuffer(GL_FRAMEBUFFER, m_SampledFrameBuffer);
 		glEnable(GL_DEPTH_TEST);
 		glViewport(0, 0, m_TextureSize.x, m_TextureSize.y);

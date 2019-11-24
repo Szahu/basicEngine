@@ -20,6 +20,7 @@ namespace Engine
 		virtual void SetFloat2(const std::string& name, const glm::vec2& value) = 0;
 		virtual void SetFloat1(const std::string& name, const float value) = 0;
 		virtual void SetInt1(const std::string& name, const int value) = 0;
+		virtual void SetBool(const std::string& name, const bool value) = 0;
 
 		virtual void SetFloatV(const std::string& name, const float* value, uint32_t count) = 0;
 

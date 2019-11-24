@@ -34,20 +34,16 @@ namespace Engine
 		bool loadModel(string path);
 
 		void Draw(const Engine::Ref<Engine::Shader>& shader);
-
-		void ProccesTextures(const Ref<Shader>& shader);
 		
 	private:
 		void processNode(aiNode* node, const aiScene* scene);
 		Mesh processMesh(aiMesh* mesh, const aiScene* scene);
 		vector<Ref<Texture2D>> loadMaterialTextures(aiMaterial* mat, aiTextureType type, TextureType typeName);
 		void SetupVertexArray();
-
+		void LoadTextures();
 	private:
 		vector<Ref<Texture2D>> m_LoadedTextures;
-		vector<Ref<Texture2D>> m_DiffTextures;
-		vector<Ref<Texture2D>> m_SpecTextures;
-		vector<Ref<Texture2D>> m_NormTextures;
+		vector<std::string> m_DiffuseTexturesPaths;
 		vector<Mesh> meshes;
 		string directory;
 

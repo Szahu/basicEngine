@@ -6,14 +6,14 @@
 #include "Engine/Renderer/Scene.h"
 #include "Engine/Renderer/Model.h"
 
+#include "Engine/Toolbox/Samples/BasicMeshes.h"
+
 namespace Engine
 {
 	MeshComponent::MeshComponent()
 	{
 		//GetMeshComponent()->SetVertexArray(BasicMeshes::Cube());
-		Model model;
-		model.loadModel("assets/models/hdcube.obj");
-		m_VertexArray = model.GetMeshes()[0].GetVertexArray();
+		m_VertexArray = BasicMeshes::Cube();
 	}
 
 	void MeshComponent::OnImGuiRender()

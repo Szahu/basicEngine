@@ -9,22 +9,19 @@
 #include "Engine/Entity/Component.h"
 #include "Engine/Toolbox/Samples/basicMeshes.h"
 
-#include "stb_image.h"
+
 
 Sandbox3D::Sandbox3D()
-	:Layer("Sandbox3D"), m_CameraController(65.0f, 1280.0f / 720.0f, &m_Window)
+	:Layer("Sandbox3D")
 {
 
 }
 
 void Sandbox3D::OnAttach()
 {
-	
 
 	EG_INFO("Sanbox3D online");
 
-	//m_Lights.push_back(&m_Light);
-	m_Lights.push_back(&m_Light1);
 
 	testScene.LoadScene();
 
@@ -36,17 +33,10 @@ void Sandbox3D::OnAttach()
 	{
 		testScene.AddEntity(Engine::Entity("Entity " + std::to_string(i)));
 		testScene.GetEntity("Entity " + std::to_string(i))->AddComponent(Engine::ComponentType::Model);
-		//testScene.GetEntity("Entity " + std::to_string(i))->GetModelComponent()->LoadModel("assets/models/nanosuit/scene.gltf");
-		testScene.GetEntity("Entity " + std::to_string(i))->GetModelComponent()->LoadModel("assets/models/SF_FIGHTER/Scifi_Fighter.FBX");
-
-
-		//testScene.AddEntity(Engine::Entity("Entity " + std::to_string(i + 1)));
-		//testScene.GetEntity("Entity " + std::to_string(i + 1))->AddComponent(Engine::ComponentType::Model);
-	
-		
-		//testScene.GetEntity("Entity " + std::to_string(i))->GetModelComponent()->LoadModel("assets/models/the Shrek/scene.gltf");
+		testScene.GetEntity("Entity " + std::to_string(i))->GetModelComponent()->LoadModel("assets/models/nanosuit/scene.gltf");
+		//testScene.GetEntity("Entity " + std::to_string(i))->GetModelComponent()->LoadModel("assets/models/stone/scene.gltf");
+		//testScene.GetEntity("Entity " + std::to_string(i))->GetModelComponent()->LoadModel("assets/models/SF_FIGHTER/Scifi_Fighter.FBX");
 	}
-
 }
 
 void Sandbox3D::OnDetach()
@@ -61,20 +51,9 @@ void Sandbox3D::OnUpdate(Engine::Timestep ts)
 
 	testScene.OnUpdate(ts);
 
-
-	/* Playground:
-	Engine::Application::Get().GetViewportWindowPointer()->GetFrameBuffer()->Bind();
-	Engine::RenderCommand::Clear();
-	Engine::RenderCommand::SetClearColor({ 0.53f, 0.81f, 0.98f, 1.0f });
-	glStencilMask(0xFF);
-	
-	
-	Engine::Application::Get().GetViewportWindowPointer()->GetFrameBuffer()->Unbind();
-	Engine::RenderCommand::Clear();
-	glStencilMask(0x00);
-	*/
-
 }
+
+
 
 void Sandbox3D::OnImGuiRender()
 {
@@ -94,7 +73,6 @@ void Sandbox3D::OnImGuiRender()
 
 void Sandbox3D::OnEvent(Engine::Event& event)
 {
-	m_CameraController.OnEvent(event);
 	testScene.OnEvent(event);
 }
 

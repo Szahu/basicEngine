@@ -33,6 +33,12 @@ namespace Engine
 
 		static void ProcessMaterial(const Material& material, const Ref<Shader>& shader);
 
+		static void SetForcedShader(const char* libKey)
+		{
+			if (libKey != nullptr) m_SceneData->m_ForcedShader = m_SceneData->m_ShaderLibrary->Get(libKey); 
+			else if(libKey == nullptr) m_SceneData->m_ForcedShader = nullptr;
+		}
+
 		static inline RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 
 		const static unsigned int MAX_NUMBER_OF_POINTLIGHTS = 5;
@@ -45,6 +51,7 @@ namespace Engine
 			const PerspectiveCamera* m_Camera;
 			std::vector<PointLight*> m_Lights;
 			ShaderLibrary* m_ShaderLibrary;
+			Ref<Shader> m_ForcedShader;
 			std::vector<std::string> m_ShadersInUse;
 			Ref<UniformBuffer> m_LightsUniformBuffer;
 			Ref<UniformBuffer> m_MatricesUniformBuffer;

@@ -43,8 +43,8 @@ namespace Engine
 		ImGuiStyle& style = ImGui::GetStyle();
 		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 		{
-			style.WindowRounding = 1.0f;
-			style.Colors[ImGuiCol_WindowBg].w = 0.0f;
+			style.WindowRounding = 3.0f;
+			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 		}
 
 		style.FramePadding = ImVec2(5, 1);

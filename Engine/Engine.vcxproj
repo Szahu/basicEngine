@@ -156,6 +156,7 @@
     <ClInclude Include="src\Engine\Core\MouseButtonCodes.h" />
     <ClInclude Include="src\Engine\Core\Timestep.h" />
     <ClInclude Include="src\Engine\Core\Window.h" />
+    <ClInclude Include="src\Engine\Debug\Instrumentor.h" />
     <ClInclude Include="src\Engine\Entity\Component.h" />
     <ClInclude Include="src\Engine\Entity\Components\MaterialComponent.h" />
     <ClInclude Include="src\Engine\Entity\Components\MeshComponent.h" />

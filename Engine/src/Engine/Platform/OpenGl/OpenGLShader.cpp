@@ -231,6 +231,12 @@ namespace Engine
 		glUniform1i(location, data);
 	}
 
+	void OpenGLShader::UplaodUniformBool(const std::string& name, const bool data)
+	{
+		GLuint location = GetUniformLocation(name.c_str());
+		glUniform1i(location, data);
+	}
+
 	void OpenGLShader::UploadUniformFloatv(const std::string& name, const float* value, uint32_t count)
 	{
 		GLuint location = GetUniformLocation(name.c_str());

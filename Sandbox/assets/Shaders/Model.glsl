@@ -160,8 +160,6 @@ vec4 CalculatePointLight(PointLight light, CommonData data)
 
 	vec3 normTex = texture(texture_normal1, fs_in.TexCoords).rgb;
 	vec3 Norm = data.c_Normal;
-	//if(normTex == vec3(1.0)) { Norm = data.c_Normal; }
-	//else { vec3 Norm = normalize(normTex * 2.0 - 1.0); }
 
 	// ambient
 	vec3 ambient = u_Material.ambient * vec3(light.ambient) * diffTex1;
@@ -190,17 +188,18 @@ vec4 CalculateSpotLight(SpotLight light, CommonData data)
 
 	vec3 normTex = texture(texture_normal1, fs_in.TexCoords).rgb;
 	vec3 Norm = data.c_Normal;
+	//Norm = normTex;
 
 	vec3 ambient = u_Material.ambient * vec3(light.Ambient) * diffTex1;
     
     // diffuse 
     vec3 lightDir = normalize(vec3(light.Position) - fs_in.FragPos);
-    float diff = max(dot(data.c_Normal, lightDir), 0.0);
+    float diff = max(dot(Norm, lightDir), 0.0);
     vec3 diffuse = vec3(light.Diffuse) * u_Material.diffuse * diffTex1;  
     
     // specular
 	vec3 halfwayDir = normalize(lightDir + data.c_ViewDirection);
-    vec3 reflectDir = reflect(-halfwayDir, data.c_Normal);  
+    vec3 reflectDir = reflect(-halfwayDir, Norm);  
     float spec = pow(max(dot(data.c_ViewDirection, reflectDir), 0.0), (1 / u_Material.shininess * 1.28f));
     vec3 specular = vec3(light.Specular) * (spec * u_Material.specular * specTex);  
     

@@ -5,14 +5,14 @@
 
 #include "Engine/Core/Application.h"
 #include "Engine/Core/MouseButtonCodes.h"
-
+#include "Engine/Toolbox/Samples/BasicMeshes.h"
 #include "Engine/Core/Input.h"
 
 #include "glad/glad.h"
 
 namespace Engine
 {
-
+	
 	Scene* Scene::s_Instance = nullptr;
 
 	Scene::Scene()
@@ -21,7 +21,7 @@ namespace Engine
 		s_Instance = this;
 		PointLight light;
 		PointLight light1;
-		m_PointLights.push_back(light);
+		//m_PointLights.push_back(light);
 		//m_PointLights.push_back(light1);
 
 		SpotLight slight;
@@ -33,11 +33,15 @@ namespace Engine
 
 	void Scene::LoadScene()
 	{
+		InstrumentationTimer timer("Scene::LoadScene()");
+
 		m_ShaderLibrary.Load("assets/shaders/GuiQuad.glsl");
 		m_ShaderLibrary.Load("assets/shaders/Model.glsl");
 		m_ShaderLibrary.Load("assets/shaders/Material.glsl");
 		m_ShaderLibrary.Load("assets/shaders/FlatColor.glsl");
 		m_ShaderLibrary.Load("assets/shaders/Reflection.glsl");
+		m_ShaderLibrary.Load("assets/shaders/simpleDepthShader.glsl");
+		m_ShaderLibrary.Load("assets/shaders/DebugDepthQuad.glsl");
 
 		m_ShaderLibrary.Get("GuiQuad")->Bind();
 		m_ShaderLibrary.Get("GuiQuad")->SetInt1("texture_sample", 0);
@@ -47,38 +51,106 @@ namespace Engine
 
 		Renderer::InitScene(); 
 
-		glm::vec4 quad_vertices[4] = {
-			{-0.5f, -0.5f, 0.0f, 0.0f},
-			{ 0.5f, -0.5f, 1.0f, 0.0f},
-			{ 0.5f,  0.5f, 1.0f, 1.0f},
-			{-0.5f,  0.5f, 0.0f, 1.0f}
-		};
-
-		unsigned int quad_indices[6] = {
-			0, 1, 2, 0, 2, 3
-		};
-
-		Ref<IndexBuffer> gui_quad_indices = IndexBuffer::Create(quad_indices, 6);
-		Ref<VertexBuffer> gui_quad_vertices = VertexBuffer::Create(&quad_vertices[0].x, sizeof(float) * 4 * 4);
-		gui_quad_vertices->SetLayout(BufferLayout{
-			{ ShaderDataType::Float2, "a_Positions" },
-			{ ShaderDataType::Float2, "a_TexCoords" }
-			});
-		GuiQuad = VertexArray::Create();
-		GuiQuad->AddVertexBuffer(gui_quad_vertices);
-		GuiQuad->SetIndexBuffer(gui_quad_indices);
+		GuiQuad = BasicMeshes::Quad();
 
 		m_LightGuiTexture = Texture2D::Create("assets/textures/lightBulb.png", true);
+
+		glGenFramebuffers(1, &depthMapFBO);
+		// create depth texture
+		glGenTextures(1, &depthMap);
+		glBindTexture(GL_TEXTURE_2D, depthMap);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		// attach depth texture as FBO's depth buffer
+		glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
+		glDrawBuffer(GL_NONE);
+		glReadBuffer(GL_NONE);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		Quad2D = BasicMeshes::Quad2D();
 	}
 
 	void Scene::OnUpdate(Timestep ts)
 	{
-		Renderer::BeginScene();
+		PROFILE_FUNCTION();
 
+		Renderer::BeginScene();
 
 		m_Camera.OnUpdate(ts);
 		m_MousePicker.OnUpdate(m_Camera.GetCamera().GetProjectionMatrix(), m_Camera.GetCamera().GetViewMatrix());
 
+		//Rendering to depthMap
+		Renderer::SetForcedShader("simpleDepthShader");
+
+		glm::mat4 lightProjection, lightView;
+		glm::mat4 lightSpaceMatrix;
+		glm::vec3 lightPos = m_SpotLights[0].GetLightData().Position;
+		float near_plane = 0.1f, far_plane = 40.5f;
+		lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
+
+		lightView = glm::lookAt(lightPos, { 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f });
+		lightSpaceMatrix = lightProjection * lightView;
+		m_ShaderLibrary.Get("simpleDepthShader")->Bind();
+		m_ShaderLibrary.Get("simpleDepthShader")->SetMat4("lightSpaceMatrix", lightSpaceMatrix);
+
+
+
+		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+		glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+		glClear(GL_DEPTH_BUFFER_BIT);
+
+		glDisable(GL_STENCIL_TEST);
+		glEnable(GL_DEPTH_TEST);
+		glCullFace(GL_FRONT);
+
+
+		RenderScene();
+
+		glEnable(GL_STENCIL_TEST);
+		glCullFace(GL_BACK); // don't forget to reset original culling face
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		Renderer::SetForcedShader(nullptr);
+
+
+		//Actual Rendering
+		Application::Get().GetViewportWindowPointer()->GetFrameBuffer()->Bind();
+		Engine::RenderCommand::Clear();
+		Engine::RenderCommand::SetClearColor({ 0.0f, 0.0f, 0.0f, 0.0f });
+		glStencilMask(0xFF);
+
+		glDisable(GL_STENCIL_TEST | GL_DEPTH_TEST);
+		Ref<Shader> shader = m_ShaderLibrary.Get("DebugDepthQuad");
+		shader->Bind();
+		shader->SetInt1("depthMap", 20);
+		shader->SetFloat1("near_plane", near_plane);
+		shader->SetFloat1("far_plane", far_plane);
+		glBindTextureUnit(20, depthMap);
+		Quad2D->Bind();
+		RenderCommand::DrawIndexed(Quad2D);
+		Quad2D->Unbind();
+		glEnable(GL_STENCIL_TEST | GL_DEPTH_TEST);
+
+		m_ShaderLibrary.Get("Material")->Bind();
+		m_ShaderLibrary.Get("Material")->SetMat4("u_LightSpaceMatrix", lightSpaceMatrix);
+		m_ShaderLibrary.Get("Material")->SetInt1("shadowMap", 20);
+		RenderScene();
+
+		DrawGui();	
+		
+		Application::Get().GetViewportWindowPointer()->GetFrameBuffer()->Unbind();
+		Engine::RenderCommand::Clear();
+		glStencilMask(0x00);
+
+		Renderer::EndScene();
+	}
+
+	void Scene::RenderScene()
+	{
 		m_Skybox.Draw(m_Camera.GetCamera());
 
 		for (auto& ent : m_Entities)
@@ -87,10 +159,6 @@ namespace Engine
 			ent.second.CheckForIntersection(&m_MousePicker);
 			ent.second.CheckIfActive(m_ActiveEntity);
 		}
-
-		DrawGui();
-
-		Renderer::EndScene();
 	}
 
 	void Scene::OnImGuiRender()
@@ -100,9 +168,9 @@ namespace Engine
 
 		AddingEntityPopUp();
 		EntityInspectorWindowContent();
-
 		EnvironmentWindow();
 
+		ImGui::DragFloat3("Center", &center.x, 0.5f);
 
 		ImGui::End();
 
@@ -130,6 +198,8 @@ namespace Engine
 		m_ActiveEntity = &m_Entities[entity.GetName()];
 	}
 
+
+	
 
 	bool Scene::OnMouseClick(MouseButtonPressedEvent& e)
 	{
@@ -328,7 +398,7 @@ namespace Engine
 		GuiQuad->Unbind();
 		m_ShaderLibrary.Get("GuiQuad")->Unbind();
 		glDisable(GL_DEPTH_TEST);
-
+		glEnable(GL_STENCIL_TEST);
 	}
 
 

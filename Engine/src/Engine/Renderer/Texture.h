@@ -2,7 +2,7 @@
 
 #include <string>
 #include "Engine/Core/Core.h"
-
+#include "glm/glm.hpp"
 
 namespace Engine
 {
@@ -20,6 +20,8 @@ namespace Engine
 		virtual uint32_t GetHeight() = 0;
 		
 		virtual void SetData(void* data, uint32_t size) = 0;
+
+		//virtual void AddSubImage(const glm::vec2& offset, const glm::vec2& size, void* data) = 0;
 
 		virtual const uint32_t GetID() const = 0;
 

@@ -10,7 +10,8 @@ namespace Engine
 	{
 	public:
 		static const Ref<VertexArray> Cube();
-
+		static const Ref<VertexArray> Quad();
+		static const Ref<VertexArray> Quad2D();
 	private:
 	};
 }

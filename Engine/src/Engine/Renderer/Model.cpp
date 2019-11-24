@@ -176,24 +176,6 @@ namespace Engine
 				Ref<Texture2D> tex = Texture2D::Create(this->directory + '/' + str.C_Str());
 				tex->SetType(typeName);
 				textures.push_back(tex);
-
-				switch (typeName)
-				{
-					case TextureType::Diffuse:
-						Diffs++;
-						m_DiffTextures.push_back(tex);
-						break;
-
-					case TextureType::Specular:
-						Specs++;
-						m_SpecTextures.push_back(tex);
-						break;
-
-					case TextureType::Normal:
-						Norms++;
-						m_NormTextures.push_back(tex);
-						break;
-				}
 			}
 		}
 
@@ -211,20 +193,6 @@ namespace Engine
 
 		for (int i = 0; i < meshes.size(); i++)
 		{
-			unsigned int DiffTosend = 0;
-			unsigned int SpecTosend = 0;
-			unsigned int NormTosend = 0;
-
-			if (meshes[i].HasTextureOfType(TextureType::Diffuse)) { DiffTosend = DiffsUsed; DiffsUsed++; }
-			else DiffTosend = -1;
-
-			if (meshes[i].HasTextureOfType(TextureType::Specular)) { SpecTosend = SpecsUsed + 6; SpecsUsed++; }
-			else SpecTosend = -1;
-
-			if (meshes[i].HasTextureOfType(TextureType::Normal)) { NormTosend = NormsUsed + 12; NormsUsed++; }
-			else NormTosend = -1;
-
-
 			for (int t = 0; t < meshes[i].vertices.size(); t++)
 			{
 				vertexBufferData.push_back(meshes[i].vertices[t].Position.x);
@@ -237,10 +205,6 @@ namespace Engine
 
 				vertexBufferData.push_back(meshes[i].vertices[t].TexCoords.x);
 				vertexBufferData.push_back(meshes[i].vertices[t].TexCoords.y);
-
-				vertexBufferData.push_back(DiffTosend);
-				vertexBufferData.push_back(SpecTosend);
-				vertexBufferData.push_back(NormTosend);
 
 				vertexBufferData.push_back(meshes[i].vertices[t].Tangent.x);
 				vertexBufferData.push_back(meshes[i].vertices[t].Tangent.y);
@@ -268,7 +232,6 @@ namespace Engine
 			{ShaderDataType::Float3, "a_Positions"},
 			{ShaderDataType::Float3, "a_Normals"},
 			{ShaderDataType::Float2, "a_TexCoords"},
-			{ShaderDataType::Int3, "a_TexSamples"},
 			{ShaderDataType::Float3, "a_Tangents"},
 			{ShaderDataType::Float3, "a_BiTangents"}
 		});
@@ -279,25 +242,11 @@ namespace Engine
 		m_FinalVA->SetIndexBuffer(ib);
 	}
 
-	void Model::ProccesTextures(const Ref<Shader>& shader)
+	void Model::LoadTextures()
 	{
-		for (int i = 0; i < m_DiffTextures.size(); i++)
-		{
-			m_DiffTextures[i]->Bind(i);
-			shader->SetInt1("u_texture_diffuse_" + std::to_string(i), i);
-		}
-		for (int i = 0; i < m_SpecTextures.size(); i++)
-		{
-			m_SpecTextures[i]->Bind(i + 6);
-			shader->SetInt1("u_texture_specular_" + std::to_string(i), i + 6);
-		}
-		for (int i = 0; i < m_NormTextures.size(); i++)
-		{
-			m_NormTextures[i]->Bind(i + 12);
-			shader->SetInt1("u_texture_diffuse_" + std::to_string(i), i + 12);
-		}
-		
+
 	}
+
 
 }
 

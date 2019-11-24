@@ -45,6 +45,8 @@ namespace Engine
 
 		const Skybox& GetSkybox() { return m_Skybox; }
 
+		void RenderScene();
+
 	private:
 		bool OnMouseClick(MouseButtonPressedEvent& e);
 
@@ -69,5 +71,13 @@ namespace Engine
 		Skybox m_Skybox;
 		Ref<Texture2D> m_LightGuiTexture;
 		static Scene* s_Instance;
+
+
+		//Test stuff:
+		unsigned int depthMapFBO;
+		const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
+		unsigned int depthMap;
+		Ref<VertexArray> Quad2D;
+		glm::vec3 eye = glm::vec3(0.0), center = glm::vec3(0.0, 0.0f, -1.0f);
 	};
 }
