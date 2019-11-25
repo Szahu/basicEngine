@@ -146,6 +146,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\Shaders\DebugDepthQuad.glsl" />
+    <None Include="assets\Shaders\DisplayNormals.glsl" />
     <None Include="assets\Shaders\GuiQuad.glsl" />
     <None Include="assets\Shaders\simpleDepthShader.glsl" />
   </ItemGroup>

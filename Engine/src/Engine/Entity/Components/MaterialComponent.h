@@ -24,16 +24,23 @@ namespace Engine
 		Ref<Texture2D> m_SpecularMap;
 	};
 
-	class MaterialComponent
+	class MaterialComponent : public Component
 	{
 	public:
-		//MaterialComponent() { m_Material.m_DiffuseTexture = Texture2D::Create("assets/Textures/dirt_tex.jpg"); }
-		Material GetMaterial() { return m_Material; }
+		MaterialComponent(const std::string& ParentID) { SetParentID(ParentID); }
+		~MaterialComponent() = default;
 
-		void OnImGuiRender();
-		void OnUpdate() {}
+		Material& GetMaterial() { return m_Material; }
+
+		virtual void OnImGuiRender() override;
+		virtual void OnUpdate() override {}
+		virtual const char* GetComponentName() override { return m_Name; }
+
+		void SetParentID(const std::string& parentID) { m_EntityParentID = parentID; }
 
 	private:
 		Material m_Material;
+		std::string m_EntityParentID = "undefined";
+		const char* m_Name = "Material";
 	};
 }

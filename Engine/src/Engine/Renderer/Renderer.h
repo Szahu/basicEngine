@@ -36,8 +36,9 @@ namespace Engine
 		static void SetForcedShader(const char* libKey)
 		{
 			if (libKey != nullptr) m_SceneData->m_ForcedShader = m_SceneData->m_ShaderLibrary->Get(libKey); 
-			else if(libKey == nullptr) m_SceneData->m_ForcedShader = nullptr;
 		}
+		
+		static void ResetForcedShader() { m_SceneData->m_ForcedShader = nullptr; }
 
 		static inline RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 

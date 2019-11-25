@@ -8,7 +8,7 @@ namespace Engine
 {
 	enum class ComponentType
 	{
-		None = 0, Mesh, Light, Model, Transform
+		None = 0, Mesh, Light, Model, Transform, Material
 	};
 
 	class Component
@@ -17,9 +17,9 @@ namespace Engine
 
 		virtual void OnImGuiRender() = 0;
 		virtual void OnUpdate() = 0;
-		virtual void SetParentID(const std::string& parentID) = 0;
+		virtual const char* GetComponentName() = 0;
 
-		static Ref<Component> Create(ComponentType type);
+		static Ref<Component> Create(ComponentType type, const std::string& ParentID);
 
 	private:
 

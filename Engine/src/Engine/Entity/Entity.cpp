@@ -20,17 +20,16 @@ namespace Engine
 		if (HasComponent(component))
 			EG_CORE_ASSERT(false, "This Entity already owns this component");
 
-		Ref<Component> new_Component = Component::Create(component);
-		new_Component->SetParentID(GetName());
+		Ref<Component> new_Component = Component::Create(component, GetName());
 		m_Components[component] = new_Component;	
 
 
-		if (component == ComponentType::Mesh)
-		{
-			auto pm = std::dynamic_pointer_cast<MeshComponent>(m_Components[component]);
-			if (pm) pm->SetTransform(&GetTransformComponent()->GetTransform());
-			else EG_CORE_ERROR("Casting in Entity.cpp when wrong");
-		}
+		//if (component == ComponentType::Mesh)
+		//{
+		//	auto pm = std::dynamic_pointer_cast<MeshComponent>(m_Components[component]);
+		//	if (pm) pm->SetTransform(&GetTransformComponent()->GetTransform());
+		//	else EG_CORE_ERROR("Casting in Entity.cpp when wrong");
+		//}
 	}
 
 	const Ref<Component> Entity::GetComponent(ComponentType type)
@@ -41,10 +40,10 @@ namespace Engine
 			switch (type)
 			{
 				case ComponentType::None: EG_CORE_ASSERT(false, "Component of type None is not supported!");  return nullptr;
-				//case ComponentType::Light:  return std::make_shared<OpenGLVertexArray>();
 				case ComponentType::Transform: return m_Components[ComponentType::Transform];
 				case ComponentType::Mesh: return m_Components[ComponentType::Mesh];
 				case ComponentType::Model: return m_Components[ComponentType::Model];
+				case ComponentType::Material: return m_Components[ComponentType::Material];
 			}
 	
 			EG_CORE_ASSERT(false, "Unknow Component type");
@@ -62,47 +61,40 @@ namespace Engine
 		ImGui::TextColored(ImVec4(1.0f, 0.75f, 0.0f, 1.0f), GetName().c_str());
 		ImGui::SetWindowFontScale(1.0f);
 		ImGui::Separator();
-
-		if (ImGui::IsMouseClicked(1) && ImGui::IsWindowHovered())
-		{
-			ImGui::OpenPopup("AddComponent");
-
-			
-		}
-
 		
-		if (ImGui::BeginPopup("AddComponent"))
+		AddComponentPopUp();
+
+
+		int i = 0;
+		int node_clicked = -1;
+		ImGuiTreeNodeFlags node_flags;
+		for (auto& component : m_Components)
 		{
-			if (ImGui::Button("Add component"))
+			if (m_DisplayedComponent == component.second) node_flags = ImGuiTreeNodeFlags_Selected;
+			else node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+			i++;
+			bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, component.second->GetComponentName(), i);
+			if (ImGui::IsItemClicked())
 			{
-				ImGui::OpenPopup("Choose");
+				node_clicked = i;
+				m_DisplayedComponent = component.second;
 			}
 
-			if (ImGui::BeginPopup("Choose"))
+			if (node_open)
 			{
-				if (ImGui::Button("MeshComponent"))
-				{
-					AddComponent(ComponentType::Mesh);
-					ImGui::CloseCurrentPopup(); //Ey
-				}
-				if (ImGui::Button("ModelComponent"))
-				{
-					AddComponent(ComponentType::Model);
-					ImGui::CloseCurrentPopup(); //Ey
-				}
+				ImGui::Unindent(ImGui::GetTreeNodeToLabelSpacing());
+				m_DisplayedComponent->OnImGuiRender();
+				ImGui::Indent(ImGui::GetTreeNodeToLabelSpacing());
 
-				ImGui::EndPopup();
+				ImGui::TreePop();
 			}
 
-			ImGui::EndPopup();
 		}
-		
-		
 
-		for (auto com : m_Components)
-		{
-			com.second->OnImGuiRender();
-		}
+		//for (auto com : m_Components)
+		//{
+		//	com.second->OnImGuiRender();
+		//}
 	}
 
 	void Entity::OnUpdate()
@@ -131,6 +123,43 @@ namespace Engine
 			picker->GetCurrentRay(),
 			GetTransformComponent()->GetPosition(), 0.85f, pickingDistance);	
 		return isWorking;
+	}
+
+	void Entity::AddComponentPopUp()
+	{
+		if (ImGui::IsMouseClicked(1) && ImGui::IsWindowHovered())
+		{
+			ImGui::OpenPopup("AddComponent");
+
+
+		}
+
+
+		if (ImGui::BeginPopup("AddComponent"))
+		{
+			if (ImGui::Button("Add component"))
+			{
+				ImGui::OpenPopup("Choose");
+			}
+
+			if (ImGui::BeginPopup("Choose"))
+			{
+				if (ImGui::Button("MeshComponent"))
+				{
+					AddComponent(ComponentType::Mesh);
+					ImGui::CloseCurrentPopup(); //Ey
+				}
+				if (ImGui::Button("ModelComponent"))
+				{
+					AddComponent(ComponentType::Model);
+					ImGui::CloseCurrentPopup(); //Ey
+				}
+
+				ImGui::EndPopup();
+			}
+
+			ImGui::EndPopup();
+		}
 	}
 
 

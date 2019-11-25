@@ -10,15 +10,11 @@
 
 namespace Engine
 {
-	MeshComponent::MeshComponent()
+	MeshComponent::MeshComponent(const std::string& ParentID)
 	{
-		//GetMeshComponent()->SetVertexArray(BasicMeshes::Cube());
+		SetParentID(ParentID);
 		m_VertexArray = BasicMeshes::Cube();
-	}
-
-	void MeshComponent::OnImGuiRender()
-	{
-		m_Material.OnImGuiRender();
+		GetParentEntity->AddComponent(ComponentType::Material);
 	}
 
 	void MeshComponent::OnUpdate()
@@ -26,7 +22,7 @@ namespace Engine
 		if (m_VertexArray)
 		{
 			Renderer::Submit(GetVertexArray(),
-				m_Material.GetMaterial(),
+				GetParentEntity->GetMaterialComponent()->GetMaterial(),
 				GetParentEntity->GetTransformComponent()->GetTransform(),
 				GetParentEntity->IsActive(),
 				"Material"

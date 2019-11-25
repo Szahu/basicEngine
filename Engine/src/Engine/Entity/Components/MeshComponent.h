@@ -9,32 +9,32 @@
 #include "Engine/Entity/Components/MaterialComponent.h"
 #include "Engine/Entity/Components/TransformComponent.h"
 
+#include "imgui.h"
+
 namespace Engine
 {
 	class MeshComponent : public Component
 	{
 	public:
-		MeshComponent();
-		virtual void OnImGuiRender() override;
+		MeshComponent(const std::string& ParentID);
+		~MeshComponent() = default;
+
+		virtual void OnImGuiRender() override { ImGui::Text("MeshComponent here!"); }
+		virtual const char* GetComponentName() override { return m_Name; }
+		virtual void OnUpdate() override;
 
 		void SetVertexArray(const Ref<VertexArray> vertexarray) { m_VertexArray = vertexarray; }
 		const Ref<VertexArray>& GetVertexArray() { return m_VertexArray; }
 
-		void SetTransform(Transform* transform) { m_Transform = transform; }
-
-		void OnUpdate() override;
 
 		bool IsActive = false;
 
-		void SetParentID(const std::string& parentID) override { m_EntityParentID = parentID; }
-
-		Material& GetMaterial() { return m_Material.GetMaterial(); }
+		void SetParentID(const std::string& parentID) { m_EntityParentID = parentID; }
 		
 	private:
 		Ref<VertexArray> m_VertexArray;
-		Transform* m_Transform = nullptr;
-		MaterialComponent m_Material;
 		std::string m_EntityParentID = "undefined";
+		const char* m_Name = "MeshComponent";
 	};
 
 }

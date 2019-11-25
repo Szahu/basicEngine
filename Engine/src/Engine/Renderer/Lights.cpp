@@ -16,7 +16,7 @@ namespace Engine
 	void SpotLight::OnImGuiRender()
 	{
 		ImGui::DragFloat3("Position", &m_Data.Position.x, 0.5f);
-		ImGui::DragFloat3("Direction", &m_Data.Direction.x, 0.5f);
+		ImGui::DragFloat3("Direction", &m_Data.Direction.x, 0.1f);
 		ImGui::ColorEdit3("Ambient", &m_Data.Ambient.x);
 		ImGui::ColorEdit3("Diffuse", &m_Data.Diffuse.x);
 		ImGui::ColorEdit3("Specular", &m_Data.Specular.x);

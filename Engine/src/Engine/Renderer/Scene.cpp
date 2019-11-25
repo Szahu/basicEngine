@@ -42,6 +42,7 @@ namespace Engine
 		m_ShaderLibrary.Load("assets/shaders/Reflection.glsl");
 		m_ShaderLibrary.Load("assets/shaders/simpleDepthShader.glsl");
 		m_ShaderLibrary.Load("assets/shaders/DebugDepthQuad.glsl");
+		m_ShaderLibrary.Load("assets/shaders/DisplayNormals.glsl");
 
 		m_ShaderLibrary.Get("GuiQuad")->Bind();
 		m_ShaderLibrary.Get("GuiQuad")->SetInt1("texture_sample", 0);
@@ -62,8 +63,10 @@ namespace Engine
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+		float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 		// attach depth texture as FBO's depth buffer
 		glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
@@ -89,10 +92,12 @@ namespace Engine
 		glm::mat4 lightProjection, lightView;
 		glm::mat4 lightSpaceMatrix;
 		glm::vec3 lightPos = m_SpotLights[0].GetLightData().Position;
-		float near_plane = 0.1f, far_plane = 40.5f;
+		glm::vec3 lightDirection = m_SpotLights[0].GetLightData().Direction;
+		float near_plane = 0.1f, far_plane = 30.5f;
 		lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
 
-		lightView = glm::lookAt(lightPos, { 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f });
+		//lightView = glm::lookAt(lightPos, { 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f });
+		lightView = glm::lookAt(lightPos, lightPos + lightDirection, { 0.0f, 1.0f, 0.0f });
 		lightSpaceMatrix = lightProjection * lightView;
 		m_ShaderLibrary.Get("simpleDepthShader")->Bind();
 		m_ShaderLibrary.Get("simpleDepthShader")->SetMat4("lightSpaceMatrix", lightSpaceMatrix);
@@ -114,8 +119,7 @@ namespace Engine
 		glCullFace(GL_BACK); // don't forget to reset original culling face
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-		Renderer::SetForcedShader(nullptr);
-
+		Renderer::ResetForcedShader();
 
 		//Actual Rendering
 		Application::Get().GetViewportWindowPointer()->GetFrameBuffer()->Bind();

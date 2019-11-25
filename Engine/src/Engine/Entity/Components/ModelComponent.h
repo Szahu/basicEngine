@@ -14,17 +14,20 @@ namespace Engine
 	class ModelComponent : public Component
 	{
 	public:
+		ModelComponent(const std::string& ParentID) { SetParentID(ParentID); }
 
 		void LoadModel(const std::string& path) { if(m_Model.loadModel(path)) model_loaded = true; }
 
-		void OnUpdate() override;
-		void OnImGuiRender() override;
-		void SetParentID(const std::string& parentID) override { m_EntityParentID = parentID; }
+		virtual void OnUpdate() override;
+		virtual void OnImGuiRender() override;
+		virtual const char* GetComponentName() override { return m_Name; }
+		void SetParentID(const std::string& parentID) { m_EntityParentID = parentID; }
+
 
 	private:
 		std::string m_EntityParentID = "undefined";
 		Model m_Model;
 		bool model_loaded = false;
-		MaterialComponent m_Material;
+		const char* m_Name = "Model Component";
 	};
 }

@@ -15,13 +15,12 @@ namespace Engine
 	{
 		if (model_loaded)
 		{
-			Renderer::Submit(m_Model, m_Material.GetMaterial(), GetParentEntity->GetTransformComponent()->GetTransform(), GetParentEntity->IsActive(), "Model");
+			Renderer::Submit(m_Model, GetParentEntity->GetMaterialComponent()->GetMaterial(), GetParentEntity->GetTransformComponent()->GetTransform(), GetParentEntity->IsActive(), "Model");
 		}
 	}
 
 	void ModelComponent::OnImGuiRender()
 	{
-		m_Material.OnImGuiRender();
 
 		ImGui::SetWindowFontScale(1.1);
 		ImGui::TextColored(ImVec4(255.0f / 255.0f, 211.0f / 255.0f, 147.0f / 255.0f, 1.0f), "Model:");
