@@ -12,6 +12,7 @@
 #include <Glad/glad.h>
 
 #include "Engine/GUI/Gui.h"
+#include "Engine/Imgui/IconsFontAwesome5.h"
 
 namespace Engine
 {
@@ -106,6 +107,13 @@ namespace Engine
 		style.Colors[ImGuiCol_TabActive] = ImVec4(0.2f, 0.2f, 0.2f, 1.0f);
 		style.Colors[ImGuiCol_TabUnfocused] = ImVec4(0.1f, 0.1f, 0.1f, 1.0f);
 		style.Colors[ImGuiCol_TabUnfocusedActive] = ImVec4(0.2f, 0.2f, 0.2f, 1.0f);
+
+		io.Fonts->AddFontDefault();
+		ImFontConfig config;
+		config.MergeMode = true;
+		config.GlyphMinAdvanceX = 13.0f; // Use if you want to make the icon monospaced
+		static const ImWchar icon_ranges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
+		io.Fonts->AddFontFromFileTTF("assets/fonts/fontawesome/fa-regular-400.ttf", 13.0f, &config, icon_ranges);
 
 		Application& app = Application::Get();
 		GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());

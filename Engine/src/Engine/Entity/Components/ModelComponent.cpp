@@ -11,6 +11,12 @@
 
 namespace Engine
 {
+	ModelComponent::ModelComponent(const std::string& ParentID)
+	{
+		SetParentID(ParentID); 
+		GetParentEntity->AddComponent(ComponentType::Material);
+	}
+
 	void ModelComponent::OnUpdate()
 	{
 		if (model_loaded)

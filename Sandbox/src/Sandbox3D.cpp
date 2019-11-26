@@ -31,9 +31,9 @@ void Sandbox3D::OnAttach()
 
 	for (int i = 0; i < 1; i++)
 	{
-		//testScene.AddEntity(Engine::Entity("Entity " + std::to_string(i)));
-		//testScene.GetEntity("Entity " + std::to_string(i))->AddComponent(Engine::ComponentType::Model);
-		//testScene.GetEntity("Entity " + std::to_string(i))->GetModelComponent()->LoadModel("assets/models/nanosuit/scene.gltf");
+		testScene.AddEntity(Engine::Entity("Entity " + std::to_string(i)));
+		testScene.GetEntity("Entity " + std::to_string(i))->AddComponent(Engine::ComponentType::Model);
+		testScene.GetEntity("Entity " + std::to_string(i))->GetModelComponent()->LoadModel("assets/models/nanosuit/scene.gltf");
 		//testScene.GetEntity("Entity " + std::to_string(i))->GetModelComponent()->LoadModel("assets/models/stone/scene.gltf");
 		//testScene.GetEntity("Entity " + std::to_string(i))->GetModelComponent()->LoadModel("assets/models/SF_FIGHTER/Scifi_Fighter.FBX");
 	}

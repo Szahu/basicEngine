@@ -1349,6 +1349,7 @@
     </ClInclude>
     <ClInclude Include="src\Engine\Toolbox\WindowsUtilities.h" />
     <ClInclude Include="src\Engine\Debug\Instrumentor.h" />
+    <ClInclude Include="src\Engine\Imgui\IconsFontAwesome5.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EGpch.cpp">

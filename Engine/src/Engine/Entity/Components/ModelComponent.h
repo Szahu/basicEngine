@@ -14,7 +14,7 @@ namespace Engine
 	class ModelComponent : public Component
 	{
 	public:
-		ModelComponent(const std::string& ParentID) { SetParentID(ParentID); }
+		ModelComponent(const std::string& ParentID);
 
 		void LoadModel(const std::string& path) { if(m_Model.loadModel(path)) model_loaded = true; }
 

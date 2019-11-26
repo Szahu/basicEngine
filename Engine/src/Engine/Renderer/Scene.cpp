@@ -48,7 +48,7 @@ namespace Engine
 		m_ShaderLibrary.Get("GuiQuad")->SetInt1("texture_sample", 0);
 		m_ShaderLibrary.Get("GuiQuad")->Unbind();
 		
-		m_Skybox.Load("assets/textures/skyboxes/waterAndSky");
+		m_Skybox.Load("assets/textures/skyboxes/nightSky");
 
 		Renderer::InitScene(); 
 
@@ -110,13 +110,13 @@ namespace Engine
 
 		glDisable(GL_STENCIL_TEST);
 		glEnable(GL_DEPTH_TEST);
-		glCullFace(GL_FRONT);
+		//glCullFace(GL_FRONT);
 
 
 		RenderScene();
 
 		glEnable(GL_STENCIL_TEST);
-		glCullFace(GL_BACK); // don't forget to reset original culling face
+		//glCullFace(GL_BACK); // don't forget to reset original culling face
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		Renderer::ResetForcedShader();
@@ -125,7 +125,7 @@ namespace Engine
 		Application::Get().GetViewportWindowPointer()->GetFrameBuffer()->Bind();
 		Engine::RenderCommand::Clear();
 		Engine::RenderCommand::SetClearColor({ 0.0f, 0.0f, 0.0f, 0.0f });
-		glStencilMask(0xFF);
+		glStencilMask(0x00);
 
 		glDisable(GL_STENCIL_TEST | GL_DEPTH_TEST);
 		Ref<Shader> shader = m_ShaderLibrary.Get("DebugDepthQuad");
@@ -142,6 +142,7 @@ namespace Engine
 		m_ShaderLibrary.Get("Material")->Bind();
 		m_ShaderLibrary.Get("Material")->SetMat4("u_LightSpaceMatrix", lightSpaceMatrix);
 		m_ShaderLibrary.Get("Material")->SetInt1("shadowMap", 20);
+
 		RenderScene();
 
 		DrawGui();	
@@ -173,8 +174,6 @@ namespace Engine
 		AddingEntityPopUp();
 		EntityInspectorWindowContent();
 		EnvironmentWindow();
-
-		ImGui::DragFloat3("Center", &center.x, 0.5f);
 
 		ImGui::End();
 

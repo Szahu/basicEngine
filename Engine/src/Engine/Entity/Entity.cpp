@@ -2,34 +2,30 @@
 #include "Entity.h"
 
 #include "imgui.h"
+#include "Engine/Imgui/IconsFontAwesome5.h"
 
 #include "glm/gtx/intersect.hpp"
 
 #include "Application.h"
-
 #include "Engine/Toolbox/Samples/BasicMeshes.h"
-
 #include "Engine/Renderer/Scene.h"
 
 namespace Engine
 {
+	Entity::Entity(std::string name)
+	{
+		m_EntityName = name; AddComponent(ComponentType::Transform); 
+	}
+
 	void Entity::AddComponent(ComponentType component)
 	{
-		
-		
+	
 		if (HasComponent(component))
 			EG_CORE_ASSERT(false, "This Entity already owns this component");
 
 		Ref<Component> new_Component = Component::Create(component, GetName());
 		m_Components[component] = new_Component;	
 
-
-		//if (component == ComponentType::Mesh)
-		//{
-		//	auto pm = std::dynamic_pointer_cast<MeshComponent>(m_Components[component]);
-		//	if (pm) pm->SetTransform(&GetTransformComponent()->GetTransform());
-		//	else EG_CORE_ERROR("Casting in Entity.cpp when wrong");
-		//}
 	}
 
 	const Ref<Component> Entity::GetComponent(ComponentType type)
@@ -56,6 +52,8 @@ namespace Engine
 
 	void Entity::OnImGuiRender()
 	{
+		
+		ImGui::Text("This should be the icon: %s", ICON_FA_AIR_FRESHENER);
 
 		ImGui::SetWindowFontScale(1.3);
 		ImGui::TextColored(ImVec4(1.0f, 0.75f, 0.0f, 1.0f), GetName().c_str());
@@ -64,37 +62,8 @@ namespace Engine
 		
 		AddComponentPopUp();
 
+		ComponentsGui();
 
-		int i = 0;
-		int node_clicked = -1;
-		ImGuiTreeNodeFlags node_flags;
-		for (auto& component : m_Components)
-		{
-			if (m_DisplayedComponent == component.second) node_flags = ImGuiTreeNodeFlags_Selected;
-			else node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
-			i++;
-			bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, component.second->GetComponentName(), i);
-			if (ImGui::IsItemClicked())
-			{
-				node_clicked = i;
-				m_DisplayedComponent = component.second;
-			}
-
-			if (node_open)
-			{
-				ImGui::Unindent(ImGui::GetTreeNodeToLabelSpacing());
-				m_DisplayedComponent->OnImGuiRender();
-				ImGui::Indent(ImGui::GetTreeNodeToLabelSpacing());
-
-				ImGui::TreePop();
-			}
-
-		}
-
-		//for (auto com : m_Components)
-		//{
-		//	com.second->OnImGuiRender();
-		//}
 	}
 
 	void Entity::OnUpdate()
@@ -159,6 +128,37 @@ namespace Engine
 			}
 
 			ImGui::EndPopup();
+		}
+	}
+
+	void Entity::ComponentsGui()
+	{
+		int i = 0;
+		int node_clicked = -1;
+		ImGuiTreeNodeFlags node_flags;
+		for (auto& component : m_Components)
+		{
+			if (i == node_clicked) node_flags = ImGuiTreeNodeFlags_Selected;
+			else node_flags = ImGuiTreeNodeFlags_None;
+			i++;
+			ImGui::SetWindowFontScale(1.1);
+			bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, "", i);
+			ImGui::SameLine(); ImGui::TextColored(ImVec4(255.0f / 255.0f, 211.0f / 255.0f, 147.0f / 255.0f, 1.0f), component.second->GetComponentName());
+			ImGui::SetWindowFontScale(1.0);
+			if (ImGui::IsItemClicked())
+			{
+				node_clicked = i;
+			}
+
+			if (node_open)
+			{
+				ImGui::Unindent(ImGui::GetTreeNodeToLabelSpacing());
+				component.second->OnImGuiRender();
+				ImGui::Indent(ImGui::GetTreeNodeToLabelSpacing());
+
+				ImGui::TreePop();
+			}
+
 		}
 	}
 

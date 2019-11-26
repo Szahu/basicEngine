@@ -78,6 +78,5 @@ namespace Engine
 		const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
 		unsigned int depthMap;
 		Ref<VertexArray> Quad2D;
-		glm::vec3 eye = glm::vec3(0.0), center = glm::vec3(0.0, 0.0f, -1.0f);
 	};
 }

@@ -15,7 +15,7 @@ namespace Engine
 	class Entity
 	{
 	public:
-		Entity(std::string name = "Unnamed Entity") { m_EntityName = name; AddComponent(ComponentType::Transform); }
+		Entity(std::string name = "Unnamed Entity");
 
 	
 		void AddComponent(ComponentType component);
@@ -40,11 +40,11 @@ namespace Engine
 		std::string GetName() { return m_EntityName; }
 
 		void AddComponentPopUp();
+		void ComponentsGui();
 
 	private:
 		std::unordered_map<ComponentType, Ref<Component>> m_Components;
 		std::string m_EntityName;
-		Ref<Component> m_DisplayedComponent;
 		float pickingDistance = 0.0f;
 		bool isActive = false;
 	};

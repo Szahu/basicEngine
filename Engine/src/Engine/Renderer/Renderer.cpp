@@ -104,13 +104,16 @@ namespace Engine
 
 		shader->Bind();
 		shader->SetMat4("u_Transform", transform);
-		
+		shader->SetFloat3("u_FlatColor", glm::vec3(0.0f));
+
+
 		ProcessMaterial(material, shader);
 
-		if (false)//(drawOutline)
+		if (drawOutline)//(drawOutline)
 		{
 			glStencilFunc(GL_ALWAYS, 1, 0xFF);
 			glStencilMask(0xFF);
+			glDepthFunc(GL_ALWAYS);
 
 			vertexArray->Bind();
 			RenderCommand::DrawIndexed(vertexArray);
@@ -119,21 +122,22 @@ namespace Engine
 			glStencilMask(0x00);
 
 			glm::mat4 scaledTransform = transform;
-			scaledTransform[0][0] += 0.15f;
-			scaledTransform[1][1] += 0.15f;
-			scaledTransform[2][2] += 0.15f;
+			scaledTransform[0][0] += 0.10f;
+			scaledTransform[1][1] += 0.10f;
+			scaledTransform[2][2] += 0.10f;
 
 			shader->SetMat4("u_Transform", scaledTransform);
 			shader->SetFloat3("u_FlatColor", glm::vec3(1.0f, 165.0f / 255.0f, 0.0f));
 			RenderCommand::DrawIndexed(vertexArray);
 
+			glDepthFunc(GL_LEQUAL);
 			glStencilFunc(GL_ALWAYS, 1, 0xFF);
 			glStencilMask(0x00);
 
 			return;
 		}
 
-		if (!drawOutline || drawOutline)
+		if (!drawOutline)
 		{
 			glDisable(GL_STENCIL_TEST);
 
@@ -159,17 +163,16 @@ namespace Engine
 
 
 		if (std::find(m_SceneData->m_ShadersInUse.begin(), m_SceneData->m_ShadersInUse.end(), libKey) == m_SceneData->m_ShadersInUse.end())
-		{
 			m_SceneData->m_ShadersInUse.push_back(libKey);
-		}
 
 		Ref<Shader> shader = m_SceneData->m_ShaderLibrary->Get(libKey);
-		
+
 		if (m_SceneData->m_ForcedShader != nullptr) shader = m_SceneData->m_ForcedShader;
 
 		shader->Bind();
 		shader->SetMat4("u_Transform", transform);
-		
+		shader->SetFloat3("u_FlatColor", glm::vec3(0.0f));
+
 		ProcessMaterial(material, shader);
 
 		if (!drawOutline || drawOutline)

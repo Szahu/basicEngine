@@ -146,8 +146,7 @@ uniform sampler2D shadowMap;
 
 void main()
 {	
-	//if(u_FlatColor.x != 0 || u_FlatColor.y != 0 || u_FlatColor.z != 0) {color = vec4(u_FlatColor, 1.0);}
-	if(false) {}
+	if(u_FlatColor.x != 0 || u_FlatColor.y != 0 || u_FlatColor.z != 0) {color = vec4(u_FlatColor, 1.0);}
 	else 
 	{
 	if(u_HasDiffuseTexture) TEX_DIFFUSE = texture(texture_diffuse1, fs_in.TexCoords).rgb;   else TEX_DIFFUSE = vec3(1.0);
