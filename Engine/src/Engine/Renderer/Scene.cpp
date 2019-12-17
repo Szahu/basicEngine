@@ -56,25 +56,6 @@ namespace Engine
 
 		m_LightGuiTexture = Texture2D::Create("assets/textures/lightBulb.png", true);
 
-		glGenFramebuffers(1, &depthMapFBO);
-		// create depth texture
-		glGenTextures(1, &depthMap);
-		glBindTexture(GL_TEXTURE_2D, depthMap);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-		float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
-		// attach depth texture as FBO's depth buffer
-		glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
-		glDrawBuffer(GL_NONE);
-		glReadBuffer(GL_NONE);
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-		Quad2D = BasicMeshes::Quad2D();
 	}
 
 	void Scene::OnUpdate(Timestep ts)
@@ -86,40 +67,6 @@ namespace Engine
 		m_Camera.OnUpdate(ts);
 		m_MousePicker.OnUpdate(m_Camera.GetCamera().GetProjectionMatrix(), m_Camera.GetCamera().GetViewMatrix());
 
-		//Rendering to depthMap
-		Renderer::SetForcedShader("simpleDepthShader");
-
-		glm::mat4 lightProjection, lightView;
-		glm::mat4 lightSpaceMatrix;
-		glm::vec3 lightPos = m_SpotLights[0].GetLightData().Position;
-		glm::vec3 lightDirection = m_SpotLights[0].GetLightData().Direction;
-		float near_plane = 0.1f, far_plane = 30.5f;
-		lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
-
-		//lightView = glm::lookAt(lightPos, { 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f });
-		lightView = glm::lookAt(lightPos, lightPos + lightDirection, { 0.0f, 1.0f, 0.0f });
-		lightSpaceMatrix = lightProjection * lightView;
-		m_ShaderLibrary.Get("simpleDepthShader")->Bind();
-		m_ShaderLibrary.Get("simpleDepthShader")->SetMat4("lightSpaceMatrix", lightSpaceMatrix);
-
-
-
-		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
-		glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
-		glClear(GL_DEPTH_BUFFER_BIT);
-
-		glDisable(GL_STENCIL_TEST);
-		glEnable(GL_DEPTH_TEST);
-		//glCullFace(GL_FRONT);
-
-
-		RenderScene();
-
-		glEnable(GL_STENCIL_TEST);
-		//glCullFace(GL_BACK); // don't forget to reset original culling face
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-		Renderer::ResetForcedShader();
 
 		//Actual Rendering
 		Application::Get().GetViewportWindowPointer()->GetFrameBuffer()->Bind();
@@ -127,24 +74,8 @@ namespace Engine
 		Engine::RenderCommand::SetClearColor({ 0.0f, 0.0f, 0.0f, 0.0f });
 		glStencilMask(0x00);
 
-		glDisable(GL_STENCIL_TEST | GL_DEPTH_TEST);
-		Ref<Shader> shader = m_ShaderLibrary.Get("DebugDepthQuad");
-		shader->Bind();
-		shader->SetInt1("depthMap", 20);
-		shader->SetFloat1("near_plane", near_plane);
-		shader->SetFloat1("far_plane", far_plane);
-		glBindTextureUnit(20, depthMap);
-		Quad2D->Bind();
-		RenderCommand::DrawIndexed(Quad2D);
-		Quad2D->Unbind();
-		glEnable(GL_STENCIL_TEST | GL_DEPTH_TEST);
-
-		m_ShaderLibrary.Get("Material")->Bind();
-		m_ShaderLibrary.Get("Material")->SetMat4("u_LightSpaceMatrix", lightSpaceMatrix);
-		m_ShaderLibrary.Get("Material")->SetInt1("shadowMap", 20);
-
 		RenderScene();
-
+		//eyyyy
 		DrawGui();	
 		
 		Application::Get().GetViewportWindowPointer()->GetFrameBuffer()->Unbind();
