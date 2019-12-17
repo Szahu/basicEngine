@@ -19,6 +19,7 @@
 #include "Engine/GUI/ViewportWindow.h"
 
 #include "Engine/Entity/Entity.h"
+#include "Engine/Renderer/Scene.h"
 
 // -------- Renderer Stuff-------------------
 #include "Engine/Renderer/Renderer.h"

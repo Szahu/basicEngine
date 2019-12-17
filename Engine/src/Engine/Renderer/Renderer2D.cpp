@@ -23,6 +23,10 @@ namespace Engine
 
 	void Renderer2D::Init()
 	{
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LESS);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		s_Data = new Renderer2DStorage;
 		float positions[4 * 5] = {

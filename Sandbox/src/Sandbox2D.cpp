@@ -38,7 +38,9 @@ void Sandbox2D::OnAttach()
 
 	m_Shader = Engine::Shader::Create("assets/shaders/2D/FlatColor.glsl");
 	m_Shader->SetFloat4("u_Color", { 1.0f, 1.0f, 1.0f, 1.0f });
-
+	
+	testScene.LoadScene();
+	testScene.AddEntity(Engine::Entity("Kappa"));
 }
 
 void Sandbox2D::OnDetach()
@@ -49,30 +51,42 @@ void Sandbox2D::OnDetach()
 void Sandbox2D::OnUpdate(Engine::Timestep ts)
 {
 
-
 	Engine::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 	Engine::RenderCommand::Clear();
-
+	
 	m_CameraController.OnUpdate(ts);
-
+	
 	Engine::Renderer2D::BeginScene(m_CameraController.GetCamera());
-
+	
 	Engine::Renderer2D::DrawQuad({1.0f, 2.0f}, glm::vec2(1.0f, 1.0f), glm::vec4(1.3f, 0.3f, 0.8f, 1.0f));
 	Engine::Renderer2D::DrawQuad(pos, glm::vec2(1.0f, 1.0f), glm::vec4(0.3f, 0.3f, 0.8f, 1.0f));
 	Engine::Renderer2D::DrawQuad(glm::vec3(0.0f, 0.0f, -0.1f), glm::vec2(10.0f, 10.0f), dirt_tex);
-
-
+	
+	
 	Engine::Renderer2D::EndScene();
+
+	testScene.OnUpdate(ts);
 }
 
 void Sandbox2D::OnImGuiRender()
 {
+	Engine::Gui::InitDocspace();
+
+	m_Window.OnImGuiRender();
+	ImGui::Begin("Inspector");
+	testScene.OnImGuiRender();
+	//ImGui::Text("FPS: %i", FPS);
+	ImGui::End();
+
+
 	ImGui::Begin("Debug");
 	ImGui::SliderFloat3("Pos", &pos.x, -1.0f, 1.0f);
 	ImGui::End();
+
 }
 
 void Sandbox2D::OnEvent(Engine::Event& event)
 {
 	m_CameraController.OnEvent(event);
+	testScene.OnEvent(event);
 }

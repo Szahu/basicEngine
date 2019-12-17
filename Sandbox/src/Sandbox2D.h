@@ -18,6 +18,9 @@ public:
 	virtual void OnEvent(Engine::Event& event) override;
 
 private:
+	Engine::ViewportWindow m_Window;
+	Engine::Scene testScene;
+
 	Engine::OrtographicCameraController m_CameraController;
 	Engine::Ref<Engine::Shader> m_Shader;
 	Engine::Ref<Engine::VertexArray> m_VertexArray;

@@ -132,9 +132,6 @@ namespace Engine
 		m_ActiveEntity = &m_Entities[entity.GetName()];
 	}
 
-
-	
-
 	bool Scene::OnMouseClick(MouseButtonPressedEvent& e)
 	{
 		if (e.GetMouseButton() == EG_MOUSE_BUTTON_1)
