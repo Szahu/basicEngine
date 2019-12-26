@@ -8,16 +8,16 @@
 
 #include "Sandbox2D.h"
 #include "Sandbox3D.h"
-
+#include "testGame/GameLayer.h"
 
 class Sandbox : public Engine::Application
 {
 public:
 	Sandbox()
 	{
-		
-		PushLayer(new Sandbox2D());
-		//PushLayer(new Sandbox3D());
+		//PushLayer(new GameLayer());
+		//PushLayer(new Sandbox2D());
+		PushLayer(new Sandbox3D());
 	}
 	~Sandbox()
 	{

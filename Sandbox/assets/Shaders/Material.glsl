@@ -243,7 +243,7 @@ vec4 CalculateSpotLight(SpotLight light, CommonData data)
         
 	float shadow = ShadowCalculation(fs_in.FragPosLightSpace, lightDir, Norm);  
 	vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular));   
-    vec3 result = ambient + diffuse + specular;
+    //vec3 result = ambient + diffuse + specular;
 	//return vec4(result, 1.0f);
 
 	return vec4(lighting, 1.0f);
@@ -261,7 +261,7 @@ float ShadowCalculation(vec4 fragPosLightSpace, vec3 lightDir, vec3 Normal)
     float currentDepth = projCoords.z;
     // check whether current frag pos is in shadow
 
-	float bias = max(0.05 * (1.0 - dot(Normal, lightDir)), 0.005);  
+	float bias = max(0.005 * (1.0 - dot(Normal, lightDir)), 0.0005);
 
 
 	float shadow = 0.0;

@@ -10,6 +10,9 @@
     <Filter Include="src\Engine\Core">
       <UniqueIdentifier>{AA407579-16CC-E23D-1FDD-65328BE73E3E}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Engine\Debug">
+      <UniqueIdentifier>{08B129A8-F4A9-48FA-1DDC-2D7F09342806}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Engine\Entity">
       <UniqueIdentifier>{1E8561B0-8A9B-5F46-D312-EB673F6830CE}</UniqueIdentifier>
     </Filter>
@@ -108,6 +111,9 @@
     <ClInclude Include="src\Engine\Core\Window.h">
       <Filter>src\Engine\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Debug\Instrumentor.h">
+      <Filter>src\Engine\Debug</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Entity\Component.h">
       <Filter>src\Engine\Entity</Filter>
     </ClInclude>
@@ -143,6 +149,9 @@
     </ClInclude>
     <ClInclude Include="src\Engine\GUI\ViewportWindow.h">
       <Filter>src\Engine\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Imgui\IconsFontAwesome5.h">
+      <Filter>src\Engine\Imgui</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Imgui\ImGuiLayer.h">
       <Filter>src\Engine\Imgui</Filter>
@@ -239,6 +248,9 @@
     </ClInclude>
     <ClInclude Include="src\Engine\Toolbox\Samples\BasicMeshes.h">
       <Filter>src\Engine\Toolbox\Samples</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Toolbox\WindowsUtilities.h">
+      <Filter>src\Engine\Toolbox</Filter>
     </ClInclude>
     <ClInclude Include="vendor\glm\glm\common.hpp">
       <Filter>vendor\glm\glm</Filter>
@@ -1347,9 +1359,7 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Toolbox\WindowsUtilities.h" />
-    <ClInclude Include="src\Engine\Debug\Instrumentor.h" />
-    <ClInclude Include="src\Engine\Imgui\IconsFontAwesome5.h" />
+    <ClInclude Include="src\Engine\Core\Random.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EGpch.cpp">
@@ -1430,6 +1440,9 @@
     <ClCompile Include="src\Engine\Renderer\FrameBuffer.cpp">
       <Filter>src\Engine\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Renderer\Lights.cpp">
+      <Filter>src\Engine\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Engine\Renderer\Mesh.cpp">
       <Filter>src\Engine\Renderer</Filter>
     </ClCompile>
@@ -1481,10 +1494,12 @@
     <ClCompile Include="src\Engine\Toolbox\Samples\BasicMeshes.cpp">
       <Filter>src\Engine\Toolbox\Samples</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Toolbox\WindowsUtilities.cpp">
+      <Filter>src\Engine\Toolbox</Filter>
+    </ClCompile>
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\Renderer\Lights.cpp" />
-    <ClCompile Include="src\Engine\Toolbox\WindowsUtilities.cpp" />
+    <ClCompile Include="src\Engine\Core\Random.cpp" />
   </ItemGroup>
 </Project>
