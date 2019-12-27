@@ -10,9 +10,8 @@
 
 #include "Engine/Renderer/Skybox.h"
 
-//Temporary
-#include <windows.h>
-#include <Commdlg.h>
+#include "Engine/Renderer/Shadows.h"
+
 
 namespace Engine
 {
@@ -72,12 +71,8 @@ namespace Engine
 		Ref<Texture2D> m_LightGuiTexture;
 		static Scene* s_Instance;
 
+		ShadowRenderer shadows;
 
-		uint32_t depthMapFBO, depthMap;
-		unsigned int SHADOW_WIDTH = 2000, SHADOW_HEIGHT = 2000;
 		Ref<VertexArray> Quad2D;
-		float Ortho = 10.0f;
-		float far_plane = 60.5f;
-		float near_plane = 0.01f;
 	};
 }

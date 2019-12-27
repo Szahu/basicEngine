@@ -1360,6 +1360,7 @@
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Core\Random.h" />
+    <ClInclude Include="src\Engine\Renderer\Shadows.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EGpch.cpp">
@@ -1501,5 +1502,6 @@
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Core\Random.cpp" />
+    <ClCompile Include="src\Engine\Renderer\Shadows.cpp" />
   </ItemGroup>
 </Project>
