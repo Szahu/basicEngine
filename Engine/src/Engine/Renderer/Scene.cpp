@@ -69,7 +69,7 @@ namespace Engine
 		m_Camera.OnUpdate(ts);
 		m_MousePicker.OnUpdate(m_Camera.GetCamera().GetProjectionMatrix(), m_Camera.GetCamera().GetViewMatrix());
 
-		shadows.RenderToDepthMap(*this);
+		shadows.RenderToDepthMap(*this, m_SpotLights[0].GetLightData().Position, m_SpotLights[0].GetLightData().Direction);
 
 		//Actual Rendering
 		Application::Get().GetViewportWindowPointer()->GetFrameBuffer()->Bind();

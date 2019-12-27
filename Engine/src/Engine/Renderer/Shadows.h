@@ -14,13 +14,13 @@ namespace Engine
 		~ShadowRenderer() {}
 
 		template <class T>
-		void RenderToDepthMap(T scene)
+		void RenderToDepthMap(T scene, glm::vec3 casterPosition, glm::vec3 casterDirection)
 		{
 			Renderer::SetForcedShader("simpleDepthShader");
 
 
-			glm::vec3 lightPos = scene.GetSpotLights()[0].GetLightData().Position;
-			glm::vec3 lightDirection = scene.GetSpotLights()[0].GetLightData().Direction;
+			glm::vec3 lightPos = casterPosition;
+			glm::vec3 lightDirection = casterDirection;
 			lightProjection = glm::ortho(-Ortho, Ortho, -Ortho, Ortho, near_plane, far_plane);
 
 			//lightView = glm::lookAt(lightPos, { 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f });
