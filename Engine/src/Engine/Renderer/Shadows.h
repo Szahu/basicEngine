@@ -3,6 +3,7 @@
 #include "Engine/Renderer/Renderer.h"
 #include "glad/glad.h"
 #include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 
 namespace Engine
 {
@@ -13,46 +14,8 @@ namespace Engine
 		ShadowRenderer();
 		~ShadowRenderer() {}
 
-		template <class T>
-		void RenderToDepthMap(T scene, glm::vec3 casterPosition, glm::vec3 casterDirection)
-		{
-			Renderer::SetForcedShader("simpleDepthShader");
-
-
-			glm::vec3 lightPos = casterPosition;
-			glm::vec3 lightDirection = casterDirection;
-			lightProjection = glm::ortho(-Ortho, Ortho, -Ortho, Ortho, near_plane, far_plane);
-
-			//lightView = glm::lookAt(lightPos, { 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f });
-			lightView = glm::lookAt(lightPos, lightPos + lightDirection, { 0.0f, 1.0f, 0.0f });
-			lightSpaceMatrix = lightProjection * lightView;
-			scene.GetShaderLibrary().Get("simpleDepthShader")->Bind();
-			scene.GetShaderLibrary().Get("simpleDepthShader")->SetMat4("lightSpaceMatrix", lightSpaceMatrix);
-
-
-			glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
-			glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
-			glClear(GL_DEPTH_BUFFER_BIT);
-
-			glDisable(GL_STENCIL_TEST);
-			glEnable(GL_DEPTH_TEST);
-			//glCullFace(GL_FRONT);
-
-			glDisable(GL_CULL_FACE);
-
-			scene.RenderScene();
-
-			glEnable(GL_CULL_FACE);
-
-			//glEnable(GL_STENCIL_TEST);
-			glCullFace(GL_BACK); // don't forget to reset original culling face
-			glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-			glBindTextureUnit(m_DepthMapUniform, depthMap);
-
-			Renderer::ResetForcedShader();
-
-		}
+		void PreRender(glm::vec3 casterPosition, glm::vec3 lookAtPosition);
+		void PostRender();
 
 		const glm::mat4& GetLightMatrix() { return lightSpaceMatrix; }
 		const uint32_t GetDepthMap() { return depthMap; }

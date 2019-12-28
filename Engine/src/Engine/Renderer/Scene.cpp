@@ -69,7 +69,9 @@ namespace Engine
 		m_Camera.OnUpdate(ts);
 		m_MousePicker.OnUpdate(m_Camera.GetCamera().GetProjectionMatrix(), m_Camera.GetCamera().GetViewMatrix());
 
-		shadows.RenderToDepthMap(*this, m_SpotLights[0].GetLightData().Position, m_SpotLights[0].GetLightData().Direction);
+		shadows.PreRender(m_SpotLights[0].GetLightData().Position, m_SpotLights[0].GetLightData().Position + m_SpotLights[0].GetLightData().Direction);
+		RenderScene();
+		shadows.PostRender();
 
 		//Actual Rendering
 		Application::Get().GetViewportWindowPointer()->GetFrameBuffer()->Bind();
@@ -85,8 +87,9 @@ namespace Engine
 		m_ShaderLibrary.Get("Model")->SetMat4("u_LightSpaceMatrix", shadows.GetLightMatrix());
 		m_ShaderLibrary.Get("Model")->SetInt1("shadowMap", 20);
 
-
-		RenderScene();
+		//RenderScene();
+		auto ptr = std::mem_fn(&Engine::Scene::RenderScene);
+		ptr(Scene::GetActiveScene());
 
 		glDisable(GL_STENCIL_TEST);
 		Ref<Shader> shader = m_ShaderLibrary.Get("DebugDepthQuad");

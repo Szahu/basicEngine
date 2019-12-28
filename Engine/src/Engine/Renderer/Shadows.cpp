@@ -25,6 +25,43 @@ namespace Engine
 
 	}
 
+	void ShadowRenderer::PreRender(glm::vec3 casterPosition, glm::vec3 lookAtPosition)
+	{
+		Renderer::SetForcedShader("simpleDepthShader");
+
+		lightProjection = glm::ortho(-Ortho, Ortho, -Ortho, Ortho, near_plane, far_plane);
+
+		//lightView = glm::lookAt(lightPos, { 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f });
+		lightView = glm::lookAt(casterPosition, lookAtPosition, { 0.0f, 1.0f, 0.0f });
+		lightSpaceMatrix = lightProjection * lightView;
+		Renderer::GetForcedShader()->Bind();
+		Renderer::GetForcedShader()->SetMat4("lightSpaceMatrix", lightSpaceMatrix);
+
+
+		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+		glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+		glClear(GL_DEPTH_BUFFER_BIT);
+
+		glDisable(GL_STENCIL_TEST);
+		glEnable(GL_DEPTH_TEST);
+		//glCullFace(GL_FRONT);
+
+		glDisable(GL_CULL_FACE);
+	}
+
+	void ShadowRenderer::PostRender()
+	{
+		glEnable(GL_CULL_FACE);
+
+		//glEnable(GL_STENCIL_TEST);
+		glCullFace(GL_BACK); // don't forget to reset original culling face
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		glBindTextureUnit(m_DepthMapUniform, depthMap);
+
+		Renderer::ResetForcedShader();
+	}
+
 	
 }
 

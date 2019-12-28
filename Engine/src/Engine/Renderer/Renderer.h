@@ -39,6 +39,7 @@ namespace Engine
 		}
 		
 		static void ResetForcedShader() { m_SceneData->m_ForcedShader = nullptr; }
+		static const Ref<Shader> GetForcedShader() { return m_SceneData->m_ForcedShader; }
 
 		static inline RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 
