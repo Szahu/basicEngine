@@ -10,6 +10,8 @@
 
 #include "glad/glad.h"
 
+#include "GLFW/glfw3.h"
+
 namespace Engine
 {
 	
@@ -43,6 +45,7 @@ namespace Engine
 		m_ShaderLibrary.Load("assets/shaders/simpleDepthShader.glsl");
 		m_ShaderLibrary.Load("assets/shaders/DebugDepthQuad.glsl");
 		m_ShaderLibrary.Load("assets/shaders/DisplayNormals.glsl");
+		m_ShaderLibrary.Load("assets/shaders/SkinnedModel.glsl");
 
 		m_ShaderLibrary.Get("GuiQuad")->Bind();
 		m_ShaderLibrary.Get("GuiQuad")->SetInt1("texture_sample", 0);
@@ -57,12 +60,22 @@ namespace Engine
 		m_LightGuiTexture = Texture2D::Create("assets/textures/lightBulb.png", true);
 
 		Quad2D = BasicMeshes::Quad2D();
+
+		testMesh.LoadMesh("assets/models/boblampclean.md5mesh");
 	}
 
 	void Scene::OnUpdate(Timestep ts)
 	{
 		PROFILE_FUNCTION();
 
+		float RunningTime = glfwGetTime();
+
+		vector<Matrix4f> Transforms;
+		testMesh.BoneTransform(RunningTime, Transforms);
+
+		m_ShaderLibrary.Get("SkinnedModel")->Bind();
+
+		glUniformMatrix4fv(glGetUniformLocation(m_ShaderLibrary.Get("SkinnedModel")->GetID(), "gBones"), Transforms.size(), GL_TRUE, (const GLfloat*)Transforms[0]);
 
 		Renderer::BeginScene();
 
@@ -82,10 +95,12 @@ namespace Engine
 		m_ShaderLibrary.Get("Material")->Bind();
 		m_ShaderLibrary.Get("Material")->SetMat4("u_LightSpaceMatrix", shadows.GetLightMatrix());
 		m_ShaderLibrary.Get("Material")->SetInt1("shadowMap", 20);
+		m_ShaderLibrary.Get("Material")->SetFloat1("bias", bias / 10000);
 
 		m_ShaderLibrary.Get("Model")->Bind();
 		m_ShaderLibrary.Get("Model")->SetMat4("u_LightSpaceMatrix", shadows.GetLightMatrix());
 		m_ShaderLibrary.Get("Model")->SetInt1("shadowMap", 20);
+		m_ShaderLibrary.Get("Model")->SetFloat1("bias", bias/ 10000);
 
 		//RenderScene();
 		auto ptr = std::mem_fn(&Engine::Scene::RenderScene);
@@ -122,6 +137,8 @@ namespace Engine
 			ent.second.CheckForIntersection(&m_MousePicker);
 			ent.second.CheckIfActive(m_ActiveEntity);
 		}
+		m_ShaderLibrary.Get("SkinnedModel")->Bind();
+		testMesh.OnRender();
 	}
 
 	void Scene::OnImGuiRender()

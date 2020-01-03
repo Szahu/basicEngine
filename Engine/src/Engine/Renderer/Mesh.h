@@ -55,5 +55,7 @@ namespace Engine
 		bool HasTextures;
 		void setupMesh();
 	};
+
+	
 }
 

@@ -153,6 +153,7 @@
     <ClInclude Include="src\Engine\Core\Layer.h" />
     <ClInclude Include="src\Engine\Core\LayerStack.h" />
     <ClInclude Include="src\Engine\Core\Log.h" />
+    <ClInclude Include="src\Engine\Core\Math3D.h" />
     <ClInclude Include="src\Engine\Core\MouseButtonCodes.h" />
     <ClInclude Include="src\Engine\Core\Random.h" />
     <ClInclude Include="src\Engine\Core\Timestep.h" />
@@ -583,6 +584,7 @@
     <ClCompile Include="src\Engine\Core\Layer.cpp" />
     <ClCompile Include="src\Engine\Core\LayerStack.cpp" />
     <ClCompile Include="src\Engine\Core\Log.cpp" />
+    <ClCompile Include="src\Engine\Core\Math3D.cpp" />
     <ClCompile Include="src\Engine\Core\Random.cpp" />
     <ClCompile Include="src\Engine\Entity\Component.cpp" />
     <ClCompile Include="src\Engine\Entity\Components\MaterialComponent.cpp" />

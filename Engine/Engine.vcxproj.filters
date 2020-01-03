@@ -1361,6 +1361,7 @@
     </ClInclude>
     <ClInclude Include="src\Engine\Core\Random.h" />
     <ClInclude Include="src\Engine\Renderer\Shadows.h" />
+    <ClInclude Include="src\Engine\Core\Math3D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EGpch.cpp">
@@ -1503,5 +1504,6 @@
     </ClCompile>
     <ClCompile Include="src\Engine\Core\Random.cpp" />
     <ClCompile Include="src\Engine\Renderer\Shadows.cpp" />
+    <ClCompile Include="src\Engine\Core\Math3D.cpp" />
   </ItemGroup>
 </Project>

@@ -25,7 +25,7 @@ namespace Engine
 
 		uint32_t depthMapFBO, depthMap;
 		uint32_t m_DepthMapUniform = 20;
-		unsigned int SHADOW_WIDTH = 2000, SHADOW_HEIGHT = 2000;
+		unsigned int SHADOW_WIDTH = 4000, SHADOW_HEIGHT = 4000;
 		float Ortho = 10.0f;
 		float far_plane = 60.5f;
 		float near_plane = 0.01f;
