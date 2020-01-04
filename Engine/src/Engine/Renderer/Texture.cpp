@@ -23,8 +23,8 @@ namespace Engine
 	{
 		switch (Renderer::GetAPI())
 		{
-			case RendererAPI::API::None: EG_CORE_ASSERT(false, "RendereAPI None is not supprtoed!");  return nullptr;
-			case RendererAPI::API::OpenGL:  return  CreateRef<OpenGLTexture2D>(width, height);
+			case RendererAPI::API::None: EG_CORE_ASSERT(false, "RendereAPI None is not supprtoed!");  return nullptr; break;
+			case RendererAPI::API::OpenGL:  return  CreateRef<OpenGLTexture2D>(width, height); break;
 		}
 
 		EG_CORE_ASSERT(false, "Unknow RendererAPI!");

@@ -46,10 +46,8 @@ void main()
 
     vec4 PosL = BoneTransform * vec4(a_Positions, 1.0);
     gl_Position = u_ViewProjectionMatrix * PosL;
-    //TexCoord0 = TexCoord;
-    //vec4 NormalL = BoneTransform * vec4(Normal, 0.0);
-    //vs_out.Normal = (gWorld * NormalL).xyz;
-    //vs_out.FragPos = (gWorld * PosL).xyz;
+    vs_out.Normal = vec3(PosL * vec4(a_Normals, 1.0));
+    vs_out.FragPos = vec3(PosL * vec4(a_Positions, 1.0));
 }
 
 
@@ -134,10 +132,7 @@ uniform sampler2D shadowMap;
 
 void main()
 {	
-	//if(u_FlatColor.x != 0 || u_FlatColor.y != 0 || u_FlatColor.z != 0) {color = vec4(u_FlatColor, 1.0);}
-	if(false) {}
-	else 
-	{
+
 	// Setting up common Data
 	CommonData s_CommonData;
 	s_CommonData.c_Normal = normalize(fs_in.Normal);
@@ -165,9 +160,7 @@ void main()
 	
 	float gamma = 1;
 
-	//color = vec4(pow(result.rgb, vec3(1.0f / gamma)), 1.0f);
-	color = vec4(1.0f);
-	}
+	color = texture(texture_diffuse1, fs_in.TexCoords);
 }
 
 vec4 CalculatePointLight(PointLight light, CommonData data)
@@ -178,6 +171,7 @@ vec4 CalculatePointLight(PointLight light, CommonData data)
 
 	vec3 normTex = texture(texture_normal1, fs_in.TexCoords).rgb;
 	vec3 Norm = data.c_Normal;
+
 
 	// ambient
 	vec3 ambient = u_Material.ambient * vec3(light.ambient) * diffTex1;
@@ -208,18 +202,22 @@ vec4 CalculateSpotLight(SpotLight light, CommonData data)
 	vec3 Norm = data.c_Normal;
 	//Norm = normTex;
 
-	vec3 ambient = u_Material.ambient * vec3(light.Ambient) * diffTex1;
+	//vec3 ambient = u_Material.ambient * vec3(light.Ambient) * diffTex1;
+	vec3 ambient = 1.0f * vec3(light.Ambient) * diffTex1;
     
     // diffuse 
     vec3 lightDir = normalize(vec3(light.Position) - fs_in.FragPos);
     float diff = max(dot(Norm, lightDir), 0.0);
-    vec3 diffuse = vec3(light.Diffuse) * u_Material.diffuse * diffTex1;  
+    //vec3 diffuse = vec3(light.Diffuse) * u_Material.diffuse * diffTex1;  
+    vec3 diffuse = vec3(light.Diffuse) * 1.0f * diffTex1;  
     
     // specular
 	vec3 halfwayDir = normalize(lightDir + data.c_ViewDirection);
     vec3 reflectDir = reflect(-halfwayDir, Norm);  
-    float spec = pow(max(dot(data.c_ViewDirection, reflectDir), 0.0), (1 / u_Material.shininess * 1.28f));
-    vec3 specular = vec3(light.Specular) * (spec * u_Material.specular * specTex);  
+    //float spec = pow(max(dot(data.c_ViewDirection, reflectDir), 0.0), (1 / u_Material.shininess * 1.28f));
+    float spec = pow(max(dot(data.c_ViewDirection, reflectDir), 0.0), (1 / 1.0f * 1.28f));
+    //vec3 specular = vec3(light.Specular) * (spec * u_Material.specular * specTex);  
+    vec3 specular = vec3(light.Specular) * (spec * 1.0f * specTex);  
     
     // spotlight (soft edges)
     float theta = dot(vec3(lightDir), normalize(-vec3(light.Direction))); 
@@ -236,10 +234,11 @@ vec4 CalculateSpotLight(SpotLight light, CommonData data)
     specular *= attenuation;   
         
 
-	float shadow = ShadowCalculation(fs_in.FragPosLightSpace, lightDir, Norm);  
-	vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular));   
-    //vec3 result = ambient + diffuse + specular;
-	return vec4(lighting, 1.0f);
+	//float shadow = ShadowCalculation(fs_in.FragPosLightSpace, lightDir, Norm);  
+	//vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular));   
+    vec3 result = ambient + diffuse + specular;
+	return vec4(result, 1.0f);
+	//return vec4(lighting, 1.0f);
 }
 
 float ShadowCalculation(vec4 fragPosLightSpace, vec3 lightDir, vec3 Normal)

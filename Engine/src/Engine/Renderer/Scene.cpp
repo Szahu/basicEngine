@@ -35,6 +35,7 @@ namespace Engine
 
 	void Scene::LoadScene()
 	{
+
 		InstrumentationTimer timer("Scene::LoadScene()");
 
 		m_ShaderLibrary.Load("assets/shaders/GuiQuad.glsl");
@@ -66,6 +67,7 @@ namespace Engine
 
 	void Scene::OnUpdate(Timestep ts)
 	{
+
 		PROFILE_FUNCTION();
 
 		float RunningTime = glfwGetTime();
@@ -102,9 +104,8 @@ namespace Engine
 		m_ShaderLibrary.Get("Model")->SetInt1("shadowMap", 20);
 		m_ShaderLibrary.Get("Model")->SetFloat1("bias", bias/ 10000);
 
-		//RenderScene();
-		auto ptr = std::mem_fn(&Engine::Scene::RenderScene);
-		ptr(Scene::GetActiveScene());
+		testMesh.OnRender(m_ShaderLibrary.Get("SkinnedModel"));
+		RenderScene();
 
 		glDisable(GL_STENCIL_TEST);
 		Ref<Shader> shader = m_ShaderLibrary.Get("DebugDepthQuad");
@@ -137,8 +138,8 @@ namespace Engine
 			ent.second.CheckForIntersection(&m_MousePicker);
 			ent.second.CheckIfActive(m_ActiveEntity);
 		}
-		m_ShaderLibrary.Get("SkinnedModel")->Bind();
-		testMesh.OnRender();
+
+		
 	}
 
 	void Scene::OnImGuiRender()

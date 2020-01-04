@@ -77,5 +77,6 @@ namespace Engine
 
 		SkinnedMesh testMesh;
 		GLuint m_boneLocation[100];
+
 	};
 }

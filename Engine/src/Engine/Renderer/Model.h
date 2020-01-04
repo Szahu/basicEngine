@@ -70,7 +70,7 @@ namespace Engine
 
 		bool LoadMesh(const string& Filename);
 
-		void OnRender();
+		void OnRender(const Ref<Shader>& shader);
 
 		unsigned int NumBones() const {}
 
@@ -153,7 +153,7 @@ namespace Engine
 		};
 
 		vector<MeshEntry> m_Entries;
-		vector<Ref<Texture>> m_Textures;
+		vector<Ref<Texture2D>> m_Textures;
 
 		map<string, unsigned int> m_BoneMapping;
 		unsigned int m_NumBones;
@@ -162,6 +162,8 @@ namespace Engine
 
 		const aiScene* m_pScene;
 		Assimp::Importer m_Importer;
+
+		Ref<Texture2D> testTexture;
 	};
 
 

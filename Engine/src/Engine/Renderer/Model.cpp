@@ -263,6 +263,8 @@ namespace Engine
 		ZERO_MEM(m_Buffers);
 		m_NumBones = 0;
 		m_pScene = NULL;
+
+		testTexture = Texture2D::Create("assets/Textures/test.png");
 	}
 
 	//SkinnedMesh::~SkinnedMesh()
@@ -303,9 +305,11 @@ namespace Engine
 		return Ret;
 	}
 
-	void SkinnedMesh::OnRender()
+	void SkinnedMesh::OnRender(const Ref<Shader>& shader)
 	{
 		glBindVertexArray(m_VAO);
+
+		shader->Bind();
 
 		for (unsigned int i = 0; i < m_Entries.size(); i++)
 		{
@@ -313,10 +317,8 @@ namespace Engine
 
 			assert(MaterialIndex < m_Textures.size());
 
-			if (m_Textures[MaterialIndex])
-			{
-				m_Textures[MaterialIndex]->Bind(GL_TEXTURE0);
-			}
+			shader->SetInt1("texture_diffuse1", 0);
+			m_Textures[MaterialIndex]->Bind(0);
 
 			glDrawElementsBaseVertex(GL_TRIANGLES,
 				m_Entries[i].NumIndices,
@@ -539,7 +541,7 @@ namespace Engine
 	bool SkinnedMesh::InitFromScene(const aiScene* pScene, const string& Filename)
 	{
 		m_Entries.resize(pScene->mNumMeshes);
-		m_Textures.resize(pScene->mNumMaterials);
+		//m_Textures.resize(pScene->mNumMaterials);
 
 		vector<Vector3f> Positions;
 		vector<Vector3f> Normals;
@@ -697,7 +699,7 @@ namespace Engine
 		{
 			const aiMaterial* pMaterial = pScene->mMaterials[i];
 
-			m_Textures[i] = NULL;
+			//m_Textures[i] = NULL;
 
 			if (pMaterial->GetTextureCount(aiTextureType_DIFFUSE) > 0)
 			{
@@ -720,9 +722,9 @@ namespace Engine
 
 					if (!tex)
 					{
-						printf("Error loading texture '%s'\n", FullPath.c_str());
+						EG_CORE_ERROR("Error loading texture '{0}'", FullPath.c_str());
 						//delete m_Textures[i];
-						m_Textures[i] = NULL;
+						//m_Textures[i] = NULL;
 						Ret = false;
 					}
 					else
