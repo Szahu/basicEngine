@@ -117,6 +117,13 @@ namespace Engine
 		glBindTexture(GL_TEXTURE_2D, m_ScreenTexture);
 	}
 
+	void OpenGLFrameBuffer::BindTexture(uint32_t slot) const
+	{
+		{
+			glBindTextureUnit(slot, GetTextureID());
+		}
+	}
+
 	void OpenGLFrameBuffer::UnbindTexture() const
 	{
 		glBindTexture(GL_TEXTURE_2D, 0);
@@ -136,9 +143,9 @@ namespace Engine
 
 	bool OpenGLFrameBuffer::OnWindowResize(WindowResizeEvent& e)
 	{
-		//m_TextureSize = { e.GetWidth(), e.GetHeight() };
+		m_TextureSize = { e.GetWidth(), e.GetHeight() };
 
-		//UpdateSize();
+		UpdateSize();
 
 		return false;
 	}

@@ -19,6 +19,9 @@ namespace Engine
 		virtual const uint32_t GetTextureID() const override { return m_ScreenTexture; }
 		
 		virtual void BindTexture() const override;
+		virtual void BindTexture(uint32_t slot) const override;
+		
+
 		virtual void UnbindTexture() const override;
 
 		virtual void SetTextureSize(const glm::vec2& vec) override;
@@ -27,6 +30,7 @@ namespace Engine
 		virtual void OnEvent(Event& e) override;
 
 		bool OnWindowResize(WindowResizeEvent& e);
+
 
 	private:
 

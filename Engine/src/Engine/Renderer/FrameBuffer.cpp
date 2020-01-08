@@ -15,7 +15,7 @@ namespace Engine
 			case RendererAPI::API::OpenGL:  return  std::make_shared<OpenGLFrameBuffer>(size);
 		}
 
-		EG_CORE_ASSERT(false, "Unknow RendererAPI!");
+		EG_CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
 
 	}

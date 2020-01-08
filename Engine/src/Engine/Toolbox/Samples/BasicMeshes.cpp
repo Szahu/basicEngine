@@ -142,6 +142,33 @@ namespace Engine
 		GuiQuad->SetIndexBuffer(gui_quad_indices);
 		return GuiQuad;
 	}
+	const Ref<VertexArray> BasicMeshes::ScreenQuad()
+	{
+		glm::vec4 quad_vertices[4] = {
+			{-1.0f, -1.0f, 0.0f, 0.0f},
+			{ 1.0f, -1.0f, 1.0f, 0.0f},
+			{ 1.0f,  1.0f, 1.0f, 1.0f},
+			{-1.0f,  1.0f, 0.0f, 1.0f}
+		};
+
+		unsigned int quad_indices[6] = {
+			0, 1, 2, 0, 2, 3
+		};
+
+		Ref<IndexBuffer> gui_quad_indices = IndexBuffer::Create(quad_indices, 6);
+		Ref<VertexBuffer> gui_quad_vertices = VertexBuffer::Create(&quad_vertices[0].x, sizeof(float) * 4 * 4);
+		gui_quad_vertices->SetLayout(BufferLayout{
+			{ ShaderDataType::Float2, "a_Positions" },
+			{ ShaderDataType::Float2, "a_TexCoords" }
+			});
+
+		Ref<VertexArray> GuiQuad = VertexArray::Create();
+
+		GuiQuad = VertexArray::Create();
+		GuiQuad->AddVertexBuffer(gui_quad_vertices);
+		GuiQuad->SetIndexBuffer(gui_quad_indices);
+		return GuiQuad;
+	}
 }
 
 

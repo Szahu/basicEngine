@@ -76,7 +76,7 @@ namespace Engine
 
 		shadows.PreRender(m_SpotLights[0].GetLightData().Position, m_SpotLights[0].GetLightData().Position + m_SpotLights[0].GetLightData().Direction);
 		RenderScene();
-		shadows.PostRender();
+		shadows.PostRender({ m_ShaderLibrary.Get("Material") , m_ShaderLibrary.Get("Model") });
 
 		//Actual Rendering
 		Application::Get().GetViewportWindowPointer()->GetFrameBuffer()->Bind();
@@ -84,13 +84,13 @@ namespace Engine
 		Engine::RenderCommand::SetClearColor({ 0.0f, 0.0f, 0.0f, 0.0f });
 		glStencilMask(0x00);
 
-		m_ShaderLibrary.Get("Material")->Bind();
-		m_ShaderLibrary.Get("Material")->SetMat4("u_LightSpaceMatrix", shadows.GetLightMatrix());
-		m_ShaderLibrary.Get("Material")->SetInt1("shadowMap", 20);
-
-		m_ShaderLibrary.Get("Model")->Bind();
-		m_ShaderLibrary.Get("Model")->SetMat4("u_LightSpaceMatrix", shadows.GetLightMatrix());
-		m_ShaderLibrary.Get("Model")->SetInt1("shadowMap", 20);
+		//m_ShaderLibrary.Get("Material")->Bind();
+		//m_ShaderLibrary.Get("Material")->SetMat4("u_LightSpaceMatrix", shadows.GetLightMatrix());
+		//m_ShaderLibrary.Get("Material")->SetInt1("shadowMap", 20);
+		//
+		//m_ShaderLibrary.Get("Model")->Bind();
+		//m_ShaderLibrary.Get("Model")->SetMat4("u_LightSpaceMatrix", shadows.GetLightMatrix());
+		//m_ShaderLibrary.Get("Model")->SetInt1("shadowMap", 20);
 
 
 

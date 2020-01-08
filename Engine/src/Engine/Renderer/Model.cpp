@@ -297,7 +297,8 @@ namespace Engine
 		}
 		else
 		{
-			EG_CORE_ASSERT(false, "Error loading a file: {0} :: {1}", Filename.c_str(), m_Importer.GetErrorString());
+			EG_CORE_ERROR("Error loading a file: {0} :: {1}", Filename.c_str(), m_Importer.GetErrorString());
+			EG_CORE_ASSERT(false, "");
 		}
 
 		// Make sure the VAO is not changed from the outside

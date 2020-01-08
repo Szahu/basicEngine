@@ -16,6 +16,7 @@ namespace Engine
 			   
 		virtual const uint32_t GetTextureID() const = 0;
 		virtual void BindTexture() const = 0;
+		virtual void BindTexture(uint32_t slot) const = 0;
 		virtual void UnbindTexture() const = 0;
 
 		virtual void SetTextureSize(const glm::vec2& vec) = 0;

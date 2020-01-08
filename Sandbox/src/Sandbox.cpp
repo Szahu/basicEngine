@@ -4,20 +4,18 @@
 #include <Engine.h>
 #include "imgui/imgui.h"
 
-#include "Engine/Platform/OpenGl/OpenGLShader.h"
-
 #include "Sandbox2D.h"
 #include "Sandbox3D.h"
-#include "testGame/GameLayer.h"
+#include "Debilopoly/GameLayer.h"
 
 class Sandbox : public Engine::Application
 {
 public:
 	Sandbox()
 	{
-		//PushLayer(new GameLayer());
 		//PushLayer(new Sandbox2D());
-		PushLayer(new Sandbox3D());
+		//PushLayer(new Sandbox3D());
+		PushLayer(new GameLayer());
 	}
 	~Sandbox()
 	{

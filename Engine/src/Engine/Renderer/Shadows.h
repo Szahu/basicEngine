@@ -15,11 +15,13 @@ namespace Engine
 		~ShadowRenderer() {}
 
 		void PreRender(glm::vec3 casterPosition, glm::vec3 lookAtPosition);
-		void PostRender();
+		void PostRender(const std::initializer_list<Ref<Shader>>& elements);
 
 		const glm::mat4& GetLightMatrix() { return lightSpaceMatrix; }
 		const uint32_t GetDepthMap() { return depthMap; }
 		const uint32_t GetMapSlot() { return m_DepthMapUniform; }
+
+		void SendDataToShader(const Ref<Shader> shader);
 
 	private:
 

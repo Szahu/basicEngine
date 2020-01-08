@@ -160,6 +160,7 @@ void main()
 	
 	float gamma = 1;
 
+	result.w = 1.0f;
 	color = result;
 }
 

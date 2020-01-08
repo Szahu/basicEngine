@@ -49,7 +49,7 @@ namespace Engine
 		glDisable(GL_CULL_FACE);
 	}
 
-	void ShadowRenderer::PostRender()
+	void ShadowRenderer::PostRender(const std::initializer_list<Ref<Shader>>& elements)
 	{
 		glEnable(GL_CULL_FACE);
 
@@ -60,6 +60,18 @@ namespace Engine
 		glBindTextureUnit(m_DepthMapUniform, depthMap);
 
 		Renderer::ResetForcedShader();
+
+		for (auto& element : elements)
+		{
+			SendDataToShader(element);
+		}
+	}
+
+	void ShadowRenderer::SendDataToShader(const Ref<Shader> shader)
+	{
+		shader->Bind();
+		shader->SetMat4("u_LightSpaceMatrix", GetLightMatrix());
+		shader->SetInt1("shadowMap", 20);
 	}
 
 	
