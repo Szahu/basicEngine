@@ -54,7 +54,7 @@ namespace Engine
 		
 		m_Skybox.Load("assets/textures/skyboxes/nightSky");
 
-		Renderer::InitScene(); 
+		Renderer::InitScene(&m_Camera.GetCamera(), &m_ShaderLibrary); 
 
 		GuiQuad = BasicMeshes::Quad();
 
@@ -62,24 +62,14 @@ namespace Engine
 
 		Quad2D = BasicMeshes::Quad2D();
 
-		testMesh.LoadMesh("assets/models/boblampclean.md5mesh");
+		testMesh.LoadMesh("assets/models/ShrekRunAnim.fbx");
 	}
 
 	void Scene::OnUpdate(Timestep ts)
 	{
-
 		PROFILE_FUNCTION();
 
-		float RunningTime = glfwGetTime();
-
-		vector<Matrix4f> Transforms;
-		testMesh.BoneTransform(RunningTime, Transforms);
-
-		m_ShaderLibrary.Get("SkinnedModel")->Bind();
-
-		glUniformMatrix4fv(glGetUniformLocation(m_ShaderLibrary.Get("SkinnedModel")->GetID(), "gBones"), Transforms.size(), GL_TRUE, (const GLfloat*)Transforms[0]);
-
-		Renderer::BeginScene();
+		Renderer::BeginScene(m_PointLights, m_SpotLights);
 
 		m_Camera.OnUpdate(ts);
 		m_MousePicker.OnUpdate(m_Camera.GetCamera().GetProjectionMatrix(), m_Camera.GetCamera().GetViewMatrix());
@@ -97,14 +87,17 @@ namespace Engine
 		m_ShaderLibrary.Get("Material")->Bind();
 		m_ShaderLibrary.Get("Material")->SetMat4("u_LightSpaceMatrix", shadows.GetLightMatrix());
 		m_ShaderLibrary.Get("Material")->SetInt1("shadowMap", 20);
-		m_ShaderLibrary.Get("Material")->SetFloat1("bias", bias / 10000);
 
 		m_ShaderLibrary.Get("Model")->Bind();
 		m_ShaderLibrary.Get("Model")->SetMat4("u_LightSpaceMatrix", shadows.GetLightMatrix());
 		m_ShaderLibrary.Get("Model")->SetInt1("shadowMap", 20);
-		m_ShaderLibrary.Get("Model")->SetFloat1("bias", bias/ 10000);
 
-		testMesh.OnRender(m_ShaderLibrary.Get("SkinnedModel"));
+
+
+		glm::mat4 transform = glm::scale(glm::mat4(1.0f), glm::vec3(0.02f));
+		testMesh.OnRender(m_ShaderLibrary.Get("SkinnedModel"), transform);
+
+
 		RenderScene();
 
 		glDisable(GL_STENCIL_TEST);
@@ -141,6 +134,8 @@ namespace Engine
 
 		
 	}
+
+
 
 	void Scene::OnImGuiRender()
 	{

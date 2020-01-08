@@ -44,10 +44,10 @@ void main()
     BoneTransform += gBones[BoneIDs[2]] * Weights[2];
     BoneTransform += gBones[BoneIDs[3]] * Weights[3];
 
-    vec4 PosL = BoneTransform * vec4(a_Positions, 1.0);
+    vec4 PosL = BoneTransform * vec4(a_Positions, 1.0) * u_Transform;
     gl_Position = u_ViewProjectionMatrix * PosL;
-    vs_out.Normal = vec3(PosL * vec4(a_Normals, 1.0));
-    vs_out.FragPos = vec3(PosL * vec4(a_Positions, 1.0));
+    vs_out.Normal = vec3(PosL * vec4(a_Normals, 1.0) * u_Transform);
+    vs_out.FragPos = vec3(PosL * vec4(a_Positions, 1.0) * u_Transform);
 }
 
 
@@ -160,7 +160,7 @@ void main()
 	
 	float gamma = 1;
 
-	color = texture(texture_diffuse1, fs_in.TexCoords);
+	color = result;
 }
 
 vec4 CalculatePointLight(PointLight light, CommonData data)
@@ -174,19 +174,19 @@ vec4 CalculatePointLight(PointLight light, CommonData data)
 
 
 	// ambient
-	vec3 ambient = u_Material.ambient * vec3(light.ambient) * diffTex1;
+	vec3 ambient = 1.0f * vec3(light.ambient) * diffTex1;
 
 	// diffuse 
 	vec3 lightDir = normalize(vec3(light.position) - fs_in.FragPos);
 	vec3 halfwayDir = normalize(lightDir + data.c_ViewDirection);
 	float diff = max(dot(Norm, halfwayDir), 0.0);
 	//float diff = max(dot(Norm, lightDir), 0.0);
-	vec3 diffuse = (diff * u_Material.diffuse) * vec3(light.diffuse) * diffTex1;
+	vec3 diffuse = (diff * 1.0f) * vec3(light.diffuse) * diffTex1;
 
 	// specular
 	vec3 reflectDir = reflect(-lightDir, Norm);
-	float spec = pow(max(dot(data.c_ViewDirection, reflectDir), 0.0), (1 / u_Material.shininess * 1.28f));
-	vec3 specular = vec3(light.specular) * (spec * u_Material.specular * specTex) ;
+	float spec = pow(max(dot(data.c_ViewDirection, reflectDir), 0.0), (1 / 1.0f * 1.28f));
+	vec3 specular = vec3(light.specular) * (spec * 1.0f * specTex) ;
 
 	vec3 result = (ambient + diffuse + specular);
 	return vec4(result, 1.0);
@@ -234,11 +234,10 @@ vec4 CalculateSpotLight(SpotLight light, CommonData data)
     specular *= attenuation;   
         
 
-	//float shadow = ShadowCalculation(fs_in.FragPosLightSpace, lightDir, Norm);  
-	//vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular));   
-    vec3 result = ambient + diffuse + specular;
-	return vec4(result, 1.0f);
-	//return vec4(lighting, 1.0f);
+	float shadow = ShadowCalculation(fs_in.FragPosLightSpace, lightDir, Norm);  
+	vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular));   
+
+	return vec4(lighting, 1.0f);
 }
 
 float ShadowCalculation(vec4 fragPosLightSpace, vec3 lightDir, vec3 Normal)

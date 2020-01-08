@@ -2,6 +2,7 @@
 #include "Model.h"
 
 #include "glad/glad.h"
+#include "Engine/Core/Application.h"
 
 namespace Engine
 {
@@ -296,7 +297,7 @@ namespace Engine
 		}
 		else
 		{
-			printf("Error parsing '%s': '%s'\n", Filename.c_str(), m_Importer.GetErrorString());
+			EG_CORE_ASSERT(false, "Error loading a file: {0} :: {1}", Filename.c_str(), m_Importer.GetErrorString());
 		}
 
 		// Make sure the VAO is not changed from the outside
@@ -305,19 +306,23 @@ namespace Engine
 		return Ret;
 	}
 
-	void SkinnedMesh::OnRender(const Ref<Shader>& shader)
+	void SkinnedMesh::OnRender(const Ref<Shader>& shader,const glm::mat4& transform)
 	{
 		glBindVertexArray(m_VAO);
 
 		shader->Bind();
 
+		BoneTransform(Application::GetRunningTime());
+		glUniformMatrix4fv(glGetUniformLocation(shader->GetID(), "gBones"), m_BoneTransforms.size(), GL_TRUE, (const GLfloat*)m_BoneTransforms[0]);
+
 		for (unsigned int i = 0; i < m_Entries.size(); i++)
 		{
 			const unsigned int MaterialIndex = m_Entries[i].MaterialIndex;
 
-			assert(MaterialIndex < m_Textures.size());
+			EG_CORE_ASSERT(MaterialIndex < m_Textures.size(), "Material Index out of m_Textures range!");
 
 			shader->SetInt1("texture_diffuse1", 0);
+			shader->SetMat4("u_Transform", transform);
 			m_Textures[MaterialIndex]->Bind(0);
 
 			glDrawElementsBaseVertex(GL_TRIANGLES,
@@ -325,13 +330,15 @@ namespace Engine
 				GL_UNSIGNED_INT,
 				(void*)(sizeof(unsigned int) * m_Entries[i].BaseIndex),
 				m_Entries[i].BaseVertex);
+
+			//glDrawElements(GL_TRIANGLES, m_Entries[i].NumIndices, GL_UNSIGNED_INT, nullptr);
 		}
 
 		// Make sure the VAO is not changed from the outside    
 		glBindVertexArray(0);
 	}
 
-	void SkinnedMesh::BoneTransform(float TimeInSeconds, std::vector<Matrix4f>& Transforms)
+	void SkinnedMesh::BoneTransform(float TimeInSeconds)
 	{
 		Matrix4f Identity;
 		Identity.InitIdentity();
@@ -342,11 +349,11 @@ namespace Engine
 
 		ReadNodeHeirarchy(AnimationTime, m_pScene->mRootNode, Identity);
 
-		Transforms.resize(m_NumBones);
+		m_BoneTransforms.resize(m_NumBones);
 
 		for (unsigned int i = 0; i < m_NumBones; i++)
 		{
-			Transforms[i] = m_BoneInfo[i].FinalTransformation;
+			m_BoneTransforms[i] = m_BoneInfo[i].FinalTransformation;
 		}
 	}
 
@@ -363,7 +370,18 @@ namespace Engine
 		}
 
 		// should never get here - more bones than we have space for
-		assert(0);
+		EG_CORE_ASSERT(false, "Too many bones per Vertex");
+	}
+
+	void SkinnedMesh::LoadNodeAnim(const aiAnimation* pAnimation)
+	{
+		for (unsigned int i = 0; i < pAnimation->mNumChannels; i++)
+		{
+			const aiNodeAnim* pNodeAnim = pAnimation->mChannels[i];
+
+			std::string name = string(pNodeAnim->mNodeName.data);
+			m_NodeAnims[name] = pNodeAnim;
+		}
 	}
 
 	void SkinnedMesh::CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim)
@@ -499,7 +517,8 @@ namespace Engine
 
 		Matrix4f NodeTransformation(pNode->mTransformation);
 
-		const aiNodeAnim* pNodeAnim = FindNodeAnim(pAnimation, NodeName);
+		//const aiNodeAnim* pNodeAnim = FindNodeAnim(pAnimation, NodeName);
+		const aiNodeAnim* pNodeAnim = m_NodeAnims[NodeName];
 
 		if (pNodeAnim)
 		{
@@ -551,6 +570,9 @@ namespace Engine
 
 		unsigned int NumVertices = 0;
 		unsigned int NumIndices = 0;
+
+		const aiAnimation* pAnimation = m_pScene->mAnimations[0];
+		LoadNodeAnim(pAnimation);
 
 		// Count the number of vertices and indices
 		for (unsigned int i = 0; i < m_Entries.size(); i++)

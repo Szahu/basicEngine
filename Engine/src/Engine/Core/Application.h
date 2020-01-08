@@ -41,6 +41,8 @@ namespace Engine
 		void SetEditorCameraPointer(PerspectiveCamera* cam) { editor_camera = cam; }
 		PerspectiveCamera* GetEditorCameraPointer() { EG_CORE_ASSERT(editor_camera, "Editor camrera pointer not set / not set correctly"); return editor_camera; }
 
+		static float GetRunningTime();
+
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);

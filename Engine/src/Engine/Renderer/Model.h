@@ -61,7 +61,7 @@ namespace Engine
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	class SkinnedMesh
+	class SkinnedMesh 
 	{
 	public:
 		SkinnedMesh();
@@ -70,11 +70,11 @@ namespace Engine
 
 		bool LoadMesh(const string& Filename);
 
-		void OnRender(const Ref<Shader>& shader);
+		void OnRender(const Ref<Shader>& shader, const glm::mat4& transform);
 
 		unsigned int NumBones() const {}
 
-		void BoneTransform(float TimeInSeconds, std::vector<Matrix4f>& Transforms);
+		void BoneTransform(float TimeInSeconds);
 
 	private:
 	#define NUM_BONES_PER_VEREX 4
@@ -102,6 +102,7 @@ namespace Engine
 			void AddBoneData(unsigned int BoneID, float Weight);
 		};
 
+		void LoadNodeAnim(const aiAnimation* pAnimation);
 		void CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
 		void CalcInterpolatedRotation(aiQuaternion& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
 		void CalcInterpolatedPosition(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
@@ -152,6 +153,8 @@ namespace Engine
 			unsigned int MaterialIndex;
 		};
 
+		map<std::string, const aiNodeAnim*> m_NodeAnims;
+		std::vector<Matrix4f> m_BoneTransforms;
 		vector<MeshEntry> m_Entries;
 		vector<Ref<Texture2D>> m_Textures;
 

@@ -23,9 +23,10 @@ namespace Engine
 		static void Init();
 		static void OnWindowResize(uint32_t width, uint32_t height);
 
-		static void InitScene();
+		static void InitScene(const PerspectiveCamera* camera, ShaderLibrary* lib);
 
 		static void BeginScene();
+		static void BeginScene(std::vector<PointLight> pointlights, std::vector<SpotLight> spotlights);
 		static void EndScene();
 
 		static void Submit(const Engine::Ref<VertexArray>& vertexArray, const Material& material, const Transform& transform, bool drawOutline, const std::string& libKey,  uint32_t instances = 0);
@@ -62,6 +63,5 @@ namespace Engine
 
 		static SceneData* m_SceneData;
 	};
-
 
 }

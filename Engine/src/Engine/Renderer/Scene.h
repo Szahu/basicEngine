@@ -72,8 +72,6 @@ namespace Engine
 		static Scene* s_Instance;
 		ShadowRenderer shadows;
 		Ref<VertexArray> Quad2D;
-		float bias = 0.0005;
-
 
 		SkinnedMesh testMesh;
 		GLuint m_boneLocation[100];

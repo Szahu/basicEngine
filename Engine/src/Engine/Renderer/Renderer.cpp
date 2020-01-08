@@ -23,11 +23,11 @@ namespace Engine
 		RenderCommand::SetViewport(0, 0, width, height);
 	}
 
-	void Renderer::InitScene()
+	void Renderer::InitScene(const PerspectiveCamera* camera, ShaderLibrary* lib)
 	{
 
-		m_SceneData->m_Camera = &Scene::GetActiveScene().GetCamera().GetCamera();
-		m_SceneData->m_ShaderLibrary = &Scene::GetActiveScene().GetShaderLibrary();
+		m_SceneData->m_Camera = camera;
+		m_SceneData->m_ShaderLibrary = lib;
 
 		m_SceneData->m_MatricesUniformBuffer = UniformBuffer::Create(sizeof(glm::mat4) + sizeof(glm::vec3), 0);
 		m_SceneData->m_LightsUniformBuffer = UniformBuffer::Create(sizeof(glm::vec4) + sizeof(PointLightData) * MAX_NUMBER_OF_POINTLIGHTS + sizeof(SpotLight) * MAX_NUMBER_OF_SPOTLIGHTS, 1);
@@ -58,6 +58,7 @@ namespace Engine
 		glm::vec4 amountOfLights;
 		amountOfLights.x = (float)Scene::GetActiveScene().GetPointLights().size();
 		amountOfLights.y = (float)Scene::GetActiveScene().GetSpotLights().size();
+
 		m_SceneData->m_LightsUniformBuffer->AddSubData(0, sizeof(glm::vec4), &amountOfLights.x);
 
 		for (int i = 0; i < pointlights.size(); i++)
@@ -73,6 +74,43 @@ namespace Engine
 		m_SceneData->m_LightsUniformBuffer->Unbind();
 
 		
+	}
+
+	void Renderer::BeginScene(std::vector<PointLight> pointlights, std::vector<SpotLight> spotlights)
+	{
+		PROFILE_FUNCTION();
+
+		//Application::Get().GetViewportWindowPointer()->GetFrameBuffer()->Bind();
+		//Engine::RenderCommand::Clear();
+		//Engine::RenderCommand::SetClearColor({ 0.0f, 0.0f, 0.0f, 0.0f });
+		//glStencilMask(0xFF);
+
+		m_SceneData->m_MatricesUniformBuffer->Bind();
+		m_SceneData->m_MatricesUniformBuffer->AddSubData(0, sizeof(glm::mat4), &m_SceneData->m_Camera->GetViewProjectionMatrix()[0][0]);
+		m_SceneData->m_MatricesUniformBuffer->AddSubData(sizeof(glm::mat4), sizeof(glm::vec3), &m_SceneData->m_Camera->GetPosition().x);
+
+		m_SceneData->m_LightsUniformBuffer->Bind();
+
+
+		glm::vec4 amountOfLights;
+		amountOfLights.x = (float)pointlights.size();
+		amountOfLights.y = (float)spotlights.size();
+
+		m_SceneData->m_LightsUniformBuffer->AddSubData(0, sizeof(glm::vec4), &amountOfLights.x);
+
+		for (int i = 0; i < pointlights.size(); i++)
+		{
+			m_SceneData->m_LightsUniformBuffer->AddSubData(sizeof(glm::vec4) + i * sizeof(PointLightData), sizeof(PointLightData), &pointlights[i].GetLightData().Position.x);
+		}
+
+		for (int i = 0; i < spotlights.size(); i++)
+		{
+			m_SceneData->m_LightsUniformBuffer->AddSubData(sizeof(glm::vec4) + MAX_NUMBER_OF_POINTLIGHTS * sizeof(PointLightData) + i * sizeof(SpotLightData), sizeof(SpotLightData), &spotlights[i].GetLightData().Position.x);
+		}
+
+		m_SceneData->m_LightsUniformBuffer->Unbind();
+
+
 	}
 
 	void Renderer::EndScene()

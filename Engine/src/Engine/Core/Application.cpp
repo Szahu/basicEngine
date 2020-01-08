@@ -83,6 +83,11 @@ namespace Engine
 		}
 	}
 
+	float Application::GetRunningTime()
+	{
+		return glfwGetTime();
+	}
+
 	bool Application::OnWindowClose(WindowCloseEvent& e)
 	{
 
