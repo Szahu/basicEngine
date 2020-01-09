@@ -132,11 +132,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Debilopoly\GameLayer.h" />
+    <ClInclude Include="src\Debilopoly\Level.h" />
     <ClInclude Include="src\Sandbox2D.h" />
     <ClInclude Include="src\Sandbox3D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Debilopoly\GameLayer.cpp" />
+    <ClCompile Include="src\Debilopoly\Level.cpp" />
     <ClCompile Include="src\Sandbox.cpp" />
     <ClCompile Include="src\Sandbox2D.cpp" />
     <ClCompile Include="src\Sandbox3D.cpp" />
@@ -147,6 +149,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="assets\Game\shaders\TileShader.glsl" />
     <None Include="assets\Shaders\2D\ScreenQuad.glsl" />
     <None Include="assets\Shaders\SkinnedModel.glsl" />
   </ItemGroup>

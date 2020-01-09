@@ -24,7 +24,7 @@ namespace Engine
 	{
 	public:
 		void OnImGuiRender();
-		const PointLightData& GetLightData() { return m_Data; }
+		PointLightData& GetLightData() { return m_Data; }
 	private:
 		PointLightData m_Data;
 	};

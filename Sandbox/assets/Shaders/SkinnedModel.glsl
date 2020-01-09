@@ -161,7 +161,8 @@ void main()
 	float gamma = 1;
 
 	result.w = 1.0f;
-	color = result;
+	// color = result;
+	color = texture(texture_diffuse1, fs_in.TexCoords);
 }
 
 vec4 CalculatePointLight(PointLight light, CommonData data)

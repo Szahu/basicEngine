@@ -44,6 +44,8 @@ namespace Engine
 
 		static inline RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 
+		static inline void AddShader(const char* name) { m_SceneData->m_ShadersInUse.push_back(name); }
+
 		const static unsigned int MAX_NUMBER_OF_POINTLIGHTS = 5;
 		const static unsigned int MAX_NUMBER_OF_SPOTLIGHTS = 5;
 

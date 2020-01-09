@@ -3,6 +3,8 @@
 #include "Engine.h"
 #include "Engine/Core/Layer.h"
 
+#include "Level.h"
+
 using namespace Engine;
 
 class GameLayer : public Layer
@@ -30,4 +32,6 @@ private:
 	Ref<FrameBuffer> m_FrameBuffer;
 
 	SkinnedMesh testModel;
+	Model testModel1;
+	Tile testTile;
 };
