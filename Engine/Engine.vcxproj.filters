@@ -102,7 +102,13 @@
     <ClInclude Include="src\Engine\Core\Log.h">
       <Filter>src\Engine\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Core\Math3D.h">
+      <Filter>src\Engine\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Core\MouseButtonCodes.h">
+      <Filter>src\Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Core\Random.h">
       <Filter>src\Engine\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Core\Timestep.h">
@@ -217,6 +223,9 @@
       <Filter>src\Engine\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Renderer\Shader.h">
+      <Filter>src\Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Renderer\Shadows.h">
       <Filter>src\Engine\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Renderer\Skybox.h">
@@ -1359,9 +1368,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Core\Random.h" />
-    <ClInclude Include="src\Engine\Renderer\Shadows.h" />
-    <ClInclude Include="src\Engine\Core\Math3D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EGpch.cpp">
@@ -1377,6 +1383,12 @@
       <Filter>src\Engine\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Core\Log.cpp">
+      <Filter>src\Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Core\Math3D.cpp">
+      <Filter>src\Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Core\Random.cpp">
       <Filter>src\Engine\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Entity\Component.cpp">
@@ -1469,6 +1481,9 @@
     <ClCompile Include="src\Engine\Renderer\Shader.cpp">
       <Filter>src\Engine\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Renderer\Shadows.cpp">
+      <Filter>src\Engine\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Engine\Renderer\Skybox.cpp">
       <Filter>src\Engine\Renderer</Filter>
     </ClCompile>
@@ -1502,8 +1517,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\Core\Random.cpp" />
-    <ClCompile Include="src\Engine\Renderer\Shadows.cpp" />
-    <ClCompile Include="src\Engine\Core\Math3D.cpp" />
   </ItemGroup>
 </Project>

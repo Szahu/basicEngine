@@ -59,7 +59,8 @@ project "Engine"
 		"Glad",
 		"imgui",
 		"opengl32.lib", 
-		"assimp-vc142-mtd.lib"
+		"assimp-vc142-mtd.lib",
+		"Winmm.lib"
 	}
 
 	includedirs
@@ -77,7 +78,8 @@ project "Engine"
 
 	libdirs
 	{
-		"%{prj.name}/vendor/assimp/lib"
+		"%{prj.name}/vendor/assimp/lib",
+		"%{prj.name}/vendor/SDL/lib/x64"
 	}
 
 

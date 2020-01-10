@@ -4,6 +4,7 @@
 #include "Engine/Core/Layer.h"
 
 #include "Level.h"
+#include <thread>
 
 using namespace Engine;
 
@@ -34,4 +35,5 @@ private:
 	SkinnedMesh testModel;
 	Model testModel1;
 	Tile testTile;
+	Level testLevel;
 };

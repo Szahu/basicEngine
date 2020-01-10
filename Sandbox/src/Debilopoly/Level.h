@@ -14,7 +14,7 @@ private:
 	};
 
 public:
-	Tile(int index, const char* texturePath, const char* name, int cost);
+	Tile(int index, const char* texturePath, const char* name, int cost, const glm::vec3& positionOffset = glm::vec3(0.0f), const float& rotationOffset = 0.0f);
 	void OnRender(const Ref<Shader>& shader, Model& model);
 
 	inline const int GetIndex() const { return m_Index; }
@@ -36,12 +36,15 @@ public:
 	Level();
 	~Level();
 
-	void Load();
+	bool Load(ShaderLibrary* shaderLib);
 	void OnUpdate(Timestep ts);
 
 
 
 private:
+	bool m_Loaded = false;
 	std::vector<Tile> m_Tiles;
-	
+	Model m_TileModel;
+	Ref<Shader> m_TileShader;
+	ShaderLibrary* m_ShaderLibrary = nullptr;
 };

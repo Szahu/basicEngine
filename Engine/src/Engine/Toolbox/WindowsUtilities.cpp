@@ -30,5 +30,4 @@ const std::string Engine::WindowsUtilities::GetFileOpen()
 
 	// Now simpley display the file name 
 	return ofn.lpstrFile;
-
 }
