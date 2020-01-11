@@ -6,6 +6,8 @@
 #include "Level.h"
 #include <thread>
 
+#include "Engine/Toolbox/Audio.h"
+
 using namespace Engine;
 
 class GameLayer : public Layer
@@ -22,6 +24,24 @@ public:
 	virtual void OnImGuiRender() override;
 	void OnEvent(Event& event) override;
 
+	bool OnKey(KeyPressedEvent& e)
+	{
+		if (e.GetKeyCode() == EG_KEY_ENTER)
+		{
+			if (paused)
+			{
+				sound.Play();
+				paused = !paused;
+			}
+			else
+			{
+				sound.Pause();
+				paused = !paused;
+			}
+			return false;
+		}
+		return false;
+	}
 
 private:
 	unsigned int FPS = 0;
@@ -34,6 +54,8 @@ private:
 
 	SkinnedMesh testModel;
 	Model testModel1;
-	Tile testTile;
 	Level testLevel;
+
+	Sound sound;
+	bool paused = false;
 };

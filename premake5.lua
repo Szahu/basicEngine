@@ -18,6 +18,7 @@ IncludeDir["imgui"] = "Engine/vendor/imgui"
 IncludeDir["glm"] = "Engine/vendor/glm"
 IncludeDir["stb"] = "Engine/vendor/stb_image"
 IncludeDir["assimp"] = "Engine/vendor/assimp/include"
+IncludeDir["sfml"] = "Engine/vendor/SFML/include"
 
 include "Engine/vendor/GLFW"
 include "Engine/vendor/Glad"
@@ -36,6 +37,8 @@ project "Engine"
 
 	pchheader "EGpch.h"
 	pchsource "Engine/src/EGpch.cpp"
+
+	characterset ("Default")
 
 	files
 	{
@@ -60,7 +63,10 @@ project "Engine"
 		"imgui",
 		"opengl32.lib", 
 		"assimp-vc142-mtd.lib",
-		"Winmm.lib"
+		"Winmm.lib",
+		"sfml-system-d.lib",
+		"sfml-main-d.lib",
+		"sfml-audio-d.lib"
 	}
 
 	includedirs
@@ -73,13 +79,15 @@ project "Engine"
 		"%{IncludeDir.imgui}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb}",
-		"%{IncludeDir.assimp}"
+		"%{IncludeDir.assimp}",
+		"%{IncludeDir.sfml}"
 	}
 
 	libdirs
 	{
 		"%{prj.name}/vendor/assimp/lib",
-		"%{prj.name}/vendor/SDL/lib/x64"
+		"%{prj.name}/vendor/SDL/lib/x64",
+		"%{prj.name}/vendor/sfml/lib"
 	}
 
 
@@ -134,7 +142,8 @@ project "Sandbox"
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.imgui}",
 		"%{IncludeDir.stb}",
-		"%{IncludeDir.assimp}"
+		"%{IncludeDir.assimp}",
+		"%{IncludeDir.sfml}"
 	}
 
 	links 

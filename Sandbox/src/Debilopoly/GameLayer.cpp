@@ -7,20 +7,21 @@
 using namespace Engine;
 
 GameLayer::GameLayer()
-	:Layer("GameLayer!"), m_CameraController(65.0f, 1.6f, nullptr),
-	testTile(0, "assets/game/models/tile_placeholder_tex.jpg", "dupako", 1000, glm::vec3(2.0f, 0.0f, 0.0f))
+	:Layer("GameLayer!"), m_CameraController(65.0f, 1.6f, nullptr)
 {
 	EG_CORE_INFO("Game runnin");
-
+	sound.LoadFromFile("assets/sounds/test.wav");
 }
 
-void Play()
-{
-	PlaySound(TEXT("assets/sounds/test.wav"), NULL, SND_ASYNC);
-}
+//void Play()
+//{
+//	//PlaySound(TEXT("assets/sounds/test.wav"), NULL, SND_ASYNC);
+//	//sound.Play();
+//}
 
 void GameLayer::OnAttach()
 {
+
 
 	m_ShaderLibrary.Load("assets/shaders/2D/ScreenQuad.glsl");
 	m_ShaderLibrary.Load("assets/shaders/SkinnedModel.glsl");
@@ -50,11 +51,14 @@ void GameLayer::OnDetach()
 
 void GameLayer::OnUpdate(Engine::Timestep ts)
 {
-	if (Input::IsKeyPressed(EG_KEY_ENTER))
-	{
-		std::thread sound(Play);
-		sound.join();
-	}
+	//if (Input::IsKeyPressed(EG_KEY_ENTER))
+	//{
+	//	EG_ERROR("Dupa");
+	//	if (paused) sound.Play();
+	//	else sound.Pause();
+	//}
+	
+
 
 	Renderer::BeginScene(m_PointLights, m_SpotLights);
 	
@@ -70,10 +74,6 @@ void GameLayer::OnUpdate(Engine::Timestep ts)
 	glm::mat4 transform = glm::scale(glm::mat4(1.0f), glm::vec3(0.02f));
 	testModel.OnRender(m_ShaderLibrary.Get("SkinnedModel"), transform);
 	
-	//testTile.GetTransform().GetPosition().y += 0.0001;
-	//m_ShaderLibrary.Get("TileShader")->Bind();
-	//m_ShaderLibrary.Get("TileShader")->SetInt1("texture_diffuse1", 0);
-	//testTile.OnRender(m_ShaderLibrary.Get("TileShader"), testModel1);
 
 	testLevel.OnUpdate(ts);
 
@@ -97,4 +97,7 @@ void GameLayer::OnEvent(Engine::Event& event)
 {
 	m_FrameBuffer->OnEvent(event);
 	m_CameraController.OnEvent(event);
+	EventDispatcher dispatcher(event);
+	dispatcher.Dispatch<KeyPressedEvent>(EG_BIND_EVENT_FN(GameLayer::OnKey));
 }
+
