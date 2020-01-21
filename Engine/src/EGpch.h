@@ -5,6 +5,7 @@
 #include <utility>
 #include <algorithm>
 #include <functional>
+#include <thread>
 
 #include <array>
 #include <string>
@@ -15,9 +16,6 @@
 
 #include "Engine/Core/Log.h"
 #include "Engine/Debug/Instrumentor.h"
-
-
-
 
 
 #ifdef EG_PLATFORM_WINDOWS

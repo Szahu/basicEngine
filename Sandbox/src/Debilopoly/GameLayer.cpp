@@ -1,23 +1,34 @@
 #include "EGpch.h"
 #include "GameLayer.h"
 
-#include <Mmsystem.h>
-
 
 using namespace Engine;
 
 GameLayer::GameLayer()
-	:Layer("GameLayer!"), m_CameraController(65.0f, 1.6f, nullptr)
+	:Layer("GameLayer!"), m_CameraController(65.0f, 1.6f, nullptr), ServerHint(NULL, 56000), testServer(&ServerHint)
 {
 	EG_CORE_INFO("Game runnin");
 	sound.LoadFromFile("assets/sounds/test.wav");
+	ZeroMemory(&buffer, 1024);
 }
 
-//void Play()
-//{
-//	//PlaySound(TEXT("assets/sounds/test.wav"), NULL, SND_ASYNC);
-//	//sound.Play();
-//}
+void Play(Socket& socket, bool* run)
+{
+
+	while (*run)
+	{
+		SocketData client;
+		char buffer[1024];
+		ZeroMemory(&buffer, 1024);
+		bool gotMessage = false;
+		if(*run) gotMessage = socket.RecvFrom(client, buffer, 1024);
+		
+		if (gotMessage) std::cout << buffer << std::endl;
+		else continue;
+	}
+
+}
+
 
 void GameLayer::OnAttach()
 {
@@ -42,23 +53,23 @@ void GameLayer::OnAttach()
 	m_PointLights.push_back(light);
 
 	testLevel.Load(&m_ShaderLibrary);
+
+	//serverThread = std::thread(&Server::ListenForData, Server());
+	serverThread = std::thread(Play, testServer, &run);
 }
 
 void GameLayer::OnDetach()
 {
-	
+	if (run)
+	{
+		run = false;
+		testServer.Close();
+		serverThread.join();
+	}
 }
 
 void GameLayer::OnUpdate(Engine::Timestep ts)
 {
-	//if (Input::IsKeyPressed(EG_KEY_ENTER))
-	//{
-	//	EG_ERROR("Dupa");
-	//	if (paused) sound.Play();
-	//	else sound.Pause();
-	//}
-	
-
 
 	Renderer::BeginScene(m_PointLights, m_SpotLights);
 	

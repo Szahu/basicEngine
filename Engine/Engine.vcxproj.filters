@@ -1369,6 +1369,7 @@
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Toolbox\Audio.h" />
+    <ClInclude Include="src\Engine\Networking\Socket.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EGpch.cpp">
@@ -1518,5 +1519,6 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Networking\Socket.cpp" />
   </ItemGroup>
 </Project>

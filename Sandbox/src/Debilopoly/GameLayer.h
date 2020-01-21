@@ -4,9 +4,11 @@
 #include "Engine/Core/Layer.h"
 
 #include "Level.h"
-#include <thread>
 
 #include "Engine/Toolbox/Audio.h"
+
+#include "Engine/Networking/Socket.h"
+#include "Engine/Events/ApplicationEvent.h"
 
 using namespace Engine;
 
@@ -43,6 +45,7 @@ public:
 		return false;
 	}
 
+
 private:
 	unsigned int FPS = 0;
 	ShaderLibrary m_ShaderLibrary;
@@ -58,4 +61,11 @@ private:
 
 	Sound sound;
 	bool paused = false;
+
+	SocketData ServerHint;
+	Socket testServer;
+	char buffer[1024];
+	std::thread serverThread;
+
+	bool run = true;
 };
