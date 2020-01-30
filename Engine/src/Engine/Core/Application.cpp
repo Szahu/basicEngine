@@ -85,7 +85,7 @@ namespace Engine
 
 	float Application::GetRunningTime()
 	{
-		return glfwGetTime();
+		return (float)glfwGetTime();
 	}
 
 	bool Application::OnWindowClose(WindowCloseEvent& e)

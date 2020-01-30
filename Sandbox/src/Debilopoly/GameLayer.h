@@ -66,6 +66,12 @@ private:
 	Socket testServer;
 	char buffer[1024];
 	std::thread serverThread;
+	
+	SocketData ClientData;
+	Socket Client;
+	std::thread clientThread;
+	SocketData serverData;
 
-	bool run = true;
+	bool m_ServerRun = true;
+	bool m_ClientRun = true;
 };

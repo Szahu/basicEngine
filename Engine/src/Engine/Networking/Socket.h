@@ -37,6 +37,8 @@ namespace Engine
 
 		void Close() { m_IsClosed = true;  closesocket(m_Socket); }
 
+		static void CleanUp() { WSACleanup(); }
+
 	private:
 		WSADATA data;
 		WORD version;

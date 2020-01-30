@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <functional>
 #include <thread>
+#include <stdlib.h>
 
 #include <array>
 #include <string>

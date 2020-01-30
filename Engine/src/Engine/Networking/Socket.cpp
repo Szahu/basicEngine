@@ -45,8 +45,6 @@ namespace Engine
 	Socket::~Socket()
 	{
 		closesocket(m_Socket);
-
-		WSACleanup();
 	}
 
 	bool Socket::Bind(const SocketData& data)
