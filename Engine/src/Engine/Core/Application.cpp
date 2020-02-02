@@ -78,7 +78,7 @@ namespace Engine
 				layer->OnImGuiRender();
 			m_ImGuiLayer->End();
 
-			m_Window->OnUpdate();
+			m_Window->OnUpdate(timestep);
 			
 		}
 	}

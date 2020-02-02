@@ -28,6 +28,9 @@
     <Filter Include="src\Engine\Imgui">
       <UniqueIdentifier>{DCA388A8-C89C-A7FA-F1CE-8C7FDD268706}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Engine\Networking">
+      <UniqueIdentifier>{E95A7D97-55C7-3892-1EBB-D0EF8AE65AFA}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Engine\Platform">
       <UniqueIdentifier>{A63124B0-1293-01BE-9B00-48700761387D}</UniqueIdentifier>
     </Filter>
@@ -162,6 +165,9 @@
     <ClInclude Include="src\Engine\Imgui\ImGuiLayer.h">
       <Filter>src\Engine\Imgui</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Networking\Socket.h">
+      <Filter>src\Engine\Networking</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Platform\OpenGl\OpenGLBuffer.h">
       <Filter>src\Engine\Platform\OpenGl</Filter>
     </ClInclude>
@@ -239,6 +245,9 @@
     </ClInclude>
     <ClInclude Include="src\Engine\Renderer\VertexArray.h">
       <Filter>src\Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Toolbox\Audio.h">
+      <Filter>src\Engine\Toolbox</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Toolbox\MousePicker.h">
       <Filter>src\Engine\Toolbox</Filter>
@@ -1368,8 +1377,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Toolbox\Audio.h" />
-    <ClInclude Include="src\Engine\Networking\Socket.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EGpch.cpp">
@@ -1422,6 +1429,9 @@
     </ClCompile>
     <ClCompile Include="src\Engine\Imgui\ImGuiLayer.cpp">
       <Filter>src\Engine\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Networking\Socket.cpp">
+      <Filter>src\Engine\Networking</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Platform\OpenGl\OpenGLBuffer.cpp">
       <Filter>src\Engine\Platform\OpenGl</Filter>
@@ -1519,6 +1529,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\Networking\Socket.cpp" />
   </ItemGroup>
 </Project>

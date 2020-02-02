@@ -45,6 +45,8 @@ public:
 		return false;
 	}
 
+	void SendDataToServer();
+	void ListenOnServer();
 
 private:
 	unsigned int FPS = 0;
@@ -74,4 +76,23 @@ private:
 
 	bool m_ServerRun = true;
 	bool m_ClientRun = true;
+
+	unsigned int myId;
+
+	bool m_RunServer = false;
+
+	struct ClientType
+	{
+		ClientType(unsigned int id) { ID = id; }
+		glm::vec3 pos = glm::vec3(0.0f);
+		unsigned int ID;
+	};
+
+	std::vector<ClientType> m_Clients;
+
+	glm::vec3 m_Players[4];
+
+	Transform trShrek;
+
+	Model testModel2;
 };

@@ -32,6 +32,8 @@ namespace Engine
 
 		void OnGuiWindowResize(const glm::vec2& size);
 
+		const glm::vec2& GetRotation() { return m_Rotation; }
+
 	private:
 		ViewportWindow* m_ActiveWindow;
 		float m_AspectRatio;
@@ -40,6 +42,7 @@ namespace Engine
 		float m_ZoomLevel = 1.0f;
 		PerspectiveCamera m_Camera;
 
+		glm::vec2 m_Rotation;
 		glm::vec2 m_Angles = { 3.14f, 0.0f };
 		glm::vec3 m_CameraPosition = { 0.0f, 0.0f, 2.0f };
 		float m_CameraMoveSpeed = 15.0f;

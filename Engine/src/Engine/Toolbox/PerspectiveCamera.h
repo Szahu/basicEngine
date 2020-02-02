@@ -17,7 +17,8 @@ namespace Engine
 		float GetRotation() const { return m_Rotation; }
 		void SetRotation(const float rotation) { m_Rotation = rotation; RecalculateViewMatrix(); }
 
-		inline const glm::vec3& GetDirection() const { return m_Direction; }
+		inline const glm::vec3& const GetDirection()  { return m_Direction; }
+		inline void ChangeDirection(const glm::vec2 dir) { m_HorizontalAngle += dir.x; }
 		inline const glm::vec3& GetVectorRight() const { return m_VectorRight; }
 		inline const glm::vec3& GetVectorUp() const { return m_VectorUp; }
 		inline const void SetAngles(float horizontal, float vertical) { m_HorizontalAngle = horizontal; m_VerticalAngle = vertical; RecalculateViewMatrix(); }

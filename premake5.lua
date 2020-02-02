@@ -62,11 +62,12 @@ project "Engine"
 		"Glad",
 		"imgui",
 		"opengl32.lib", 
-		"assimp-vc142-mtd.lib",
+	--	"assimp-vc142-mtd.lib",
 		"Winmm.lib",
-		"sfml-system-d.lib",
-		"sfml-main-d.lib",
-		"sfml-audio-d.lib"
+		"ws2_32.lib"
+	--	"sfml-system-d.lib",
+	--	"sfml-main-d.lib",
+	--	"sfml-audio-d.lib"
 	}
 
 	includedirs
@@ -85,8 +86,7 @@ project "Engine"
 
 	libdirs
 	{
-		"%{prj.name}/vendor/assimp/lib",
-		"%{prj.name}/vendor/SDL/lib/x64",
+	   --	"%{prj.name}/vendor/assimp/lib",
 		"%{prj.name}/vendor/sfml/lib"
 	}
 
@@ -105,16 +105,42 @@ project "Engine"
 		defines "EG_DEBUG"
 		runtime "Debug"
 		symbols "On"
+		links
+		{
+			"sfml-system-d.lib",
+			"sfml-audio-d.lib",
+			"assimp-vc142-mtd.lib"
+		}
+		libdirs
+		{
+		"%{prj.name}/vendor/assimp/lib/Debug"
+		}
 
 	filter "configurations:Release"
 		defines "EG_RELEASE"
 		runtime "Release"
-		optimize "On"
+		optimize "on"
+		links
+		{
+			"sfml-system.lib",
+			"sfml-audio.lib",
+			"assimp-vc142-mt.lib"
+		}
+		libdirs
+		{
+		"%{prj.name}/vendor/assimp/lib/Release"
+		}
+
 
 	filter "configurations:Dist"
 		defines "EG_DIST"
 		runtime "Release"
-		optimize "On"
+		optimize "Off"
+		links
+		{
+			"sfml-system.lib",
+			"sfml-audio.lib"
+		}
 
 project "Sandbox"
 	location "Sandbox"
@@ -150,6 +176,7 @@ project "Sandbox"
 	{
 		"Engine"
 	}
+
 
 	filter "system:windows"
 		staticruntime "On"

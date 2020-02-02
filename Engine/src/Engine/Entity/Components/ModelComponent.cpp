@@ -21,7 +21,7 @@ namespace Engine
 	{
 		if (model_loaded)
 		{
-			Renderer::Submit(m_Model, GetParentEntity->GetMaterialComponent()->GetMaterial(), GetParentEntity->GetTransformComponent()->GetTransform(), GetParentEntity->IsActive(), "Model");
+			Renderer::Submit(m_Model, GetParentEntity->GetMaterialComponent()->GetMaterial(), GetParentEntity->GetTransformComponent()->GetTransform().Get(), GetParentEntity->IsActive(), "Model");
 		}
 	}
 

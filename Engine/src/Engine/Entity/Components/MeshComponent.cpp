@@ -23,7 +23,7 @@ namespace Engine
 		{
 			Renderer::Submit(GetVertexArray(),
 				GetParentEntity->GetMaterialComponent()->GetMaterial(),
-				GetParentEntity->GetTransformComponent()->GetTransform(),
+				GetParentEntity->GetTransformComponent()->GetTransform().Get(),
 				GetParentEntity->IsActive(),
 				"Material"
 			);

@@ -76,7 +76,7 @@ namespace Engine
 		int bytesIn = recvfrom(m_Socket, buffer, size, 0, (sockaddr*)&socketData, &sizeOfData);
 		if (bytesIn == SOCKET_ERROR)
 		{
-			EG_CORE_ERROR("Error receiveing from client! {0}", WSAGetLastError());
+			EG_CORE_ERROR("Error receiveing a message! {0}", WSAGetLastError());
 			return false;
 		}
 

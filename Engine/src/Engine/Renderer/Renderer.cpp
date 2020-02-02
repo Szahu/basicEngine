@@ -126,7 +126,7 @@ namespace Engine
 		//Engine::RenderCommand::RenderToScreen();
 	}
 
-	void Renderer::Submit(const Engine::Ref<VertexArray>& vertexArray, const Material& material, const Transform& transform, bool drawOutline, const std::string& libKey,  uint32_t instances)
+	void Renderer::Submit(const Engine::Ref<VertexArray>& vertexArray, const Material& material, const glm::mat4& transform, bool drawOutline, const std::string& libKey,  uint32_t instances)
 	{
 		PROFILE_SCOPE("Renderer::Submit(Mesh)");
 
@@ -195,7 +195,7 @@ namespace Engine
 		}
 	}
 
-	void Renderer::Submit(Model& model, const Material& material, const Transform& transform, bool drawOutline, const std::string& libKey)
+	void Renderer::Submit(Model& model, const Material& material, const glm::mat4& transform, bool drawOutline, const std::string& libKey)
 	{
 		PROFILE_SCOPE("Renderer::Submit(Model)");
 

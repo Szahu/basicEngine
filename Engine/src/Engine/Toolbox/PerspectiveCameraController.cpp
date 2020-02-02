@@ -27,11 +27,17 @@ namespace Engine
 
 	void PerspectiveCameraController::OnUpdate(Timestep ts)
 	{
-		//if ((m_ScreenWidth != m_ActiveWindow->GetFrameBuffer()->GetTextureSize().x || m_ScreenHeight != m_ActiveWindow->GetFrameBuffer()->GetTextureSize().y) && m_ActiveWindow != nullptr)
-		//{
-		//	OnGuiWindowResize({m_ActiveWindow->GetFrameBuffer()->GetTextureSize().x, m_ActiveWindow->GetFrameBuffer()->GetTextureSize().y });
-		//}
-
+		if (m_ActiveWindow)
+		{
+			if ((m_ScreenWidth != m_ActiveWindow->GetFrameBuffer()->GetTextureSize().x || m_ScreenHeight != m_ActiveWindow->GetFrameBuffer()->GetTextureSize().y) && m_ActiveWindow != nullptr)
+			{
+				OnGuiWindowResize({ m_ActiveWindow->GetFrameBuffer()->GetTextureSize().x, m_ActiveWindow->GetFrameBuffer()->GetTextureSize().y });
+			}
+		}
+		
+		float horizontalAngle = m_Camera.GetAngles().x;
+		float verticalAngle = m_Camera.GetAngles().y;
+		m_Rotation = glm::vec2(horizontalAngle * 180.0f / M_PI, verticalAngle * 180.0f / M_PI);
 
 		if (m_ActiveWindow)
 		{

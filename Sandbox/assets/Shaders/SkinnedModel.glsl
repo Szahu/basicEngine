@@ -44,7 +44,7 @@ void main()
     BoneTransform += gBones[BoneIDs[2]] * Weights[2];
     BoneTransform += gBones[BoneIDs[3]] * Weights[3];
 
-    vec4 PosL = BoneTransform * vec4(a_Positions, 1.0) * u_Transform;
+    vec4 PosL = u_Transform * BoneTransform * vec4(a_Positions, 1.0);
     gl_Position = u_ViewProjectionMatrix * PosL;
     vs_out.Normal = vec3(PosL * vec4(a_Normals, 1.0) * u_Transform);
     vs_out.FragPos = vec3(PosL * vec4(a_Positions, 1.0) * u_Transform);

@@ -7,6 +7,8 @@
 
 #include "Engine/Renderer/FrameBuffer.h"
 
+#include "Engine/Core/Timestep.h"
+
 namespace Engine
 {
 
@@ -33,7 +35,7 @@ namespace Engine
 
 		virtual ~Window() = default;
 
-		virtual void OnUpdate() = 0;
+		virtual void OnUpdate(Timestep ts) = 0;
 
 		virtual unsigned int GetWidth() const = 0;
 		virtual unsigned int GetHeight() const = 0;

@@ -15,7 +15,7 @@ Tile::Tile(int index, const char* texturePath, const char* name, int cost, const
 void Tile::OnRender(const Ref<Shader>& shader, Model& model)
 {
 	m_Texture->Bind();
-	shader->SetMat4("u_Transform", m_Transform);
+	shader->SetMat4("u_Transform", m_Transform.Get());
 	model.GetMeshes()[0].GetVertexArray()->Bind();
 	RenderCommand::DrawIndexed(model.GetMeshes()[0].GetVertexArray());
 	model.GetMeshes()[0].GetVertexArray()->Unbind();

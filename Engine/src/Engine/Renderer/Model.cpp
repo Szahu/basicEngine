@@ -686,9 +686,13 @@ namespace Engine
 			{
 				BoneIndex = m_BoneMapping[BoneName];
 			}
+			
 
 			for (unsigned int j = 0; j < pMesh->mBones[i]->mNumWeights; j++)
 			{
+		
+				//EG_CORE_ASSERT(&pMesh->mBones[i]->mWeights[j].mVertexId, "SHIIT"); //THIS IS A NULLPTR
+				
 				unsigned int VertexID = m_Entries[MeshIndex].BaseVertex + pMesh->mBones[i]->mWeights[j].mVertexId;
 				float Weight = pMesh->mBones[i]->mWeights[j].mWeight;
 				Bones[VertexID].AddBoneData(BoneIndex, Weight);

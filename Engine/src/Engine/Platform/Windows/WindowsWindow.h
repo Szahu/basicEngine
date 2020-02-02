@@ -5,6 +5,7 @@
 
 #include <GLFW/glfw3.h>
 
+
 namespace Engine
 {
 
@@ -14,7 +15,7 @@ namespace Engine
 		WindowsWindow(const WindowProps& props);
 		virtual ~WindowsWindow();
 
-		void OnUpdate() override;
+		void OnUpdate(Timestep ts) override;
 
 		inline unsigned int GetWidth() const override { return m_Data.Width; }
 		inline unsigned int GetHeight() const override { return m_Data.Height; }
@@ -45,6 +46,8 @@ namespace Engine
 		};
 
 		WindowData m_Data;
+
+		unsigned int m_FrameCounter = 0;
 	};
 
 }

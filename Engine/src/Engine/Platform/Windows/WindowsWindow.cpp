@@ -162,8 +162,15 @@ namespace Engine
 		}
 	}
 
-	void WindowsWindow::OnUpdate()
+	void WindowsWindow::OnUpdate(Timestep ts)
 	{
+		if (m_FrameCounter == 100)
+		{
+			glfwSetWindowTitle(m_Window, (m_Data.Title + "   FPS: " + std::to_string(int(1.0f / ts))).c_str());
+			m_FrameCounter = 0;
+		}
+		m_FrameCounter++;
+
 		glfwPollEvents();
 		m_Context->SwapBuffers();
 	}

@@ -11,27 +11,23 @@ namespace Engine
 	{
 	
 	public:
-		
-		inline void Translate(const glm::vec3& vec) { m_Position += vec; }
-		inline void Scale(const glm::vec3& vec) { m_Scale += vec; }
-		inline void Rotate(const glm::vec3& vec) { m_Rotation += vec; }
+		Transform() {}
+		Transform(glm::mat4 matrix) { Full_Transform = matrix; }
+
+		void Translate(const glm::vec3& vec);
+		void Scale(const glm::vec3& vec);
+		void Rotate(const glm::vec3& vec);
 
 		inline glm::vec3& GetPosition() { return m_Position; }
 		inline glm::vec3& GetRotation() { return m_Rotation; }
 		inline glm::vec3& GetScale() { return m_Scale; }
 
-		const glm::mat4& Get() const 
-		{
-			glm::mat4 position = glm::translate(glm::mat4(1.0f), m_Position);
-			glm::mat4 RotationX = glm::rotate(glm::mat4(1.0f), glm::radians(m_Rotation.x), { 1, 0, 0 });
-			glm::mat4 RotationY = glm::rotate(RotationX, glm::radians(m_Rotation.y), { 0, 1, 0 });
-			glm::mat4 RotationFULL = glm::rotate(RotationY, glm::radians(m_Rotation.z), { 0, 0, 1 });
-			glm::mat4 scale = glm::scale(glm::mat4(1.0f), m_Scale);
+		const glm::mat4& Get();
 
-			return  position * RotationFULL * scale;
-		}
+		void LookAt(const glm::vec3& dir);
 
-		operator glm::mat4() const { return Get(); }
+		//operator const glm::mat4() const { return Get(); }
+		//operator glm::mat4() { return Get(); }
 
 	private:
 		glm::mat4 Full_Transform = glm::mat4(1.0f);

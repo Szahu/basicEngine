@@ -29,8 +29,8 @@ namespace Engine
 		static void BeginScene(std::vector<PointLight> pointlights, std::vector<SpotLight> spotlights);
 		static void EndScene();
 
-		static void Submit(const Engine::Ref<VertexArray>& vertexArray, const Material& material, const Transform& transform, bool drawOutline, const std::string& libKey,  uint32_t instances = 0);
-		static void Submit(Model& model, const Material& material, const Transform& transform, bool drawOutline, const std::string& libKey);
+		static void Submit(const Engine::Ref<VertexArray>& vertexArray, const Material& material, const glm::mat4& transform, bool drawOutline, const std::string& libKey,  uint32_t instances = 0);
+		static void Submit(Model& model, const Material& material, const const glm::mat4& transform, bool drawOutline, const std::string& libKey);
 
 		static void ProcessMaterial(const Material& material, const Ref<Shader>& shader);
 
