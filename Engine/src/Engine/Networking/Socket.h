@@ -37,6 +37,8 @@ namespace Engine
 
 		void Close() { m_IsClosed = true;  closesocket(m_Socket); }
 
+		bool isClosed() { return m_IsClosed; }
+
 		static void CleanUp() { WSACleanup(); }
 
 	private:

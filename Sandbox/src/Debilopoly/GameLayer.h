@@ -10,6 +10,8 @@
 #include "Engine/Networking/Socket.h"
 #include "Engine/Events/ApplicationEvent.h"
 
+#include "Server.h"
+
 using namespace Engine;
 
 class GameLayer : public Layer
@@ -46,7 +48,7 @@ public:
 	}
 
 	void SendDataToServer();
-	void ListenOnServer();
+	//void ListenOnServer();
 
 private:
 	unsigned int FPS = 0;
@@ -64,32 +66,34 @@ private:
 	Sound sound;
 	bool paused = false;
 
-	SocketData ServerHint;
-	Socket testServer;
-	char buffer[1024];
-	std::thread serverThread;
-	
+	Server testServer;
+
+	//SocketData ServerHint;
+	//Socket testServer;
+	//char buffer[1024];
+	//std::thread serverThread;
+	//
 	SocketData ClientData;
 	Socket Client;
 	std::thread clientThread;
 	SocketData serverData;
-
-	bool m_ServerRun = true;
+	//
+	//bool m_ServerRun = true;
 	bool m_ClientRun = true;
-
+	//
 	unsigned int myId;
-
-	bool m_RunServer = false;
-
-	struct ClientType
-	{
-		ClientType(unsigned int id) { ID = id; }
-		glm::vec3 pos = glm::vec3(0.0f);
-		unsigned int ID;
-	};
-
-	std::vector<ClientType> m_Clients;
-
+	//
+	//bool m_RunServer = false;
+	//
+	//struct ClientType
+	//{
+	//	ClientType(unsigned int id) { ID = id; }
+	//	glm::vec3 pos = glm::vec3(0.0f);
+	//	unsigned int ID;
+	//};
+	//
+	//std::vector<ClientType> m_Clients;
+	//
 	glm::vec3 m_Players[4];
 
 	Transform trShrek;
