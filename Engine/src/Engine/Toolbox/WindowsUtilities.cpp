@@ -9,7 +9,7 @@
 const std::string Engine::WindowsUtilities::GetFileOpen()
 {
 	OPENFILENAME ofn;
-	char szFile[100];
+	char szFile[256];
 
 	HINSTANCE hInstance;
 	HINSTANCE hPrevInstance; 

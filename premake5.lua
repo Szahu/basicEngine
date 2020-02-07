@@ -62,12 +62,8 @@ project "Engine"
 		"Glad",
 		"imgui",
 		"opengl32.lib", 
-	--	"assimp-vc142-mtd.lib",
 		"Winmm.lib",
 		"ws2_32.lib"
-	--	"sfml-system-d.lib",
-	--	"sfml-main-d.lib",
-	--	"sfml-audio-d.lib"
 	}
 
 	includedirs
@@ -81,13 +77,14 @@ project "Engine"
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb}",
 		"%{IncludeDir.assimp}",
-		"%{IncludeDir.sfml}"
+		"%{IncludeDir.sfml}",
+		"%{prj.name}/vendor/rp3d/src",
 	}
 
 	libdirs
 	{
-	   --	"%{prj.name}/vendor/assimp/lib",
-		"%{prj.name}/vendor/sfml/lib"
+		"%{prj.name}/vendor/sfml/lib",
+		"%{prj.name}/vendor/rp3d"
 	}
 
 
@@ -109,7 +106,8 @@ project "Engine"
 		{
 			"sfml-system-d.lib",
 			"sfml-audio-d.lib",
-			"assimp-vc142-mtd.lib"
+			"assimp-vc142-mtd.lib",
+			"reactphysics3d-d.lib"
 		}
 		libdirs
 		{
@@ -124,7 +122,8 @@ project "Engine"
 		{
 			"sfml-system.lib",
 			"sfml-audio.lib",
-			"assimp-vc142-mt.lib"
+			"assimp-vc142-mt.lib",
+			"reactphysics3d-r.lib"
 		}
 		libdirs
 		{

@@ -46,7 +46,7 @@ namespace Engine
 
 	void TransformComponent::OnUpdate()
 	{
-		EG_CORE_ERROR("TRANSFORM COMPONENT DOESNT HAVE TO BE UPDATED!");
+		//EG_CORE_ERROR("TRANSFORM COMPONENT DOESNT HAVE TO BE UPDATED!");
 	}
 
 

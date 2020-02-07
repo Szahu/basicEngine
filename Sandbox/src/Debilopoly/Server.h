@@ -37,8 +37,8 @@ namespace Engine
 		bool m_Closed = true;
 		std::thread m_Thread;
 
-		const unsigned int m_BufferSize;
-		char m_Buffer[m_BufferSize];
+		const unsigned int m_BufferSize = 64;
+		char m_Buffer[64];
 
 	};
 }

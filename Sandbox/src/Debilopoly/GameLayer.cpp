@@ -5,7 +5,7 @@
 using namespace Engine;
 
 GameLayer::GameLayer()
-	:Layer("GameLayer!"), m_CameraController(65.0f, 1.6f, nullptr), serverData("192.168.100.15", 56000)
+	:Layer("GameLayer!"), m_CameraController(65.0f, 1.6f, nullptr),testClient(&m_Players[0])
 {
 	char yn = 'k'; // change to something else than y or n 
 	while (yn != 'y' && yn != 'n')
@@ -14,7 +14,7 @@ GameLayer::GameLayer()
 		ZeroMemory(&yn, 1);
 		std::cin >> yn;
 	}
-
+	
 
 	if (yn == 'y') testServer.Start();
 
@@ -24,50 +24,6 @@ GameLayer::GameLayer()
 	trShrek.Rotate({ 0.0f, 180.0f, 0.0f });
 }
 
-void GameLayer::SendDataToServer()
-{
-	char buf[64];
-	ZeroMemory(&buf, 64);
-	buf[0] = '0';
-	Client.SendTo(serverData, buf, 1);
-	Client.RecvFrom(serverData, &buf[1], 1);
-	myId = int(buf[1]);
-
-	//EG_TRACE(myId);
-
-	while (m_ClientRun)
-	{
-		float time1 = Application::GetRunningTime();
-
-		ZeroMemory(&buf, 64);
-
-		buf[0] = '1';
-		buf[1] = char(myId);
-		glm::vec3 pos = m_CameraController.GetCamera().GetPosition();
-		
-		memcpy(&buf[2], &float(pos.x), 12);
-	
-		Client.SendTo(serverData, buf, sizeof(buf));
-
-		ZeroMemory(&buf, 64);
-
-		Client.RecvFrom(serverData, buf, sizeof(buf));
-
-		int amountOfPositions = buf[0];
-
-		ZeroMemory(&pos, 12);
-
-		memcpy(&pos, &buf[1], 12);
-
-		m_Players[0] = pos;
-
-		float time2 = Application::GetRunningTime();
-		float timeElapsed = time2 - time1;
-
-		float waittime = 100.0f - timeElapsed;
-		if ((waittime) > 0) std::this_thread::sleep_for(std::chrono::milliseconds(int(waittime)));
-	}
-}
 
 void GameLayer::OnAttach()
 {
@@ -93,20 +49,15 @@ void GameLayer::OnAttach()
 
 	testLevel.Load(&m_ShaderLibrary);
 
-	clientThread = std::thread(&GameLayer::SendDataToServer, this);
+	//clientThread = std::thread(&GameLayer::SendDataToServer, this);
+	testClient.Start(&dataToSend);
 }
 
 void GameLayer::OnDetach()
 {
 
 	testServer.Close();
-
-	if (m_ClientRun)
-	{
-		m_ClientRun = false;
-		Client.Close();
-		clientThread.join();
-	}
+	testClient.Close();
 
 	Socket::CleanUp();
 }
@@ -128,11 +79,17 @@ void GameLayer::OnUpdate(Engine::Timestep ts)
 	//EG_TRACE(angle);
 	//Render here:
 	trShrek.GetScale() = glm::vec3(0.009f);
-	trShrek.GetPosition() = m_Players[0];
-	trShrek.GetPosition().y -= 1.0f;	
-	trShrek.GetRotation().y = m_CameraController.GetRotation().x;
 
-	testModel.OnRender(m_ShaderLibrary.Get("SkinnedModel"), trShrek.Get());
+	dataToSend = glm::vec4(m_CameraController.GetCamera().GetPosition().x, m_CameraController.GetCamera().GetPosition().y, m_CameraController.GetCamera().GetPosition().z, m_CameraController.GetRotation().x);
+
+	for (int i = 0; i < 2; i++)
+	{
+		trShrek.GetPosition() = glm::vec3(m_Players[i]);
+		trShrek.GetRotation().y = m_Players[i].w;
+		testModel.OnRender(m_ShaderLibrary.Get("SkinnedModel"), trShrek.Get());
+	}
+
+	
 
 	
 	//EG_INFO(acos(0.5f) * 180/M_PI);

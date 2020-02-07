@@ -66,7 +66,11 @@ void Engine::Server::RunServer()
 				{
 					unsigned int Client_id = (int)m_Buffer[1];
 					glm::vec3 Client_Pos;
-					memcpy(&Client_Pos, &m_Buffer[2], 12);
+					glm::vec4 Data;
+					memcpy(&Data, &m_Buffer[2], 16);
+
+					Client_Pos = { Data.x, Data.y, Data.z };
+					float Client_Rotation = Data.w;
 
 					//EG_INFO("{0}, {1}, {2}", Client_Pos.x, Client_Pos.y, Client_Pos.z);
 
@@ -77,20 +81,21 @@ void Engine::Server::RunServer()
 					EG_ASSERT(Client_id <= m_Clients.size(); , "Client Id not in clients vector!");
 
 					m_Clients[Client_id].m_Position = Client_Pos;
+					m_Clients[Client_id].m_Rotation = Client_Rotation;
 
 					ZeroMemory(&m_Buffer, Buffer_size);
 
-					//Layout to send: [how many positions]NUMBER_OF_POSITIONS * 12[pos]
+					//Layout to send: [how many positions]NUMBER_OF_POSITIONS * 12[pos]+[rotation]
 
-					m_Buffer[0] = char(m_Clients.size() - 1);
+					m_Buffer[0] = char(m_Clients.size() - 1); // how many datas will be sent
 
 					unsigned int index = 1;
 
 					for (int i = 0; i < m_Clients.size(); i++)
 					{
 						if (i == Client_id) continue;
-						memcpy(&m_Buffer[index], &m_Clients[i].m_Position, 12);
-						index += 12;
+						memcpy(&m_Buffer[index], &m_Clients[i].m_Position.x, 16);
+						index += 16;
 					}
 
 					m_Server.SendTo(client, m_Buffer, Buffer_size);

@@ -11,6 +11,9 @@
 #include "Engine/Events/ApplicationEvent.h"
 
 #include "Server.h"
+#include "Client.h"
+
+#include "rp3d/src/reactphysics3d.h"
 
 using namespace Engine;
 
@@ -47,9 +50,6 @@ public:
 		return false;
 	}
 
-	void SendDataToServer();
-	//void ListenOnServer();
-
 private:
 	unsigned int FPS = 0;
 	ShaderLibrary m_ShaderLibrary;
@@ -67,36 +67,13 @@ private:
 	bool paused = false;
 
 	Server testServer;
+	Client testClient;
+	glm::vec4 m_Players[4];
 
-	//SocketData ServerHint;
-	//Socket testServer;
-	//char buffer[1024];
-	//std::thread serverThread;
-	//
-	SocketData ClientData;
-	Socket Client;
-	std::thread clientThread;
-	SocketData serverData;
-	//
-	//bool m_ServerRun = true;
-	bool m_ClientRun = true;
-	//
-	unsigned int myId;
-	//
-	//bool m_RunServer = false;
-	//
-	//struct ClientType
-	//{
-	//	ClientType(unsigned int id) { ID = id; }
-	//	glm::vec3 pos = glm::vec3(0.0f);
-	//	unsigned int ID;
-	//};
-	//
-	//std::vector<ClientType> m_Clients;
-	//
-	glm::vec3 m_Players[4];
-
+	glm::vec4 dataToSend;
 	Transform trShrek;
 
 	Model testModel2;
+
+	rp3d::SphereShape* testShape;
 };
