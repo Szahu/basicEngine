@@ -38,7 +38,7 @@ namespace Engine
 		const void SetViewportWindowPointer(ViewportWindow* window) { viewport_window = window; }
 		ViewportWindow* GetViewportWindowPointer() { EG_CORE_ASSERT(viewport_window, "Viewport window pointer not set / not set correctly"); return viewport_window; }
 
-		static float GetRunningTime();
+		static double GetRunningTime();
 
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);

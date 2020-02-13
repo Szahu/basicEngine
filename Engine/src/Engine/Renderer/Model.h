@@ -36,6 +36,8 @@ namespace Engine
 
 		void Draw(const Engine::Ref<Engine::Shader>& shader);
 		
+		const glm::vec3& GetCenterOfGeometry() const { return m_CenterOfGeometry; }
+
 	private:
 		void processNode(aiNode* node, const aiScene* scene);
 		Mesh processMesh(aiMesh* mesh, const aiScene* scene);
@@ -47,6 +49,7 @@ namespace Engine
 		vector<std::string> m_DiffuseTexturesPaths;
 		vector<Mesh> meshes;
 		string directory;
+		string m_Path;
 
 		unsigned int m_MaxTextures = 5;
 			
@@ -56,6 +59,17 @@ namespace Engine
 		unsigned int NormsUsed = 0;
 
 		Ref<VertexArray> m_FinalVA;
+
+		bool m_Initialised = false;
+
+		glm::vec3 m_MostUpVertex; // y
+		glm::vec3 m_MostDownVertex; // y
+		glm::vec3 m_MostRightVertex; // x
+		glm::vec3 m_MostLeftVertex; // x
+		glm::vec3 m_MostFarVertex; // z
+		glm::vec3 m_MostCloseVertex; // z
+
+		glm::vec3 m_CenterOfGeometry;
 	};
 
 
@@ -166,7 +180,7 @@ namespace Engine
 		const aiScene* m_pScene;
 		Assimp::Importer m_Importer;
 
-		Ref<Texture2D> testTexture;
+		Model m_Model;
 	};
 
 

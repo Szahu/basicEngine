@@ -4,7 +4,7 @@
 #include "Engine/Core/Log.h"
 
 Engine::Client::Client(glm::vec4* playerDataStorage)
-	:m_ServerData("192.168.100.15", 56000), m_PlayersDataPtr(playerDataStorage)
+	:m_ServerData(IP, 56000), m_PlayersDataPtr(playerDataStorage)
 {
 
 }
@@ -65,25 +65,17 @@ void Engine::Client::RunConnection()
 		m_Socket.RecvFrom(m_ServerData, buf, sizeof(buf));
 
 		int amountOfPositions = (int)buf[0];
-		//EG_TRACE(amountOfPositions);
-
-		//ZeroMemory(&pos, 12);
 
 		for (int i = 0; i < amountOfPositions; i++)
 		{
-			//glm::vec4 data;
 			memcpy(m_PlayersDataPtr + i, &buf[i * 16 + 1], 16);
-			//m_PlayersData[i] = data;
 		}
 
-		//memcpy(&pos, &buf[1], 12);
-		//
-		//m_Players[0] = pos;
 
 		float time2 = Application::GetRunningTime();
 		float timeElapsed = time2 - time1;
 
-		float waittime = 100.0f - timeElapsed;
+		float waittime =  1.0f / (float)m_Tick * 1000.0f - timeElapsed;
 		if ((waittime) > 0) std::this_thread::sleep_for(std::chrono::milliseconds(int(waittime)));
 	}
 }

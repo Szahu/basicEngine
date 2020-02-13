@@ -6,7 +6,7 @@
 namespace Engine
 {
 	void Transform::Translate(const glm::vec3& vec) { m_Position += vec; }
-	void Transform::Scale(const glm::vec3& vec) { m_Scale *= vec; }
+	void Transform::Scale(const glm::vec3& vec) { m_Scale *= vec; m_CenterOfGeometry *= vec; }
 	void Transform::Rotate(const glm::vec3& vec)
 	{
 		m_Rotation += vec;
@@ -19,7 +19,7 @@ namespace Engine
 	const glm::mat4& Transform::Get()
 	{
 
-		glm::mat4 position = glm::translate(glm::mat4(1.0f), m_Position);
+		glm::mat4 position = glm::translate(glm::mat4(1.0f), m_Position + m_CenterOfGeometry * glm::vec3(-1.0f));
 		glm::mat4 RotationX = glm::rotate(glm::mat4(1.0f), glm::radians(m_Rotation.x), { 1, 0, 0 });
 		glm::mat4 RotationY = glm::rotate(glm::mat4(1.0f), glm::radians(m_Rotation.y), { 0, 1, 0 });
 		glm::mat4 RotationZ = glm::rotate(glm::mat4(1.0f), glm::radians(m_Rotation.z), { 0, 0, 1 });

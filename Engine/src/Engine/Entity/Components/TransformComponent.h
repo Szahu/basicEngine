@@ -18,9 +18,20 @@ namespace Engine
 		void Scale(const glm::vec3& vec);
 		void Rotate(const glm::vec3& vec);
 
-		inline glm::vec3& GetPosition() { return m_Position; }
-		inline glm::vec3& GetRotation() { return m_Rotation; }
-		inline glm::vec3& GetScale() { return m_Scale; }
+		inline glm::vec3& GetPosition()  { return m_Position; }
+		inline glm::vec3& GetRotation()  { return m_Rotation; }
+		inline glm::vec3& GetScale()  { return m_Scale; }
+
+		inline void SetPosition(const glm::vec3& pos) { m_Position = pos; }
+		inline void SetRotation(const glm::vec3& rot) { m_Rotation = rot; }
+		inline void SetScale(const glm::vec3& scale) { m_Scale = scale;  m_CenterOfGeometry = m_CenterOfGeometryOriginal * scale; }
+	
+		inline void SetPosition(float pos) { m_Position = glm::vec3(pos); }
+		inline void SetRotation(float rot) { m_Rotation = glm::vec3(rot); }
+		inline void SetScale(float scale) { m_Scale = glm::vec3(scale); m_CenterOfGeometry = m_CenterOfGeometryOriginal * scale; }
+
+		inline void SetCenterOfGeometry(const glm::vec3& pos) { m_CenterOfGeometry = pos;  m_CenterOfGeometryOriginal = pos; }
+		inline glm::vec3& GetCenterOfGeometry() { return m_CenterOfGeometry; }
 
 		const glm::mat4& Get();
 
@@ -34,6 +45,8 @@ namespace Engine
 		glm::vec3 m_Position = glm::vec3(0.0f);
 		glm::vec3 m_Rotation = glm::vec3(0.0f);
 		glm::vec3 m_Scale = glm::vec3(1.0f);
+		glm::vec3 m_CenterOfGeometry = glm::vec3(0.0f);
+		glm::vec3 m_CenterOfGeometryOriginal = glm::vec3(0.0f);
 	};
 
 	class TransformComponent : public Component

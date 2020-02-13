@@ -16,6 +16,8 @@ namespace Engine
 
 	bool Model::loadModel(string path)
 	{
+		m_Path = path;
+
 		// read file via ASSIMP
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
@@ -31,7 +33,11 @@ namespace Engine
 		// process ASSIMP's root node recursively
 		processNode(scene->mRootNode, scene);
 
-		SetupVertexArray();
+		m_CenterOfGeometry = { (m_MostLeftVertex.x + m_MostRightVertex.x) / 2.0f, (m_MostDownVertex.y + m_MostUpVertex.y) / 2.0f, (m_MostCloseVertex.z + m_MostFarVertex.z) / 2.0f };
+		///////////////////////////////////
+
+
+		//SetupVertexArray();
 		return true;
 	}
 
@@ -46,11 +52,13 @@ namespace Engine
 			meshes.push_back(processMesh(mesh, scene));
 		}
 
+
 		// after we've processed all of the meshes (if any) we then recursively process each of the children nodes
 		for (unsigned int i = 0; i < node->mNumChildren; i++)
 		{
 			processNode(node->mChildren[i], scene);
 		}
+
 	}
 
 	Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
@@ -71,6 +79,25 @@ namespace Engine
 			vector.y = mesh->mVertices[i].y;
 			vector.z = mesh->mVertices[i].z;
 			vertex.Position = vector;
+
+			if (!m_Initialised)
+			{
+				m_MostUpVertex = vertex.Position;
+				m_MostDownVertex = vertex.Position;
+				m_MostRightVertex = vertex.Position;
+				m_MostLeftVertex = vertex.Position;
+				m_MostFarVertex = vertex.Position;
+				m_MostCloseVertex = vertex.Position;
+				m_Initialised = true;
+			}
+
+			if (vertex.Position.x > m_MostRightVertex.x) m_MostRightVertex = vertex.Position;
+			if (vertex.Position.x < m_MostLeftVertex.x) m_MostLeftVertex = vertex.Position;
+			if (vertex.Position.y > m_MostUpVertex.y) m_MostUpVertex = vertex.Position;
+			if (vertex.Position.y < m_MostDownVertex.y) m_MostDownVertex = vertex.Position;
+			if (vertex.Position.z < m_MostFarVertex.z) m_MostFarVertex = vertex.Position;
+			if (vertex.Position.z >	m_MostCloseVertex.z) m_MostCloseVertex = vertex.Position;
+
 			// normals
 			vector.x = mesh->mNormals[i].x;
 			vector.y = mesh->mNormals[i].y;
@@ -100,6 +127,9 @@ namespace Engine
 			vertex.Bitangent = vector;
 			vertices.push_back(vertex);
 		}
+
+		
+
 		// now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
 		for (unsigned int i = 0; i < mesh->mNumFaces; i++)
 		{
@@ -264,8 +294,6 @@ namespace Engine
 		ZERO_MEM(m_Buffers);
 		m_NumBones = 0;
 		m_pScene = NULL;
-
-		testTexture = Texture2D::Create("assets/Textures/test.png");
 	}
 
 	//SkinnedMesh::~SkinnedMesh()
@@ -319,21 +347,20 @@ namespace Engine
 		for (unsigned int i = 0; i < m_Entries.size(); i++)
 		{
 			const unsigned int MaterialIndex = m_Entries[i].MaterialIndex;
-
+		
 			EG_CORE_ASSERT(MaterialIndex < m_Textures.size(), "Material Index out of m_Textures range!");
-
+		
 			shader->SetInt1("texture_diffuse1", 0);
 			shader->SetMat4("u_Transform", transform);
 			m_Textures[MaterialIndex]->Bind(0);
-
+		
 			glDrawElementsBaseVertex(GL_TRIANGLES,
 				m_Entries[i].NumIndices,
 				GL_UNSIGNED_INT,
 				(void*)(sizeof(unsigned int) * m_Entries[i].BaseIndex),
 				m_Entries[i].BaseVertex);
-
-			//glDrawElements(GL_TRIANGLES, m_Entries[i].NumIndices, GL_UNSIGNED_INT, nullptr);
 		}
+
 
 		// Make sure the VAO is not changed from the outside    
 		glBindVertexArray(0);

@@ -18,6 +18,10 @@ namespace Engine
 		void Start(glm::vec4* dataToSend);
 		void Close();
 
+		void SetTick(unsigned int tick) { m_Tick = tick; }
+
+		const unsigned int GetTick() const { return m_Tick; }
+
 	private:
 		void RunConnection();
 
@@ -29,6 +33,8 @@ namespace Engine
 		SocketData m_ServerData;
 		bool m_Closed = true;
 		glm::vec4* m_DataToSend = nullptr;
+
+		unsigned int m_Tick = 32;
 	};
 
 }

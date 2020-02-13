@@ -27,9 +27,9 @@ public:
 	virtual void OnAttach() override;
 	virtual void OnDetach() override;
 
-	void OnUpdate(Timestep ts) override;
+	virtual void OnUpdate(Timestep ts) override;
 	virtual void OnImGuiRender() override;
-	void OnEvent(Event& event) override;
+	virtual void OnEvent(Event& event) override;
 
 	bool OnKey(KeyPressedEvent& e)
 	{
@@ -70,10 +70,28 @@ private:
 	Client testClient;
 	glm::vec4 m_Players[4];
 
-	glm::vec4 dataToSend;
+	glm::vec4 dataToSend = glm::vec4(0.0f);
 	Transform trShrek;
 
 	Model testModel2;
 
-	rp3d::SphereShape* testShape;
+	rp3d::Vector3 gravity = rp3d::Vector3(0.0f, -9.81f, 0.0f);
+	rp3d::DynamicsWorld world;
+	long double previousFrameTime = 0.0;
+	long double accumulator = 0.0;
+	rp3d::Vector3 initPosition = rp3d::Vector3(0.0f, 5.0f, 0.0f);
+	rp3d::Quaternion initOrientation = rp3d::Quaternion::identity();
+	rp3d::Transform transform = rp3d::Transform(initPosition, initOrientation);
+	rp3d::RigidBody* body;
+	rp3d::Transform prevTransform;
+	rp3d::CapsuleShape shape;
+	rp3d::ProxyShape* proxShape;
+
+	rp3d::RigidBody* floor;
+	rp3d::BoxShape floor_shape;
+	rp3d::ProxyShape* floor_proxShape;
+
+	Model plane;
+
+	bool show = true;
 };

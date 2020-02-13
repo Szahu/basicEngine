@@ -4,6 +4,8 @@
 #include <winsock.h>
 //#pragma comment(lib, "ws2_32.lib")
 
+#define IP "192.168.100.14"
+
 namespace Engine
 {
 	class SocketData
