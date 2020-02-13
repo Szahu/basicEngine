@@ -137,6 +137,7 @@
     <ClInclude Include="src\Debilopoly\Server.h" />
     <ClInclude Include="src\Sandbox2D.h" />
     <ClInclude Include="src\Sandbox3D.h" />
+    <ClInclude Include="src\TestLayer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Debilopoly\Client.cpp" />
@@ -146,6 +147,7 @@
     <ClCompile Include="src\Sandbox.cpp" />
     <ClCompile Include="src\Sandbox2D.cpp" />
     <ClCompile Include="src\Sandbox3D.cpp" />
+    <ClCompile Include="src\TestLayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">

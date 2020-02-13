@@ -7,6 +7,7 @@
 #include "Sandbox2D.h"
 #include "Sandbox3D.h"
 #include "Debilopoly/GameLayer.h"
+#include "TestLayer.h"
 
 class Sandbox : public Engine::Application
 {
@@ -15,7 +16,8 @@ public:
 	{
 		//PushLayer(new Sandbox2D());
 		//PushLayer(new Sandbox3D());
-		PushLayer(new GameLayer());
+		//PushLayer(new GameLayer());
+		PushLayer(new TestLayer());
 	}
 	~Sandbox()
 	{

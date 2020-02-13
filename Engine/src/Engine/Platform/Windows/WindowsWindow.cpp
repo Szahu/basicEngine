@@ -7,6 +7,7 @@
 
 #include "Engine/Platform/OpenGl/OpenGLContext.h"
 
+#include "Engine/Core/Input.h"
 
 namespace Engine
 {
@@ -26,6 +27,7 @@ namespace Engine
 	WindowsWindow::WindowsWindow(const WindowProps& props)
 	{
 		Init(props);
+		Input::Init();
 	}
 
 	WindowsWindow::~WindowsWindow()

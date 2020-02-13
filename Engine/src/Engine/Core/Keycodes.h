@@ -123,3 +123,29 @@
 #define EG_KEY_RIGHT_ALT          346
 #define EG_KEY_RIGHT_SUPER        347
 #define EG_KEY_MENU               348
+
+
+
+// GAMEPAD CODES
+#define EG_GAMEPAD_BUTTON_A               0
+#define EG_GAMEPAD_BUTTON_B               1
+#define EG_GAMEPAD_BUTTON_X               2
+#define EG_GAMEPAD_BUTTON_Y               3
+#define EG_GAMEPAD_BUTTON_LEFT_BUMPER     4
+#define EG_GAMEPAD_BUTTON_RIGHT_BUMPER    5
+#define EG_GAMEPAD_BUTTON_BACK            6
+#define EG_GAMEPAD_BUTTON_START           7
+#define EG_GAMEPAD_BUTTON_GUIDE           8
+#define EG_GAMEPAD_BUTTON_LEFT_THUMB      9
+#define EG_GAMEPAD_BUTTON_RIGHT_THUMB     10
+#define EG_GAMEPAD_BUTTON_DPAD_UP         11
+#define EG_GAMEPAD_BUTTON_DPAD_RIGHT      12
+#define EG_GAMEPAD_BUTTON_DPAD_DOWN       13
+#define EG_GAMEPAD_BUTTON_DPAD_LEFT       14
+
+#define EG_GAMEPAD_AXIS_LEFT_X            0
+#define EG_GAMEPAD_AXIS_LEFT_Y            1
+#define EG_GAMEPAD_AXIS_RIGHT_X           2
+#define EG_GAMEPAD_AXIS_RIGHT_Y           3
+#define EG_GAMEPAD_AXIS_LEFT_TRIGGER      4
+#define EG_GAMEPAD_AXIS_RIGHT_TRIGGER     5
