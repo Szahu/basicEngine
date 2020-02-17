@@ -3,6 +3,8 @@
 #include "glm/glm.hpp"
 #include "Engine/Events/MouseEvent.h"
 
+#include "Engine/Entity/Components/TransformComponent.h"
+
 namespace Engine
 {
 	class PerspectiveCamera
@@ -31,6 +33,10 @@ namespace Engine
 		const glm::mat4 GetViewMatrix() const { return m_ViewMatrix; }
 		const glm::mat4 GetViewProjectionMatrix() const { return m_ViewProjectionMatrix; }
 
+		void SetTransform(Transform& trans);
+
+		void SetDirection(const glm::vec3& dir) { m_Direction = dir; }
+
 	private:
 		void RecalculateViewMatrix();
 
@@ -38,6 +44,8 @@ namespace Engine
 		glm::mat4 m_ProjectionMatrix;
 		glm::mat4 m_ViewMatrix;
 		glm::mat4 m_ViewProjectionMatrix;
+
+		Transform m_Transform;
 
 		glm::vec3 m_Position = glm::vec3(0.0f, 0.0f, 0.0f);
 		glm::vec3 m_Direction = { 0.0f, 0.0f, 0.0f };

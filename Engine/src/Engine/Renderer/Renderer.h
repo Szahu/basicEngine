@@ -31,6 +31,7 @@ namespace Engine
 
 		static void Submit(const Engine::Ref<VertexArray>& vertexArray, const Material& material, const glm::mat4& transform, bool drawOutline, const std::string& libKey,  uint32_t instances = 0);
 		static void Submit(Model& model, const Material& material, const const glm::mat4& transform, bool drawOutline, const std::string& libKey);
+		static void Submit(Model& model, const const glm::mat4& transform, const char* libkey = "Model");
 
 		static void ProcessMaterial(const Material& material, const Ref<Shader>& shader);
 

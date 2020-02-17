@@ -8,6 +8,7 @@
 #include "Sandbox3D.h"
 #include "Debilopoly/GameLayer.h"
 #include "TestLayer.h"
+#include "PolyTown/MainLayer.h"
 
 class Sandbox : public Engine::Application
 {
@@ -17,7 +18,8 @@ public:
 		//PushLayer(new Sandbox2D());
 		//PushLayer(new Sandbox3D());
 		//PushLayer(new GameLayer());
-		PushLayer(new TestLayer());
+		//PushLayer(new TestLayer());
+		PushLayer(new MainLayer());
 	}
 	~Sandbox()
 	{

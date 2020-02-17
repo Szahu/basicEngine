@@ -11,8 +11,8 @@ namespace Engine
 
 	struct Material
 	{
-		glm::vec3 m_Ambient = glm::vec3(0.3f);
-		glm::vec3 m_Diffuse = glm::vec3(0.4f);
+		glm::vec3 m_Ambient = glm::vec3(1.0f);
+		glm::vec3 m_Diffuse = glm::vec3(1.0f);
 		glm::vec3 m_Specular = glm::vec3(0.4f);
 		float m_Shininess = 0.2f;
 		float OverExposure = 1.0f;

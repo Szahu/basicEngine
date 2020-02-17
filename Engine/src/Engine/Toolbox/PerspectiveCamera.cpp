@@ -23,6 +23,12 @@ namespace Engine
 	}
 
 
+	void PerspectiveCamera::SetTransform(Transform& trans)
+	{
+		m_ViewMatrix = glm::lookAt(trans.GetPosition(), trans.GetPosition() + glm::vec3(0.0f, 0.0f, 1.0f), { 0.0f, 1.0f, 0.0f });
+		m_ViewProjectionMatrix = m_ProjectionMatrix * m_ViewMatrix;
+	}
+
 	void PerspectiveCamera::RecalculateViewMatrix()
 	{
 

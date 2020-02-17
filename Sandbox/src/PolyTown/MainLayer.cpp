@@ -1,30 +1,28 @@
-#include "TestLayer.h"
+#include "MainLayer.h"
 
-#include "GLFW/glfw3.h"
 #include "Engine/Core/Keycodes.h"
 
-#include <glm/gtc/type_ptr.hpp>
 
 using namespace Engine;
 
 #define rp3dToGlm(vec) glm::vec3(vec.x, vec.y, vec.z)
 
-TestLayer::TestLayer()
-:m_CameraController(65.0f, 1.6f, nullptr), m_World(gravity), m_Camera(65.0f, 1.6f)
+MainLayer::MainLayer()
+	: m_Camera(65.0f, 1.6f)
 {
 }
 
-void TestLayer::OnAttach()
+void MainLayer::OnAttach()
 {
 	m_ShaderLibrary.Load("assets/shaders/2D/ScreenQuad.glsl");
 	m_ShaderLibrary.Load("assets/shaders/SkinnedModel.glsl");
 	m_ShaderLibrary.Load("assets/shaders/Model.glsl");
 
 	m_Terrain.loadModel("assets/models/mountain/terrain.fbx");
-	m_Plane.loadModel("assets/models/plane/plane.obj");
+	model.loadModel("assets/models/plane/plane.obj");
 
-	//Renderer::InitScene(&m_CameraController.GetCamera(), &m_ShaderLibrary);
-	Renderer::InitScene(&m_Camera, &m_ShaderLibrary);
+	Renderer::InitScene(&m_CameraController.GetCamera(), &m_ShaderLibrary);
+	//Renderer::InitScene(&m_Camera, &m_ShaderLibrary);
 
 	m_FrameBuffer = FrameBuffer::Create({ 1280, 720 });
 	m_ScreenQuad = BasicMeshes::ScreenQuad();
@@ -38,43 +36,20 @@ void TestLayer::OnAttach()
 	tr_Terrain.Translate({ 0.0f, -20.0f, 0.0f });
 	tr_Terrain.Scale(glm::vec3(20.0f));
 
-	m_CameraTransform.Rotate({ 0.0f, 180.0f, 0.0f });
 }
 
-void TestLayer::OnDetach()
+void MainLayer::OnDetach()
 {
 }
 
-void TestLayer::OnUpdate(Engine::Timestep ts)
+void MainLayer::OnUpdate(Engine::Timestep ts)
 {
-	//rp3d stuff
-	const float timeStep = 1.0 / 60.0;
-	long double currentFrameTime = Application::GetRunningTime();
-	long double deltaTime = currentFrameTime - previousFrameTime;
-	previousFrameTime = currentFrameTime;
-	accumulator += deltaTime;
-
-	//Updating physics simulation
-	while (accumulator >= timeStep)
-	{
-		m_World.update(timeStep);
-
-		accumulator -= timeStep;
-	}
-
-	rp3d::decimal factor = accumulator / timeStep;
-	//rp3d::Transform interpolatedTransform = rp3d::Transform::interpolateTransforms(prevTransform, currTransform, factor);
-
-
-	float matrix[16];
+	m_CameraController.OnUpdate(ts);
+	m_CameraController.SetTargetPosition(pos);
 
 	Renderer::BeginScene(m_PointLights, m_SpotLights);
 
-
-
-	//m_CameraController.OnUpdate(ts);
-	//m_Camera.SetTransform(m_CameraTransform);
-	m_Camera.SetAngles(M_PI / 180.0f * m_Angles.x , M_PI / 180.0f * m_Angles.y);
+	m_Camera.SetAngles(M_PI / 180.0f * m_Angles.x, M_PI / 180.0f * m_Angles.y);
 
 
 	m_FrameBuffer->Bind();
@@ -85,8 +60,8 @@ void TestLayer::OnUpdate(Engine::Timestep ts)
 
 
 	Renderer::Submit(m_Terrain, tr_Terrain.Get());
-	
-	Renderer::Submit(m_Plane, glm::make_mat4(matrix));
+	Transform tr; tr.SetPosition(pos);
+	Renderer::Submit(model, tr.Get());
 
 	/// Rendering Ends here!
 	m_FrameBuffer->Unbind();
@@ -103,11 +78,14 @@ void TestLayer::OnUpdate(Engine::Timestep ts)
 	RenderCommand::DrawIndexed(m_ScreenQuad);
 }
 
-void TestLayer::OnImGuiRender()
+void MainLayer::OnImGuiRender()
 {
 	ImGui::SliderFloat2("Angles: ", &m_Angles.x, 0.0f, 360.0f);
+	m_CameraController.OnImGuiRender();
+	ImGui::SliderFloat3("Pos: ", &pos.x, -20.0f, 20.0f);
 }
 
-void TestLayer::OnEvent(Engine::Event& event)
+void MainLayer::OnEvent(Engine::Event& event)
 {
+	m_CameraController.OnEvent(event);
 }

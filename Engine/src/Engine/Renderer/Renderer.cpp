@@ -236,6 +236,31 @@ namespace Engine
 		glActiveTexture(GL_TEXTURE0);
 	}
 
+	void Renderer::Submit(Model& model, const const glm::mat4& transform, const char* libkey)
+	{
+		glDisable(GL_STENCIL_TEST);
+
+		Ref<Shader> shader = m_SceneData->m_ShaderLibrary->Get(libkey);
+
+		if (m_SceneData->m_ForcedShader != nullptr) shader = m_SceneData->m_ForcedShader;
+
+		shader->Bind();
+		shader->SetMat4("u_Transform", transform);
+		shader->SetFloat3("u_FlatColor", glm::vec3(0.0f));
+
+		ProcessMaterial(Material(), shader);
+
+		for (int i = 0; i < model.GetMeshes().size(); i++)
+		{
+			model.GetMeshes()[i].ProccessMaterial(m_SceneData->m_ShaderLibrary->Get(libkey));
+			model.GetMeshes()[i].GetVertexArray()->Bind();
+			RenderCommand::DrawIndexed(model.GetMeshes()[i].GetVertexArray());
+			model.GetMeshes()[i].GetVertexArray()->Unbind();
+		}
+
+		glActiveTexture(GL_TEXTURE0);
+	}
+
 	void Renderer::ProcessMaterial(const Material& material, const Ref<Shader>& shader)
 	{
 		PROFILE_FUNCTION();

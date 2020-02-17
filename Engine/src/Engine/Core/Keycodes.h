@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Engine/Core/MouseButtonCodes.h"
+
 // From glfw.h
 #define EG_KEY_SPACE              32
 #define EG_KEY_APOSTROPHE         39  /* ' */
