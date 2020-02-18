@@ -178,6 +178,7 @@ namespace Engine
 		if (!drawOutline)
 		{
 			glDisable(GL_STENCIL_TEST);
+			glDisable(GL_CULL_FACE);
 
 			vertexArray->Bind();
 			RenderCommand::DrawIndexed(vertexArray);
@@ -246,9 +247,8 @@ namespace Engine
 
 		shader->Bind();
 		shader->SetMat4("u_Transform", transform);
-		shader->SetFloat3("u_FlatColor", glm::vec3(0.0f));
 
-		ProcessMaterial(Material(), shader);
+		//ProcessMaterial(Material(), shader);
 
 		for (int i = 0; i < model.GetMeshes().size(); i++)
 		{

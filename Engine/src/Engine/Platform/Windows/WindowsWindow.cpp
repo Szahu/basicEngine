@@ -26,6 +26,7 @@ namespace Engine
 
 	WindowsWindow::WindowsWindow(const WindowProps& props)
 	{
+		m_FrameTimer.SetDuration(1.0);
 		Init(props);
 		Input::Init();
 	}
@@ -166,12 +167,11 @@ namespace Engine
 
 	void WindowsWindow::OnUpdate(Timestep ts)
 	{
-		if (m_FrameCounter == 100)
+		if (m_FrameTimer.IsFinished())
 		{
 			glfwSetWindowTitle(m_Window, (m_Data.Title + "   FPS: " + std::to_string(int(1.0f / ts))).c_str());
-			m_FrameCounter = 0;
+			m_FrameTimer.ReStart();
 		}
-		m_FrameCounter++;
 
 		glfwPollEvents();
 		m_Context->SwapBuffers();

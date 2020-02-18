@@ -64,7 +64,7 @@ namespace Engine
 
 	Ref<Shader> ShaderLibrary::Get(const std::string& name)
 	{
-		EG_CORE_ASSERT(Exists(name), "Shader not found!");
+		EG_CORE_ASSERT(Exists(name), "Shader not found! " + name);
 		return m_Shaders[name];
 	}
 

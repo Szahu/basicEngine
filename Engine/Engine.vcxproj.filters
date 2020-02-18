@@ -1377,6 +1377,9 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Toolbox\Random.h" />
+    <ClInclude Include="src\Engine\Toolbox\PerlinNoise.hpp" />
+    <ClInclude Include="src\Engine\Toolbox\PerlinNoise.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EGpch.cpp">
@@ -1398,6 +1401,9 @@
       <Filter>src\Engine\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Core\Random.cpp">
+      <Filter>src\Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Core\Timestep.cpp">
       <Filter>src\Engine\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Entity\Component.cpp">
@@ -1529,5 +1535,7 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Toolbox\Random.cpp" />
+    <ClCompile Include="src\Engine\Toolbox\PerlinNoise.cpp" />
   </ItemGroup>
 </Project>

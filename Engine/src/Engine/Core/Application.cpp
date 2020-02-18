@@ -4,6 +4,7 @@
 #include "imgui.h"
 
 #include <GLFW/glfw3.h>
+#include "Engine/Toolbox/Random.h"
 
 namespace Engine
 {
@@ -21,6 +22,8 @@ namespace Engine
 		m_Window = Engine::Scope<Window>(Window::Create());
 		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 		m_Window->SetVSync(false);
+
+		Random::Init();
 
 		Renderer::Init();
 		//Renderer2D::Init();

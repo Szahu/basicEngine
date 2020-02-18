@@ -57,6 +57,19 @@ namespace Engine
 		return { (float)xpos,  (float)ypos };
 	}
 
+	glm::vec2 WindowsInput::GetMousePosDeltaImpl()
+	{
+		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
+		double xpos, ypos;
+
+		glfwGetCursorPos(window, &xpos, &ypos);
+
+		glm::vec2 pos = {float(xpos - prevx), float(ypos - prevy)};
+
+		glfwGetCursorPos(window, &prevx, &prevy);
+		return pos;
+	}
+
 	bool WindowsInput::IsGamepadButtonPressedImpl(int keycode)
 	{
 		GLFWgamepadstate m_GamepadState;

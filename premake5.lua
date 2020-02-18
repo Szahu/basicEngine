@@ -20,6 +20,7 @@ IncludeDir["stb"] = "Engine/vendor/stb_image"
 IncludeDir["assimp"] = "Engine/vendor/assimp/include"
 IncludeDir["sfml"] = "Engine/vendor/SFML/include"
 
+
 include "Engine/vendor/GLFW"
 include "Engine/vendor/Glad"
 include "Engine/vendor/imgui"
@@ -78,7 +79,7 @@ project "Engine"
 		"%{IncludeDir.stb}",
 		"%{IncludeDir.assimp}",
 		"%{IncludeDir.sfml}",
-		"%{prj.name}/vendor/rp3d/src",
+		"%{prj.name}/vendor/rp3d/src"
 	}
 
 	libdirs

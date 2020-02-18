@@ -154,13 +154,13 @@ namespace Engine
 		float shininess;
 
 		material->Get(AI_MATKEY_COLOR_DIFFUSE, color);
-		m_Material.m_Diffuse = glm::vec3(color.r, color.b, color.g);
+		m_Material.m_Diffuse = glm::vec3(color.r, color.g, color.b);
 
 		material->Get(AI_MATKEY_COLOR_AMBIENT, color);
-		m_Material.m_Ambient = glm::vec3(color.r, color.b, color.g);
+		m_Material.m_Ambient = glm::vec3(color.r, color.g, color.b);
 
 		material->Get(AI_MATKEY_COLOR_SPECULAR, color);
-		m_Material.m_Specular = glm::vec3(color.r, color.b, color.g);
+		m_Material.m_Specular = glm::vec3(color.r, color.g, color.b);
 
 		material->Get(AI_MATKEY_SHININESS, shininess);
 		m_Material.m_Shininess = shininess;

@@ -18,6 +18,7 @@ namespace Engine
 		inline static float GetMouseX() { return s_Instance->GetMouseXImpl(); }
 		inline static float GetMouseY() { return s_Instance->GetMouseYImpl();  }
 		inline static glm::vec2 GetMousePos() { return s_Instance->GetMousePosImpl(); }
+		inline static glm::vec2 GetMousePosDelta() { return s_Instance->GetMousePosDeltaImpl(); }
 		inline static bool IsGamepadButtonPressed(int keycode) { return s_Instance->IsGamepadButtonPressedImpl(keycode); }
 		inline static glm::vec2 GetGamepadLeftStickPos() { return s_Instance->GetGamepadLeftStickPosImpl(); }
 		inline static glm::vec2 GetGamepadRightStickPos() { return s_Instance->GetGamepadRightStickPosImpl(); }
@@ -28,6 +29,7 @@ namespace Engine
 		virtual float GetMouseXImpl() = 0;
 		virtual float GetMouseYImpl() = 0;
 		virtual glm::vec2 GetMousePosImpl() = 0;
+		virtual glm::vec2 GetMousePosDeltaImpl() = 0;
 		virtual bool IsGamepadButtonPressedImpl(int keycode) = 0;
 		virtual void InitImpl() = 0;
 		virtual glm::vec2 GetGamepadLeftStickPosImpl() = 0;

@@ -198,8 +198,11 @@
     <ClInclude Include="src\Engine\Toolbox\MousePicker.h" />
     <ClInclude Include="src\Engine\Toolbox\OrtographicCamera.h" />
     <ClInclude Include="src\Engine\Toolbox\OrtographicCameraController.h" />
+    <ClInclude Include="src\Engine\Toolbox\PerlinNoise.h" />
+    <ClInclude Include="src\Engine\Toolbox\PerlinNoise.hpp" />
     <ClInclude Include="src\Engine\Toolbox\PerspectiveCamera.h" />
     <ClInclude Include="src\Engine\Toolbox\PerspectiveCameraController.h" />
+    <ClInclude Include="src\Engine\Toolbox\Random.h" />
     <ClInclude Include="src\Engine\Toolbox\Samples\BasicMeshes.h" />
     <ClInclude Include="src\Engine\Toolbox\WindowsUtilities.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
@@ -582,6 +585,7 @@
     <ClCompile Include="src\Engine\Core\Log.cpp" />
     <ClCompile Include="src\Engine\Core\Math3D.cpp" />
     <ClCompile Include="src\Engine\Core\Random.cpp" />
+    <ClCompile Include="src\Engine\Core\Timestep.cpp" />
     <ClCompile Include="src\Engine\Entity\Component.cpp" />
     <ClCompile Include="src\Engine\Entity\Components\MaterialComponent.cpp" />
     <ClCompile Include="src\Engine\Entity\Components\MeshComponent.cpp" />
@@ -620,8 +624,10 @@
     <ClCompile Include="src\Engine\Toolbox\MousePicker.cpp" />
     <ClCompile Include="src\Engine\Toolbox\OrtographicCamera.cpp" />
     <ClCompile Include="src\Engine\Toolbox\OrtographicCameraController.cpp" />
+    <ClCompile Include="src\Engine\Toolbox\PerlinNoise.cpp" />
     <ClCompile Include="src\Engine\Toolbox\PerspectiveCamera.cpp" />
     <ClCompile Include="src\Engine\Toolbox\PerspectiveCameraController.cpp" />
+    <ClCompile Include="src\Engine\Toolbox\Random.cpp" />
     <ClCompile Include="src\Engine\Toolbox\Samples\BasicMeshes.cpp" />
     <ClCompile Include="src\Engine\Toolbox\WindowsUtilities.cpp" />
     <ClCompile Include="vendor\stb_image\stb_image.cpp" />

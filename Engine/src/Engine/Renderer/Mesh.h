@@ -39,6 +39,8 @@ namespace Engine
 		vector<std::pair<unsigned int, unsigned int>> normBinds; // index, slot
 		Material m_material;
 
+		Material& GetMaterial() { return m_material; }
+
 		Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Ref<Texture2D>> textures);
 		Mesh(vector<Vertex> vertices, vector<unsigned int> indices, Material material);
 

@@ -2,6 +2,7 @@
 
 #include "Engine/Core/Window.h"
 #include "Engine/Renderer/GraphicsContext.h"
+#include "Engine/Core/Timestep.h"
 
 #include <GLFW/glfw3.h>
 
@@ -47,7 +48,7 @@ namespace Engine
 
 		WindowData m_Data;
 
-		unsigned int m_FrameCounter = 0;
+		Timer m_FrameTimer;
 	};
 
 }

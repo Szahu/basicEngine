@@ -21,6 +21,7 @@ namespace Engine
 		const uint32_t GetDepthMap() { return depthMap; }
 		const uint32_t GetMapSlot() { return m_DepthMapUniform; }
 
+		void SetSize(float ortho) { Ortho = ortho; }
 		void SendDataToShader(const Ref<Shader> shader);
 
 	private:

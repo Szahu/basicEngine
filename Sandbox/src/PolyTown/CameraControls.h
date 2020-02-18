@@ -8,6 +8,7 @@
 #include "Engine/Core/KeyCodes.h"
 #include "Engine/Core/Core.h"
 #include "Engine/Events/MouseEvent.h"
+#include "Engine/Events/ApplicationEvent.h"
 
 #include "glm/glm/gtx/compatibility.hpp"
 
@@ -37,9 +38,11 @@ private:
 	float CalculateHorizontalDistance();
 	float CalculateVerticalDistance();
 	void CalculateAngleAroundTarget(Timestep ts);
-	void CalculatePitchAngle();
+	void CalculatePitchAngle(Timestep ts);
 	void CalculateCameraPosition(float horizDistance, float vertDistance);
 	bool OnMouseScroll(MouseScrolledEvent& e);
+	bool OnWindowResize(WindowResizeEvent& e);
+	void CalculateInputMovement(Timestep ts);
 
 private:
 	glm::vec3 m_Position = { 0.0f, 0.0f, 0.0f };
@@ -50,10 +53,18 @@ private:
 	glm::vec3 m_TargetPosition = { 0.0f, 0.0f, 0.0f };
 	float m_DistanceFromTarget = 20.0f;
 
-	float m_HorizontalSensivity = 5.0f;
+	float m_HorizontalSensivity = 4.0f;
+	float m_VerticalSensivity = 4.0f;
+	float m_MovingSensivity = 4.0f;
 
-	float original = 0.0f;
-	float m_Increase = 0.0f;
+	glm::vec2 m_DeltaMouse = { 0.0f, 0.0f };
+
+	float originalYaw = 0.0f;
+	float originalPitch = 0.0f;
+	float m_IncreaseYaw = 0.0f;
+	float m_IncreasePitch = 0.0f;
+
+	glm::vec2 prevMousePos = {0.0f, 0.0f};
 
 	Engine::PerspectiveCamera m_Camera;
 };
