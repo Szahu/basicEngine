@@ -7,6 +7,9 @@
 #include "glm/gtx/normal.hpp"
 #include "glm/gtx/compatibility.hpp"
 
+#include "rp3d/src/reactphysics3d.h"
+
+
 // heights.length = m_GridSize + 1;	\
 
 using std::vector;	
@@ -165,6 +168,8 @@ public:
 		m_TerrainColors[4] = glm::vec3(200.0f / 255.0f, 200.0f / 255.0f, 210.0f / 255.0f);
 	}
 
+	void SetSpread(float spread) { m_Spread = spread; }
+
 	vector<glm::vec3> GenerateColors(vector<float>& heights, float amplitude)
 	{
 		vector<glm::vec3> colors;
@@ -182,6 +187,22 @@ public:
 		return colors;
 	}
 
+	vector<glm::vec3> GenerateColors(vector<float>& heights, float lowestHeight, float highestHeight)
+	{
+		vector<glm::vec3> colors;
+		int count = sqrt(heights.size());
+		for (int y = 0; y < count; y++)
+		{
+			for (int x = 0; x < count; x++)
+			{
+				float height = heights[y * count + x];
+				colors.push_back(CalculateColor(height, lowestHeight, highestHeight));
+			}
+		}
+
+		return colors;
+	}
+
 private:
 	glm::vec3 CalculateColor(float height, float amplitude)
 	{
@@ -191,6 +212,17 @@ private:
 		int firstBiome = (int)glm::floor(value / part);
 		float blend = (value - (firstBiome * part)) / part;
 		return glm::lerp(m_TerrainColors[firstBiome], m_TerrainColors[firstBiome + 1], blend);
+	}
+
+	glm::vec3 CalculateColor(float height, float lowestPoint, float highestPoint)
+	{
+		float range = highestPoint - lowestPoint;
+		float slot = range / _countof(m_TerrainColors);
+		float relHeight = height - lowestPoint;
+		int index = int(relHeight / slot);
+		EG_CORE_ASSERT((index) < _countof(m_TerrainColors));
+		if (height == highestPoint) index = _countof(m_TerrainColors) - 1;
+		return m_TerrainColors[index];
 	}
 
 private:
@@ -309,8 +341,9 @@ public:
 
 	const Engine::Ref<Engine::VertexArray>& GetVertexArray() {return m_VertexArray;}
 
-	void RegenerateTerrain(double frequency = 0, int octaves = 0, int amplitude = 0);
+	void RegenerateTerrain(double frequency = 0, int octaves = 0, int amplitude = 0, float spread = 0.45f);
 	
+	rp3d::HeightFieldShape* GetCollisionShape() const { return m_CollisionShape; }
 
 private:
 
@@ -337,4 +370,6 @@ private:
 	HeightsGenerator m_HeightGen;
 	ColorGenerator m_ColorGen;
 	vector<unsigned int> m_IndexData;
+	vector<float> m_Heights;
+	rp3d::HeightFieldShape* m_CollisionShape;
 };

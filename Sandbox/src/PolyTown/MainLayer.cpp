@@ -9,7 +9,7 @@ using namespace Engine;
 #define rp3dToGlm(vec) glm::vec3(vec.x, vec.y, vec.z)
 
 MainLayer::MainLayer()
-	: m_Camera(65.0f, 1.6f), testTerrain(testNoise, 100)
+	: testTerrain(testNoise, 100)
 {
 }
 
@@ -24,11 +24,9 @@ void MainLayer::OnAttach()
 	m_ShaderLibrary.Load("assets/shaders/simpleDepthShader.glsl");
 	m_ShaderLibrary.Load("assets/shaders/TerrainShader.glsl");
 
-	m_Terrain.loadModel("assets/models/mountain/terrain.fbx");
 	model.loadModel("assets/models/well.obj");
 
 	Renderer::InitScene(&m_CameraController.GetCamera(), &m_ShaderLibrary);
-	//Renderer::InitScene(&m_Camera, &m_ShaderLibrary);
 
 	m_FrameBuffer = FrameBuffer::Create({ 1280, 720 });
 	m_ScreenQuad = BasicMeshes::ScreenQuad();
@@ -40,13 +38,6 @@ void MainLayer::OnAttach()
 	SpotLight light1;
 	light1.GetLightData().Position = glm::vec4(0.0f, 1.0f, 3.0f, 1.0f);
 	m_SpotLights.push_back(light1);
-
-	tr_Terrain.SetCenterOfGeometry(m_Terrain.GetCenterOfGeometry());
-	tr_Terrain.Rotate({ -90.0f, 0.0f, 0.0f });
-	tr_Terrain.Translate({ 0.0f, -20.0f, 0.0f });
-	tr_Terrain.Scale(glm::vec3(20.0f));
-	
-	m_Shadows.SetSize(30);
 
 	testNoise.reseed(12345);
 
@@ -70,11 +61,11 @@ void MainLayer::OnDraw(Timestep ts)
 void MainLayer::OnUpdate(Engine::Timestep ts)
 {
 	m_CameraController.OnUpdate(ts);
-	//m_CameraController.SetTargetPosition(pos);
+	m_Picker.OnUpdate(m_CameraController.GetCamera().GetProjectionMatrix(), m_CameraController.GetCamera().GetViewMatrix());
+
+	EG_TRACE_VEC3(m_Picker.GetCurrentRay());
 
 	Renderer::BeginScene(m_PointLights, m_SpotLights);
-
-	m_Camera.SetAngles(M_PI / 180.0f * m_Angles.x, M_PI / 180.0f * m_Angles.y);
 
 
 	m_FrameBuffer->Bind();
@@ -111,11 +102,12 @@ void MainLayer::OnImGuiRender()
 	//m_PointLights[0].OnImGuiRender();
 	m_SpotLights[0].OnImGuiRender();
 	ImGui::InputDouble("freq", &freq);
+	ImGui::InputFloat("spread", &spread);
 	ImGui::InputInt("amp", &amp);
 	ImGui::InputInt("oct", &octave);
 	if (ImGui::Button("ReGenerate!"))
 	{
-		testTerrain.RegenerateTerrain(freq, octave, amp);
+		testTerrain.RegenerateTerrain(freq, octave, amp, spread);
 	}
 }
 

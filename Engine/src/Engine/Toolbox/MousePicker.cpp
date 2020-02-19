@@ -8,22 +8,34 @@
 
 namespace Engine
 {
-	glm::vec2 MousePicker::GetNormalizedCoords(float x, float y)
-	{
-		float mousex = (2.0f * x) / window->GetFrameBuffer()->GetTextureSize().x - 1.0f;
-		float mousey = -(2.0f * y) / window->GetFrameBuffer()->GetTextureSize().y - 1.0f;
-
-		return { mousex, mousey };
-	}
-
-	
-
 	MousePicker::MousePicker(ViewportWindow* window) :
 		m_CurrentRay{ 0.0f, 0.0f, 0.0f },
 		window(window)
 	{
 
 	}
+
+	glm::vec2 MousePicker::GetNormalizedCoords(float x, float y)
+	{
+		if (window)
+		{
+			float mousex = (2.0f * x) / window->GetFrameBuffer()->GetTextureSize().x - 1.0f;
+			float mousey = -(2.0f * y) / window->GetFrameBuffer()->GetTextureSize().y - 1.0f;
+
+			return { mousex, mousey };
+		}
+		else
+		{
+			float mousex = (2.0f * x) / Application::Get().GetWindow().GetWidth() - 1.0f;
+			float mousey = -(2.0f * y) / Application::Get().GetWindow().GetHeight() - 1.0f;
+
+			return { mousex, mousey };
+		}
+	}
+
+	
+
+	
 
 	void MousePicker::OnUpdate(const glm::mat4& proj, const glm::mat4& view)
 	{
@@ -34,11 +46,30 @@ namespace Engine
 
 	glm::vec3 MousePicker::CalculateMouseRay()
 	{
-		float mouse_x = window->GetRelativeMousePos().x;
-		float mouse_y = window->GetRelativeMousePos().y;
+		float mouse_x;
+		float mouse_y;
 
-		float width = window->GetFrameBuffer()->GetTextureSize().x;
-		float height = window->GetFrameBuffer()->GetTextureSize().y;
+		float width;
+		float height;
+
+		if (window)
+		{
+			mouse_x = window->GetRelativeMousePos().x;
+			mouse_y = window->GetRelativeMousePos().y;
+
+			width = window->GetFrameBuffer()->GetTextureSize().x;
+			height = window->GetFrameBuffer()->GetTextureSize().y;
+		}
+		else
+		{
+			mouse_x = Input::GetMousePos().x;
+			mouse_y = Input::GetMousePos().y;
+
+			width = Application::Get().GetWindow().GetWidth();
+			height = Application::Get().GetWindow().GetHeight();
+
+		}
+		
 
 		float x = (2.0f * mouse_x) / width - 1.0f;
 		float y = 1.0f - (2.0f * mouse_y) / height;

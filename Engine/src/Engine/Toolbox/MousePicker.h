@@ -9,7 +9,7 @@ namespace Engine
 	class MousePicker
 	{
 	public:
-		MousePicker(ViewportWindow* window);
+		MousePicker(ViewportWindow* window = nullptr);
 
 		inline const glm::vec3& GetCurrentRay() const { return m_CurrentRay; }
 

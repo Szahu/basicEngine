@@ -11,6 +11,9 @@
 
 #include "Engine/Toolbox/PerlinNoise.hpp"
 
+#include "rp3d/src/reactphysics3d.h"
+
+
 using namespace Engine;
 
 class MainLayer : public Engine::Layer
@@ -31,23 +34,16 @@ public:
 
 private:
 	ShaderLibrary m_ShaderLibrary;
-	PerspectiveCamera m_Camera;
 	std::vector<PointLight> m_PointLights;
 	std::vector<SpotLight> m_SpotLights;
 	Ref<VertexArray> m_ScreenQuad;
 	Ref<FrameBuffer> m_FrameBuffer;
+	MousePicker m_Picker;
 private:
 	CameraController m_CameraController;
 
-	Model m_Terrain;
-	Transform tr_Terrain;
-
 	Model model;
 
-	glm::vec2 m_Angles = glm::vec2(0.0f);
-	glm::vec3 pos = glm::vec3(0.0f);
-
-	ShadowRenderer m_Shadows;
 
 	siv::PerlinNoise testNoise;
 	Terrain testTerrain;
@@ -55,4 +51,7 @@ private:
 	double freq = 0;
 	int amp = 0;
 	int octave = 0;
+	float spread = 0;
+
+	rp3d::CollisionWorld world;
 };

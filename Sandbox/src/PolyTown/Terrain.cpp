@@ -42,9 +42,11 @@ void Terrain::GenerateMeshData()
 	vector<glm::vec3> t_VertexData;
 
 	t_lastRowSquares.resize(m_GridSize);
-	vector<float> heights = m_HeightGen.GenerateHeights();
+	//vector<float> heights = m_HeightGen.GenerateHeights();
+	m_Heights = m_HeightGen.GenerateHeights();
 
-	vector<glm::vec3> colors = m_ColorGen.GenerateColors(heights, m_Amplitude * 3);
+	vector<glm::vec3> colors = m_ColorGen.GenerateColors(m_Heights, m_Amplitude * 3);
+	//vector<glm::vec3> colors = m_ColorGen.GenerateColors(heights, m_HeightGen.GetLowestValue(), m_HeightGen.GetHighestValue());
 
 	std::thread loadingIndices(&Terrain::LoadIndices, this);
 
@@ -52,7 +54,7 @@ void Terrain::GenerateMeshData()
 	{
 		for (int x = 0; x < m_GridSize; x++)
 		{
-			GridSquare square(x, y, m_GridSize, heights, colors);
+			GridSquare square(x, y, m_GridSize, m_Heights, colors);
 			square.StoreSquareData(t_VertexData);
 			if (y == m_GridSize - 1)
 			{
@@ -85,6 +87,8 @@ void Terrain::GenerateMeshData()
 	m_VertexArray->SetIndexBuffer(t_IndexBuffer);
 
 	vector<unsigned int>().swap(m_IndexData);
+	m_CollisionShape = new rp3d::HeightFieldShape(m_GridSize + 1, m_GridSize + 1, m_HeightGen.GetLowestValue(),
+		m_HeightGen.GetHighestValue(), &m_Heights[0], rp3d::HeightFieldShape::HeightDataType::HEIGHT_FLOAT_TYPE);
 
 }
 
@@ -94,9 +98,9 @@ void Terrain::LoadIndices()
 	m_IndexData = generator.GenerateIndices(m_GridSize + 1);
 }
 
-void Terrain::RegenerateTerrain(double frequency, int octaves, int amplitude)
+void Terrain::RegenerateTerrain(double frequency, int octaves, int amplitude, float spread)
 {
-
+	m_ColorGen.SetSpread(spread);
 
 	if (frequency != 0) { m_Frequency = frequency; }
 	if (octaves != 0) { m_Octaves = octaves; }
@@ -109,15 +113,18 @@ void Terrain::RegenerateTerrain(double frequency, int octaves, int amplitude)
 	vector<GridSquare> t_lastRowSquares;
 
 	t_lastRowSquares.resize(m_GridSize);
-	vector<float> heights = m_HeightGen.GenerateHeights();
+	//vector<float> heights = m_HeightGen.GenerateHeights();
+	m_Heights = m_HeightGen.GenerateHeights();
 
-	vector<glm::vec3> colors = m_ColorGen.GenerateColors(heights, m_Amplitude * 3);
+	vector<glm::vec3> colors = m_ColorGen.GenerateColors(m_Heights, m_Amplitude * 3);
+	//vector<glm::vec3> colors = m_ColorGen.GenerateColors(heights, m_HeightGen.GetLowestValue(), m_HeightGen.GetHighestValue());
+
 
 	for (int y = 0; y < m_GridSize; y++)
 	{
 		for (int x = 0; x < m_GridSize; x++)
 		{
-			GridSquare square(x, y, m_GridSize, heights, colors);
+			GridSquare square(x, y, m_GridSize, m_Heights, colors);
 			square.StoreSquareData(t_VertexData);
 			if (y == m_GridSize - 1)
 			{
