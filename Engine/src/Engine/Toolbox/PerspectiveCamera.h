@@ -56,5 +56,6 @@ namespace Engine
 		float m_HorizontalAngle = 3.14f;
 		float m_VerticalAngle = 0.0f;
 		float m_Rotation = 0.0f;
+		float m_RenderingDistance = 200.0f;
 	};
 }

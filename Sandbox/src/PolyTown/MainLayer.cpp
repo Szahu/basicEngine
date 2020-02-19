@@ -9,7 +9,7 @@ using namespace Engine;
 #define rp3dToGlm(vec) glm::vec3(vec.x, vec.y, vec.z)
 
 MainLayer::MainLayer()
-	: m_Camera(65.0f, 1.6f), testTerrain(100)
+	: m_Camera(65.0f, 1.6f), testTerrain(testNoise, 100)
 {
 }
 
@@ -22,6 +22,7 @@ void MainLayer::OnAttach()
 	m_ShaderLibrary.Load("assets/shaders/Model_CelShading.glsl");
 	m_ShaderLibrary.Load("assets/shaders/DisplayNormals.glsl");
 	m_ShaderLibrary.Load("assets/shaders/simpleDepthShader.glsl");
+	m_ShaderLibrary.Load("assets/shaders/TerrainShader.glsl");
 
 	m_Terrain.loadModel("assets/models/mountain/terrain.fbx");
 	model.loadModel("assets/models/well.obj");
@@ -49,8 +50,9 @@ void MainLayer::OnAttach()
 
 	testNoise.reseed(12345);
 
-	//glProvokingVertex(GL_FIRST_VERTEX_CONVENTION);
 	glDisable(GL_CULL_FACE);
+	glProvokingVertex(GL_FIRST_VERTEX_CONVENTION);
+	glDepthFunc(GL_LEQUAL);
 }
 
 void MainLayer::OnDraw(Timestep ts)
@@ -62,7 +64,7 @@ void MainLayer::OnDraw(Timestep ts)
 	//Renderer::Submit(model, tr.Get(), "Model_CelShading");
 
 
-	Renderer::Submit(testTerrain.GetVertexArray(), Material(), glm::mat4(1.0f),false, "SimpleModel");
+	Renderer::Submit(testTerrain.GetVertexArray(), Material(), glm::mat4(1.0f), false, "TerrainShader");
 }
 
 void MainLayer::OnUpdate(Engine::Timestep ts)
@@ -81,11 +83,11 @@ void MainLayer::OnUpdate(Engine::Timestep ts)
 	glDisable(GL_STENCIL_TEST);
 	/// Render Here:
 
-	m_Shadows.PreRender(glm::vec3(m_SpotLights[0].GetLightData().Position), {0.0f, 0.0f, 0.0f});
-	OnDraw(ts);
-	m_Shadows.PostRender({m_ShaderLibrary.Get("SimpleModel"), m_ShaderLibrary.Get("Model_CelShading") });
-
-	m_FrameBuffer->Bind();
+	//m_Shadows.PreRender(glm::vec3(m_SpotLights[0].GetLightData().Position), {0.0f, 0.0f, 0.0f});
+	//OnDraw(ts);
+	//m_Shadows.PostRender({m_ShaderLibrary.Get("SimpleModel"), m_ShaderLibrary.Get("Model_CelShading") });
+	//
+	//m_FrameBuffer->Bind();
 	OnDraw(ts);
 
 	/// Rendering Ends here!
@@ -108,6 +110,13 @@ void MainLayer::OnImGuiRender()
 {
 	//m_PointLights[0].OnImGuiRender();
 	m_SpotLights[0].OnImGuiRender();
+	ImGui::InputDouble("freq", &freq);
+	ImGui::InputInt("amp", &amp);
+	ImGui::InputInt("oct", &octave);
+	if (ImGui::Button("ReGenerate!"))
+	{
+		testTerrain.RegenerateTerrain(freq, octave, amp);
+	}
 }
 
 void MainLayer::OnEvent(Engine::Event& event)

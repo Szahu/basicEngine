@@ -33,11 +33,15 @@
 # include <iterator>
 # include <type_traits>
 
+#include "Engine/Toolbox/Random.h"
+
 namespace siv
 {
 	class PerlinNoise
 	{
 	private:
+
+		double m_Frequency = 0.0;
 
 		std::uint8_t p[512];
 
@@ -61,8 +65,9 @@ namespace siv
 
 	public:
 
-		explicit PerlinNoise(std::uint32_t seed = std::default_random_engine::default_seed)
+		explicit PerlinNoise(std::uint32_t seed = std::default_random_engine::default_seed, double frequency = Engine::Random::Float())
 		{
+			m_Frequency = std::clamp(frequency, 0.1, 64.0);
 			reseed(seed);
 		}
 

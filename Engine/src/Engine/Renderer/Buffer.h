@@ -124,6 +124,8 @@ namespace Engine
 		virtual const BufferLayout GetLayout() const = 0;
 
 		virtual const uint32_t GetSize() const = 0;
+
+		virtual const uint32_t GetRendererId() const = 0;
 		
 		static Ref<VertexBuffer> Create(float* vertices, uint32_t size);		
 	};

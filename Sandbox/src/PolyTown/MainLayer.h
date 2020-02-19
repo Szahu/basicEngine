@@ -51,4 +51,8 @@ private:
 
 	siv::PerlinNoise testNoise;
 	Terrain testTerrain;
+
+	double freq = 0;
+	int amp = 0;
+	int octave = 0;
 };

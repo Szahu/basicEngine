@@ -7,7 +7,7 @@
 namespace Engine
 {
 	Engine::PerspectiveCamera::PerspectiveCamera(float fov, float aspectRatio)
-		:m_ProjectionMatrix(glm::perspective(glm::radians(fov), aspectRatio, 0.1f, 300.0f)),
+		:m_ProjectionMatrix(glm::perspective(glm::radians(fov), aspectRatio, 0.1f, m_RenderingDistance)),
 		m_ViewMatrix(glm::lookAt(glm::vec3(4, 3, 3),
 			glm::vec3(0, 0, 0),
 			glm::vec3(0, 1, 0))),
@@ -18,7 +18,7 @@ namespace Engine
 
 	void PerspectiveCamera::SetProjection(float fov, float aspectRatio)
 	{
-		m_ProjectionMatrix = glm::perspective(glm::radians(fov), aspectRatio, 0.1f, 100.0f);
+		m_ProjectionMatrix = glm::perspective(glm::radians(fov), aspectRatio, 0.1f, m_RenderingDistance);
 		RecalculateViewMatrix();
 	}
 

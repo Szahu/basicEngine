@@ -1,10 +1,11 @@
 #pragma once
 
-#include "Engine/Toolbox/PerlinNoise.h"
+#include "Engine/Toolbox/PerlinNoise.hpp"
 #include "Engine/Renderer/VertexArray.h"
 #include "glm/glm.hpp"
 
 #include "glm/gtx/normal.hpp"
+#include "glm/gtx/compatibility.hpp"
 
 // heights.length = m_GridSize + 1;	\
 
@@ -14,11 +15,15 @@ class GridSquare
 {
 public:
 	GridSquare() {}
-	GridSquare(int x, int y, int gridSize) //Location of top left corner in gird
+	GridSquare(int x, int y, int gridSize, vector<float>& heights, vector<glm::vec3>& colors) //Location of top left corner in gird
 	{
+		m_Heights = heights;
+		m_Colors = colors;
+		m_RowVertexCount = sqrt(m_Heights.size());
 		m_X = x; m_Y = y;
 		m_LastIndex = gridSize - 1;
 		CalculateCornerPositions();
+		CalculateCornerColors();
 
 		rightHanded = y % 2 != x % 2;
 		m_NormalLeft = glm::triangleNormal(m_VertexPositions[0], m_VertexPositions[1], m_VertexPositions[rightHanded ? 3 : 2]);
@@ -46,29 +51,34 @@ public:
 
 private:
 	void CalculateCornerPositions();
+	void CalculateCornerColors();
 
 	void StoreTopLeftVertex(vector<glm::vec3>& data)
 	{
 		data.push_back(m_VertexPositions[0]);
 		data.push_back(m_NormalLeft);
+		data.push_back(m_VertexColors[0]);
 	}
 
 	void StoreTopRightVertex(vector<glm::vec3>& data)
 	{
 		data.push_back(m_VertexPositions[2]);
 		data.push_back(m_NormalRight);
+		data.push_back(m_VertexColors[2]);
 	}
 
 	void StoreBottomLeftVertex(vector<glm::vec3>& data)
 	{
 		data.push_back(m_VertexPositions[1]);
 		data.push_back(m_NormalLeft);
+		data.push_back(m_VertexColors[1]);
 	}
 
 	void StoreBottomRightVertex(vector<glm::vec3>& data)
 	{
 		data.push_back(m_VertexPositions[3]);
 		data.push_back(m_NormalRight);
+		data.push_back(m_VertexColors[3]);
 	}
 
 private:
@@ -78,9 +88,118 @@ private:
 	glm::vec3 m_NormalLeft = glm::vec3(0.0f);
 	glm::vec3 m_NormalRight = glm::vec3(0.0f);
 	glm::vec3 m_VertexPositions[4];
+	glm::vec3 m_VertexColors[4];
 	bool rightHanded;
+	vector<float> m_Heights;
+	vector<glm::vec3> m_Colors;
+	int m_RowVertexCount = 0;
 };
 
+class HeightsGenerator
+{
+public:
+	HeightsGenerator(int gridSize, siv::PerlinNoise& noise, double freq, int octaves, float amplitude)
+	{
+		m_GridSize = gridSize;
+		m_Octaves = octaves;
+		m_Frequency = freq;
+		m_Noise = noise;
+		m_Amplitude = amplitude;
+	}
+
+	HeightsGenerator() {}
+
+	void Init(int gridSize, siv::PerlinNoise& noise, double freq, int octaves, float amplitude)
+	{
+		m_GridSize = gridSize;
+		m_Octaves = octaves;
+		m_Frequency = freq;
+		m_Noise = noise;
+		m_Amplitude = amplitude;
+	}
+
+	vector<float> GenerateHeights()
+	{
+		vector<float> m_GeneratedHeights;
+		for (int y = 0; y < m_GridSize + 1; y++)
+		{
+			for (int x = 0; x < m_GridSize + 1; x++)
+			{
+				float height = m_Amplitude * m_Noise.octaveNoise0_1(x / m_Frequency, y / m_Frequency, m_Octaves);
+				if (x == 0 && y == 0) { m_HighestValue = height; m_LowestValue = height; }
+				if (height > m_HighestValue) m_HighestValue = height;
+				if (height < m_LowestValue) m_LowestValue = height;
+				m_GeneratedHeights.push_back(height);
+			}
+		}
+		return m_GeneratedHeights;
+	}
+
+	void SetPerlinNoise(siv::PerlinNoise& noise) { m_Noise = noise; }
+	float GetLowestValue() { return m_LowestValue; }
+	float GetHighestValue() { return m_HighestValue; }
+
+private:
+	int m_GridSize = 0;
+	int m_Octaves = 0;
+	double m_Frequency = 0.0;
+	siv::PerlinNoise m_Noise;
+	float m_Amplitude = 0;
+	float m_HighestValue = 0;
+	float m_LowestValue = 0;
+};
+
+class ColorGenerator
+{
+public:
+	ColorGenerator(float spread = 0.45f)
+	{
+		m_Spread = spread;
+		m_HalfSpread = m_Spread / 2.0f;
+		part = 1.0f / (countof(m_TerrainColors) - 1);
+
+		m_TerrainColors[0] = glm::vec3(201.0f / 255.0f, 178.0f / 255.0f, 99.0f / 255.0f);
+		m_TerrainColors[1] = glm::vec3(135.0f / 255.0f, 184.0f / 255.0f, 82.0f / 255.0f);
+		m_TerrainColors[2] = glm::vec3(80.0f / 255.0f, 171.0f / 255.0f, 93.0f / 255.0f);
+		m_TerrainColors[3] = glm::vec3(120.0f / 255.0f, 120.0f / 255.0f, 120.0f / 255.0f);
+		m_TerrainColors[4] = glm::vec3(200.0f / 255.0f, 200.0f / 255.0f, 210.0f / 255.0f);
+	}
+
+	vector<glm::vec3> GenerateColors(vector<float>& heights, float amplitude)
+	{
+		vector<glm::vec3> colors;
+		int count = sqrt(heights.size());
+		for (int y = 0; y < count; y++)
+		{
+			for (int x = 0; x < count; x++)
+			{
+				float height = heights[y * count + x];
+				glm::vec3 color = CalculateColor(height, amplitude);
+				colors.push_back(color);
+			}
+		}
+
+		return colors;
+	}
+
+private:
+	glm::vec3 CalculateColor(float height, float amplitude)
+	{
+		float value = (height + amplitude) / (amplitude * 2);
+		value = std::clamp((value - m_HalfSpread) * (1.0f / m_Spread), 0.0f, 0.9999f);
+		//EG_CORE_INFO(value);
+		int firstBiome = (int)glm::floor(value / part);
+		float blend = (value - (firstBiome * part)) / part;
+		return glm::lerp(m_TerrainColors[firstBiome], m_TerrainColors[firstBiome + 1], blend);
+	}
+
+private:
+
+	float m_Spread = 0;
+	float m_HalfSpread = 0;
+	float part = 0;
+	glm::vec3 m_TerrainColors[5];
+};
 
 class IndexGenerator
 {
@@ -186,13 +305,20 @@ private:
 class Terrain
 {
 public:
-	Terrain(int gridSize = 4);
+	Terrain(siv::PerlinNoise& noise, int gridSize = 4);
 
 	const Engine::Ref<Engine::VertexArray>& GetVertexArray() {return m_VertexArray;}
 
+	void RegenerateTerrain(double frequency = 0, int octaves = 0, int amplitude = 0);
+	
+
 private:
 
+
 	void GenerateMeshData();
+
+	void LoadIndices();
+
 	int calculateVertexCount(int vertexLength)
 	{
 		int bottom2Rows = 2 * vertexLength;
@@ -201,7 +327,14 @@ private:
 		return topCount + bottom2Rows;
 	}
 private:
+	siv::PerlinNoise m_PerlinNoise;
+	double m_Frequency = 64.0;
+	int m_Octaves = 4;
 	int m_VertexCount = 0;
 	int m_GridSize = 0;
+	int m_Amplitude = 30;
 	Engine::Ref<Engine::VertexArray> m_VertexArray;
+	HeightsGenerator m_HeightGen;
+	ColorGenerator m_ColorGen;
+	vector<unsigned int> m_IndexData;
 };

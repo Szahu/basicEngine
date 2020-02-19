@@ -178,7 +178,6 @@ namespace Engine
 		if (!drawOutline)
 		{
 			glDisable(GL_STENCIL_TEST);
-			glDisable(GL_CULL_FACE);
 
 			vertexArray->Bind();
 			RenderCommand::DrawIndexed(vertexArray);
