@@ -19,3 +19,16 @@ bool Engine::Timer::IsFinished()
 	if (m_TimeRemaining <= 0.0) { return true; }
 	else return false;
 }
+
+void Engine::Stoper::Start()
+{
+	m_TimePassed = 0.0;
+	m_StartTime = Application::GetRunningTime();
+}
+
+double Engine::Stoper::Stop()
+{
+	double finishTime = Application::GetRunningTime();
+	m_TimePassed = finishTime - m_StartTime;
+	return m_TimePassed;
+}

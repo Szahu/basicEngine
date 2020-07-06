@@ -14,6 +14,9 @@ namespace Engine
 	{
 	public:
 		Client(glm::vec4* playerDataStorage);
+		Client() = default;
+		void SetUp(glm::vec4* playerDataStorage, const char* ip);
+
 		~Client();
 		void Start(glm::vec4* dataToSend);
 		void Close();

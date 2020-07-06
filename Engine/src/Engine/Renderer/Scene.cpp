@@ -5,7 +5,7 @@
 
 #include "Engine/Core/Application.h"
 #include "Engine/Core/MouseButtonCodes.h"
-#include "Engine/Toolbox/Samples/BasicMeshes.h"
+#include "Engine/Toolbox/BasicMeshes.h"
 #include "Engine/Core/Input.h"
 
 #include "glad/glad.h"
@@ -38,23 +38,24 @@ namespace Engine
 
 		InstrumentationTimer timer("Scene::LoadScene()");
 
-		m_ShaderLibrary.Load("assets/shaders/GuiQuad.glsl");
-		m_ShaderLibrary.Load("assets/shaders/Model.glsl");
-		m_ShaderLibrary.Load("assets/shaders/Material.glsl");
-		m_ShaderLibrary.Load("assets/shaders/FlatColor.glsl");
-		m_ShaderLibrary.Load("assets/shaders/Reflection.glsl");
-		m_ShaderLibrary.Load("assets/shaders/simpleDepthShader.glsl");
-		m_ShaderLibrary.Load("assets/shaders/DebugDepthQuad.glsl");
-		m_ShaderLibrary.Load("assets/shaders/DisplayNormals.glsl");
-		m_ShaderLibrary.Load("assets/shaders/SkinnedModel.glsl");
-
-		m_ShaderLibrary.Get("GuiQuad")->Bind();
-		m_ShaderLibrary.Get("GuiQuad")->SetInt1("texture_sample", 0);
-		m_ShaderLibrary.Get("GuiQuad")->Unbind();
+		m_ShaderLibrary = Renderer::GetShaderLibrary();
+		m_ShaderLibrary->Load("assets/shaders/GuiQuad.glsl");
+		m_ShaderLibrary->Load("assets/shaders/Model.glsl");
+		m_ShaderLibrary->Load("assets/shaders/Material.glsl");
+		m_ShaderLibrary->Load("assets/shaders/FlatColor.glsl");
+		m_ShaderLibrary->Load("assets/shaders/Reflection.glsl");
+		m_ShaderLibrary->Load("assets/shaders/simpleDepthShader.glsl");
+		m_ShaderLibrary->Load("assets/shaders/DebugDepthQuad.glsl");
+		m_ShaderLibrary->Load("assets/shaders/DisplayNormals.glsl");
+		m_ShaderLibrary->Load("assets/shaders/SkinnedModel.glsl");
+					   
+		m_ShaderLibrary->Get("GuiQuad")->Bind();
+		m_ShaderLibrary->Get("GuiQuad")->SetInt1("texture_sample", 0);
+		m_ShaderLibrary->Get("GuiQuad")->Unbind();
 		
 		m_Skybox.Load("assets/textures/skyboxes/nightSky");
 
-		Renderer::InitScene(&m_Camera.GetCamera(), &m_ShaderLibrary); 
+		Renderer::InitScene(&m_Camera.GetCamera()); 
 
 		GuiQuad = BasicMeshes::Quad();
 
@@ -76,7 +77,7 @@ namespace Engine
 
 		shadows.PreRender(m_SpotLights[0].GetLightData().Position, m_SpotLights[0].GetLightData().Position + m_SpotLights[0].GetLightData().Direction);
 		RenderScene();
-		shadows.PostRender({ m_ShaderLibrary.Get("Material") , m_ShaderLibrary.Get("Model") });
+		shadows.PostRender({ m_ShaderLibrary->Get("Material") , m_ShaderLibrary->Get("Model") });
 
 		//Actual Rendering
 		Application::Get().GetViewportWindowPointer()->GetFrameBuffer()->Bind();
@@ -84,24 +85,14 @@ namespace Engine
 		Engine::RenderCommand::SetClearColor({ 0.0f, 0.0f, 0.0f, 0.0f });
 		glStencilMask(0x00);
 
-		//m_ShaderLibrary.Get("Material")->Bind();
-		//m_ShaderLibrary.Get("Material")->SetMat4("u_LightSpaceMatrix", shadows.GetLightMatrix());
-		//m_ShaderLibrary.Get("Material")->SetInt1("shadowMap", 20);
-		//
-		//m_ShaderLibrary.Get("Model")->Bind();
-		//m_ShaderLibrary.Get("Model")->SetMat4("u_LightSpaceMatrix", shadows.GetLightMatrix());
-		//m_ShaderLibrary.Get("Model")->SetInt1("shadowMap", 20);
-
-
-
 		glm::mat4 transform = glm::scale(glm::mat4(1.0f), glm::vec3(0.02f));
-		testMesh.OnRender(m_ShaderLibrary.Get("SkinnedModel"), transform);
+		testMesh.OnRender(m_ShaderLibrary->Get("SkinnedModel"), transform);
 
 
 		RenderScene();
 
 		glDisable(GL_STENCIL_TEST);
-		Ref<Shader> shader = m_ShaderLibrary.Get("DebugDepthQuad");
+		Ref<Shader> shader = m_ShaderLibrary->Get("DebugDepthQuad");
 		shader->Bind();
 		shader->SetInt1("depthMap", 20);
 		//shader->SetFloat1("near_plane", near_plane);
@@ -118,7 +109,7 @@ namespace Engine
 		Engine::RenderCommand::Clear();
 		glStencilMask(0x00);
 
-		Renderer::EndScene();
+		Renderer::EndScene(Application::Get().GetViewportWindowPointer()->GetFrameBuffer());
 	}
 
 	void Scene::RenderScene()
@@ -349,25 +340,25 @@ namespace Engine
 	{
 		glDisable(GL_STENCIL_TEST);
 		GuiQuad->Bind();
-		m_ShaderLibrary.Get("GuiQuad")->Bind();
+		m_ShaderLibrary->Get("GuiQuad")->Bind();
 		m_LightGuiTexture->Bind();
 
 		glm::mat4 ViewMatrix = m_Camera.GetCamera().GetViewMatrix();
 		glm::vec3 camRight = { ViewMatrix[0][0], ViewMatrix[1][0], ViewMatrix[2][0] };
 		glm::vec3 camUp = { ViewMatrix[0][1], ViewMatrix[1][1], ViewMatrix[2][1] };
 
-		m_ShaderLibrary.Get("GuiQuad")->SetFloat3("u_CameraRight", camRight);
-		m_ShaderLibrary.Get("GuiQuad")->SetFloat3("u_CameraUp", camUp);
+		m_ShaderLibrary->Get("GuiQuad")->SetFloat3("u_CameraRight", camRight);
+		m_ShaderLibrary->Get("GuiQuad")->SetFloat3("u_CameraUp", camUp);
 
 		for (int i = 0; i < m_PointLights.size(); i++)
 		{
 			glm::vec4 pos = Scene::GetActiveScene().GetPointLights()[i].GetLightData().Position;
 			glm::mat4 transform = glm::translate(glm::mat4(1.0f), glm::vec3(pos));
-			m_ShaderLibrary.Get("GuiQuad")->SetMat4("u_Transform", transform);
+			m_ShaderLibrary->Get("GuiQuad")->SetMat4("u_Transform", transform);
 			RenderCommand::DrawIndexed(GuiQuad);
 		}
 		GuiQuad->Unbind();
-		m_ShaderLibrary.Get("GuiQuad")->Unbind();
+		m_ShaderLibrary->Get("GuiQuad")->Unbind();
 		glDisable(GL_DEPTH_TEST);
 		glEnable(GL_STENCIL_TEST);
 	}

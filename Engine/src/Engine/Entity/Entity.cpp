@@ -7,7 +7,7 @@
 #include "glm/gtx/intersect.hpp"
 
 #include "Application.h"
-#include "Engine/Toolbox/Samples/BasicMeshes.h"
+#include "Engine/Toolbox/BasicMeshes.h"
 #include "Engine/Renderer/Scene.h"
 
 namespace Engine

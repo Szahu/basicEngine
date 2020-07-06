@@ -52,7 +52,7 @@ namespace Engine
 			glVertexAttribPointer(index, element.GetComponenetCount(),
 				ShaderDataTypeToOpenGLBaseType(element.Type),
 				element.Normalised ? GL_TRUE : GL_FALSE,
-				vertexBuffer->GetLayout().GetStride(), (const void*)element.Offset);
+				vertexBuffer->GetLayout().GetStride(), (const void*)element.Offset); 
 			if (instancing) glVertexAttribDivisor(index, divisor);
 			index++;
 		}

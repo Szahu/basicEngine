@@ -16,10 +16,10 @@ public:
 	Sandbox()
 	{
 		//PushLayer(new Sandbox2D());
-		//PushLayer(new Sandbox3D());
-		//PushLayer(new GameLayer());
+		//PushLayer(new Sandbox3D()); // Model Rendering
+		PushLayer(new GameLayer()); // Multiplayer and skeletal animation
 		//PushLayer(new TestLayer());
-		PushLayer(new MainLayer());
+		//PushLayer(new MainLayer()); // Terrain demo
 	}
 	~Sandbox()
 	{

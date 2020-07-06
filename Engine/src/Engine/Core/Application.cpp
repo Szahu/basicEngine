@@ -67,7 +67,7 @@ namespace Engine
 		{
 			
 			float time = (float)glfwGetTime(); //Platform class should be
-			Timestep timestep = time - m_LastFrameTime;
+			timestep = time - m_LastFrameTime;
 			m_LastFrameTime = time;
 
 			if (!m_Minimized)

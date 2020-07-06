@@ -6,7 +6,7 @@
 #include "Engine/Renderer/Scene.h"
 #include "Engine/Renderer/Model.h"
 
-#include "Engine/Toolbox/Samples/BasicMeshes.h"
+#include "Engine/Toolbox/BasicMeshes.h"
 
 namespace Engine
 {

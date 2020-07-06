@@ -74,6 +74,18 @@ namespace Engine
 					m_Angles.y = verticalAngle + (m_MouseSpeed * ts * float(m_ScreenHeight / 2 - ypos));
 					m_Camera.SetAngles(m_Angles.x, m_Angles.y);
 				}
+
+				if (Engine::Input::IsKeyPressed(EG_KEY_LEFT_ALT))
+				{
+					float xpos = Engine::Input::GetMouseX();
+					float ypos = Engine::Input::GetMouseY();
+					Engine::Application::Get().GetWindow().SetCursorPosition(m_ScreenWidth / 2, m_ScreenHeight / 2);
+					float horizontalAngle = m_Camera.GetAngles().x;
+					float verticalAngle = m_Camera.GetAngles().y;
+					m_Angles.x = horizontalAngle + (m_MouseSpeed * ts * float(m_ScreenWidth / 2 - xpos));
+					m_Angles.y = verticalAngle + (m_MouseSpeed * ts * float(m_ScreenHeight / 2 - ypos));
+					m_Camera.SetAngles(m_Angles.x, m_Angles.y);
+				}
 			}
 		}
 		
@@ -100,6 +112,18 @@ namespace Engine
 			m_Camera.SetPosition(m_CameraPosition);
 
 			if (Engine::Input::IsMouseButtonPressed(EG_MOUSE_BUTTON_4))
+			{
+				float xpos = Engine::Input::GetMouseX();
+				float ypos = Engine::Input::GetMouseY();
+				Engine::Application::Get().GetWindow().SetCursorPosition(m_ScreenWidth / 2, m_ScreenHeight / 2);
+				float horizontalAngle = m_Camera.GetAngles().x;
+				float verticalAngle = m_Camera.GetAngles().y;
+				m_Angles.x = horizontalAngle + (m_MouseSpeed * ts * float(m_ScreenWidth / 2 - xpos));
+				m_Angles.y = verticalAngle + (m_MouseSpeed * ts * float(m_ScreenHeight / 2 - ypos));
+				m_Camera.SetAngles(m_Angles.x, m_Angles.y);
+			}
+
+			if (Engine::Input::IsKeyPressed(EG_KEY_LEFT_ALT))
 			{
 				float xpos = Engine::Input::GetMouseX();
 				float ypos = Engine::Input::GetMouseY();
@@ -161,6 +185,14 @@ namespace Engine
 			m_AspectRatio = (float)m_ScreenWidth / (float)m_ScreenHeight;
 			return false;
 		}
+		return false;
+	}
+
+	bool PerspectiveCameraController::OnKeyPressed(KeyEvent& e)
+	{
+		if (e.GetKeyCode() == EG_KEY_LEFT_ALT)
+			Engine::Application::Get().GetWindow().SetCursorPosition(m_ScreenWidth / 2, m_ScreenHeight / 2);
+
 		return false;
 	}
 

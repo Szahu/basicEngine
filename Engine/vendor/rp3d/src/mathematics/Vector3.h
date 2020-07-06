@@ -65,6 +65,9 @@ struct Vector3 {
         /// Copy-constructor
         Vector3(const Vector3& vector);
 
+        template<typename T>
+        Vector3(T vec) { x = vec.x; y = vec.y; z = vec.z; }
+
         /// Destructor
         ~Vector3() = default;
 

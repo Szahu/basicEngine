@@ -24,7 +24,7 @@ void TestLayer::OnAttach()
 	m_Plane.loadModel("assets/models/plane/plane.obj");
 
 	//Renderer::InitScene(&m_CameraController.GetCamera(), &m_ShaderLibrary);
-	Renderer::InitScene(&m_Camera, &m_ShaderLibrary);
+	Renderer::InitScene(&m_Camera);
 
 	m_FrameBuffer = FrameBuffer::Create({ 1280, 720 });
 	m_ScreenQuad = BasicMeshes::ScreenQuad();
@@ -91,7 +91,7 @@ void TestLayer::OnUpdate(Engine::Timestep ts)
 	/// Rendering Ends here!
 	m_FrameBuffer->Unbind();
 	Engine::RenderCommand::Clear();
-	Renderer::EndScene();
+	Renderer::EndScene(m_FrameBuffer);
 
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_STENCIL_TEST);

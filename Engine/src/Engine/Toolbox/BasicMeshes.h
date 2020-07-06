@@ -13,6 +13,6 @@ namespace Engine
 		static const Ref<VertexArray> Quad();
 		static const Ref<VertexArray> Quad2D();
 		static const Ref<VertexArray> ScreenQuad();
-	private:
+
 	};
 }

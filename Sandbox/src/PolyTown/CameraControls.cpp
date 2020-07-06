@@ -131,9 +131,20 @@ void CameraController::CalculateCameraPosition(float horizDistance, float vertDi
 
 bool CameraController::OnMouseScroll(MouseScrolledEvent& e)
 {
-	float offset = e.GetYOffset();
+	if (!Input::IsKeyPressed(EG_KEY_LEFT_SHIFT))
+	{
+		float offset = e.GetYOffset();
 
-	m_DistanceFromTarget -= offset;
+		m_DistanceFromTarget -= offset;
+	}
+
+	if (Input::IsKeyPressed(EG_KEY_LEFT_SHIFT))
+	{
+		float offset = e.GetYOffset();
+
+		m_TargetPosition += glm::normalize(m_TargetPosition - m_Position) * e.GetYOffset();
+	}
+	
 
 	return false;
 }

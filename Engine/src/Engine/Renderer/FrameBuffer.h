@@ -9,6 +9,11 @@ namespace Engine
 	class FrameBuffer
 	{
 	public:
+		enum class ATTACHMENT_TYPE
+		{
+			NONE = 0, COLOR, DEPTH, STENCIL
+		};
+
 		virtual ~FrameBuffer() {}
 
 		virtual void Bind() const = 0;
@@ -24,6 +29,6 @@ namespace Engine
 
 		virtual void OnEvent(Event& e) = 0;
 
-		static Ref<FrameBuffer> Create(const glm::vec2& size);
+		static Ref<FrameBuffer> Create(const glm::vec2& size = glm::vec2(), ATTACHMENT_TYPE type = ATTACHMENT_TYPE::NONE);
 	};
 }

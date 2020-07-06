@@ -5,19 +5,26 @@
 using namespace Engine;
 
 GameLayer::GameLayer()
-	:Layer("GameLayer!"), m_CameraController(65.0f, 1.6f, nullptr), testClient(&m_Players[0]), world(gravity), shape(1.0f, 2.0f),
+	:Layer("GameLayer!"), m_CameraController(65.0f, 1.6f, nullptr), /*testClient(&m_Players[0]), */ world(gravity), shape(1.0f, 2.0f),
 	floor_shape(rp3d::Vector3(10.0f, 1.0f, 1.0f))
 {
 	char yn = 'k'; // change to something else than y or n 
 	while (yn != 'y' && yn != 'n')
 	{
-		EG_INFO("Wanna run a server?");
+		EG_INFO("Wanna run a server? (y/n)");
 		ZeroMemory(&yn, 1);
 		std::cin >> yn;
 	}
 	
 
 	if (yn == 'y') testServer.Start();
+
+	std::string l_tmp;
+	EG_WARN("Please provide server's local ip");
+	std::cin >> l_tmp;
+	const char* Input_Ip = l_tmp.c_str();
+	testClient.SetUp(&m_Players[0], l_tmp.c_str());
+	
 
 	EG_CORE_INFO("Game runnin");
 	sound.LoadFromFile("assets/sounds/test.wav");
@@ -45,7 +52,8 @@ void GameLayer::OnAttach()
 	m_ShaderLibrary.Load("assets/shaders/Model.glsl");
 	m_ShaderLibrary.Load("assets/game/shaders/TileShader.glsl");
 
-	Renderer::InitScene(&m_CameraController.GetCamera(), &m_ShaderLibrary);
+
+	Renderer::InitScene(&m_CameraController.GetCamera());
 	
 	m_FrameBuffer = FrameBuffer::Create({ 1280, 720 });
 	m_ScreenQuad = BasicMeshes::ScreenQuad();
@@ -110,7 +118,7 @@ void GameLayer::OnUpdate(Engine::Timestep ts)
 		testModel.OnRender(m_ShaderLibrary.Get("SkinnedModel"), trShrek.Get());
 	}
 
-	Renderer::Submit(plane, Material(), Transform().Get(), false, "Model");
+	//Renderer::Submit(plane, Material(), Transform().Get(), false, "Model");
 
 	// Transform trSuit;
 	// //EG_TRACE_VEC3(testModel2.GetCenterOfGeometry());
@@ -135,7 +143,7 @@ void GameLayer::OnUpdate(Engine::Timestep ts)
 
 	m_FrameBuffer->Unbind();
 	Engine::RenderCommand::Clear();
-	Renderer::EndScene();
+	Renderer::EndScene(m_FrameBuffer);
 	
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_STENCIL_TEST);
@@ -151,7 +159,8 @@ void GameLayer::OnUpdate(Engine::Timestep ts)
 
 void GameLayer::OnImGuiRender()
 {
-	m_PointLights[0].OnImGuiRender();
+	//m_PointLights[0].OnImGuiRender();
+	ImGui::Text( "Controls:\n WASD to move around, \n SPACE to go upwards, \n SHIFT to go downwards, \n hold LEFT ALT to control camera");
 }
 
 void GameLayer::OnDetach()

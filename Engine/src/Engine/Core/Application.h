@@ -40,6 +40,8 @@ namespace Engine
 
 		static double GetRunningTime();
 
+		static const Timestep& GetApplicationTimeStep() { return s_Instance->timestep; }
+
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
@@ -51,6 +53,8 @@ namespace Engine
 		bool m_Running = true;
 		bool m_Minimized = false;
 		LayerStack m_LayerStack;
+
+		Timestep timestep;
 
 		float m_LastFrameTime = 0.0f;
 

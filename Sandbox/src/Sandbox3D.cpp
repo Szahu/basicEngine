@@ -7,7 +7,7 @@
 #include "GLFW/glfw3.h"
 
 #include "Engine/Entity/Component.h"
-#include "Engine/Toolbox/Samples/basicMeshes.h"
+#include "Engine/Toolbox/basicMeshes.h"
 
 
 

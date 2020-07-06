@@ -13,7 +13,7 @@
 #include "Engine/Toolbox/OrtographicCameraController.h"
 #include "Engine/Toolbox/PerspectiveCameraController.h"
 #include "Engine/Toolbox/MousePicker.h"
-#include "Engine/Toolbox/Samples/BasicMeshes.h"
+#include "Engine/Toolbox/BasicMeshes.h"
 
 #include "Engine/GUI/GUI.h"
 #include "Engine/GUI/ViewportWindow.h"

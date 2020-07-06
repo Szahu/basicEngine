@@ -1,5 +1,5 @@
 #type vertex
-#version 330 core
+#version 420 core
 layout (location = 0) in vec3 aPos;
 
 uniform mat4 lightSpaceMatrix;
@@ -18,7 +18,7 @@ void main()
 } 
 
 #type fragment
-#version 330 core
+#version 420 core
 out vec4 color;
 
 void main()

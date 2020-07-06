@@ -29,6 +29,7 @@ namespace Engine
 		bool OnMouseScroll(MouseScrolledEvent& e);
 		bool OnMouseButton(MouseButtonPressedEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
+		bool OnKeyPressed(KeyEvent& e);
 
 		void OnGuiWindowResize(const glm::vec2& size);
 

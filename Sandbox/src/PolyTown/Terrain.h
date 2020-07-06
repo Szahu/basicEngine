@@ -337,13 +337,34 @@ private:
 class Terrain
 {
 public:
-	Terrain(siv::PerlinNoise& noise, int gridSize = 4);
+	Terrain(rp3d::CollisionWorld* world);
+
+	void Generate(siv::PerlinNoise& noise, int gridSize = 100);
+
+	void LoadFromFile(const char* path);
 
 	const Engine::Ref<Engine::VertexArray>& GetVertexArray() {return m_VertexArray;}
 
 	void RegenerateTerrain(double frequency = 0, int octaves = 0, int amplitude = 0, float spread = 0.45f);
 	
-	rp3d::HeightFieldShape* GetCollisionShape() const { return m_CollisionShape; }
+	rp3d::HeightFieldShape*& GetCollisionShape() { return m_CollisionShape; }
+
+	rp3d::CollisionBody*& GetColiisionBody() { return m_CollisionBody; }
+
+	void AddShape()
+	{
+		float lowest = m_HeightGen.GetLowestValue();
+		float highest = m_HeightGen.GetHighestValue();
+		float yOrigin = (highest - lowest) / 2.0f;
+		rp3d::Vector3 initPosition1(0.0, highest - yOrigin, 0.0);
+		rp3d::Quaternion initOrientation2 = rp3d::Quaternion::identity();
+		rp3d::Transform transform1(initPosition1, initOrientation2);
+
+		m_CollisionBody->addCollisionShape(m_CollisionShape, transform1);
+	}
+
+	bool IsRegenerating() { return m_IsRegenerating; }
+
 
 private:
 
@@ -359,6 +380,8 @@ private:
 		int topCount = remainingRowCount * (vertexLength - 1) * 2;
 		return topCount + bottom2Rows;
 	}
+
+
 private:
 	siv::PerlinNoise m_PerlinNoise;
 	double m_Frequency = 64.0;
@@ -371,5 +394,8 @@ private:
 	ColorGenerator m_ColorGen;
 	vector<unsigned int> m_IndexData;
 	vector<float> m_Heights;
+	rp3d::CollisionWorld* m_CollisionWorld;
 	rp3d::HeightFieldShape* m_CollisionShape;
+	rp3d::CollisionBody* m_CollisionBody;
+	bool m_IsRegenerating = false;
 };

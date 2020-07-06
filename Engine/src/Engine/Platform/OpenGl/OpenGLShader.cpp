@@ -120,7 +120,7 @@ namespace Engine
 
 				glDeleteShader(shader);
 
-				EG_CORE_ERROR("{0}, from Path: {1}", infoLog.data(), m_Path);
+				EG_CORE_ERROR("{0} from Path: {1}", infoLog.data(), m_Path);
 				EG_CORE_ASSERT(false, "Shader compilation failure!");
 				break;
 			}

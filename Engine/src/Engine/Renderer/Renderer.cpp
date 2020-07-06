@@ -9,6 +9,8 @@
 
 #include "Engine/Renderer/Scene.h"
 
+#include "Engine/Toolbox/BasicMeshes.h"
+
 namespace Engine
 {
 	Renderer::SceneData* Renderer::m_SceneData = new Renderer::SceneData;
@@ -23,11 +25,12 @@ namespace Engine
 		RenderCommand::SetViewport(0, 0, width, height);
 	}
 
-	void Renderer::InitScene(const PerspectiveCamera* camera, ShaderLibrary* lib)
+	void Renderer::InitScene(const PerspectiveCamera* camera)
 	{
 
+		m_SceneData->m_ScreenQuad = BasicMeshes::ScreenQuad();
+
 		m_SceneData->m_Camera = camera;
-		m_SceneData->m_ShaderLibrary = lib;
 
 		m_SceneData->m_MatricesUniformBuffer = UniformBuffer::Create(sizeof(glm::mat4) + sizeof(glm::vec3), 0);
 		m_SceneData->m_LightsUniformBuffer = UniformBuffer::Create(sizeof(glm::vec4) + sizeof(PointLightData) * MAX_NUMBER_OF_POINTLIGHTS + sizeof(SpotLight) * MAX_NUMBER_OF_SPOTLIGHTS, 1);
@@ -113,10 +116,15 @@ namespace Engine
 
 	}
 
-	void Renderer::EndScene()
+	void Renderer::EndScene(const Ref<FrameBuffer>& fbo)
 	{
 		PROFILE_FUNCTION();
+		m_SceneData->m_LastFrameBuffer = fbo;
 
+		for (auto& i : m_SceneData->m_Effects)
+		{
+			i.Procces();
+		}
 
 		//Application::Get().GetViewportWindowPointer()->GetFrameBuffer()->Unbind();
 		//Engine::RenderCommand::Clear();
@@ -136,7 +144,7 @@ namespace Engine
 			m_SceneData->m_ShadersInUse.push_back(libKey);
 		}
 
-		Ref<Shader> shader = m_SceneData->m_ShaderLibrary->Get(libKey);
+		Ref<Shader> shader = m_SceneData->m_ShaderLibrary.Get(libKey);
 
 		if (m_SceneData->m_ForcedShader != nullptr) shader = m_SceneData->m_ForcedShader;
 
@@ -195,6 +203,19 @@ namespace Engine
 		}
 	}
 
+	void Renderer::Submit(const Engine::Ref<VertexArray>& vertexArray, const glm::mat4& transform, const std::string& libKey)
+	{
+		glDisable(GL_STENCIL_TEST);
+
+		Ref<Shader> shader = m_SceneData->m_ShaderLibrary.Get(libKey);
+		shader->Bind();
+		shader->SetMat4("u_Transform", transform);
+
+		vertexArray->Bind();
+		RenderCommand::DrawIndexed(vertexArray);
+		vertexArray->Unbind();
+	}
+
 	void Renderer::Submit(Model& model, const Material& material, const glm::mat4& transform, bool drawOutline, const std::string& libKey)
 	{
 		PROFILE_SCOPE("Renderer::Submit(Model)");
@@ -203,7 +224,7 @@ namespace Engine
 		if (std::find(m_SceneData->m_ShadersInUse.begin(), m_SceneData->m_ShadersInUse.end(), libKey) == m_SceneData->m_ShadersInUse.end())
 			m_SceneData->m_ShadersInUse.push_back(libKey);
 
-		Ref<Shader> shader = m_SceneData->m_ShaderLibrary->Get(libKey);
+		Ref<Shader> shader = m_SceneData->m_ShaderLibrary.Get(libKey);
 
 		if (m_SceneData->m_ForcedShader != nullptr) shader = m_SceneData->m_ForcedShader;
 
@@ -219,7 +240,7 @@ namespace Engine
 
 			for (int i = 0; i < model.GetMeshes().size(); i++)
 			{
-				model.GetMeshes()[i].ProccessMaterial(m_SceneData->m_ShaderLibrary->Get(libKey));
+				model.GetMeshes()[i].ProccessMaterial(m_SceneData->m_ShaderLibrary.Get(libKey));
 				model.GetMeshes()[i].GetVertexArray()->Bind();
 				RenderCommand::DrawIndexed(model.GetMeshes()[i].GetVertexArray());
 				model.GetMeshes()[i].GetVertexArray()->Unbind();
@@ -240,7 +261,7 @@ namespace Engine
 	{
 		glDisable(GL_STENCIL_TEST);
 
-		Ref<Shader> shader = m_SceneData->m_ShaderLibrary->Get(libkey);
+		Ref<Shader> shader = m_SceneData->m_ShaderLibrary.Get(libkey);
 
 		if (m_SceneData->m_ForcedShader != nullptr) shader = m_SceneData->m_ForcedShader;
 
@@ -251,7 +272,7 @@ namespace Engine
 
 		for (int i = 0; i < model.GetMeshes().size(); i++)
 		{
-			model.GetMeshes()[i].ProccessMaterial(m_SceneData->m_ShaderLibrary->Get(libkey));
+			model.GetMeshes()[i].ProccessMaterial(m_SceneData->m_ShaderLibrary.Get(libkey));
 			model.GetMeshes()[i].GetVertexArray()->Bind();
 			RenderCommand::DrawIndexed(model.GetMeshes()[i].GetVertexArray());
 			model.GetMeshes()[i].GetVertexArray()->Unbind();
@@ -263,51 +284,51 @@ namespace Engine
 	void Renderer::ProcessMaterial(const Material& material, const Ref<Shader>& shader)
 	{
 		PROFILE_FUNCTION();
-		shader->SetBool("u_HasDiffuseTexture", false);
-		shader->SetBool("u_HasSpecularTexture", false);
-		shader->SetBool("u_HasAmbientTexture", false);
-		shader->SetBool("u_HasNormalTexture", false);
-		shader->SetBool("u_HasHeightTexture", false);
+		//shader->SetBool("u_HasDiffuseTexture", false);
+		//shader->SetBool("u_HasSpecularTexture", false);
+		//shader->SetBool("u_HasAmbientTexture", false);
+		//shader->SetBool("u_HasNormalTexture", false);
+		//shader->SetBool("u_HasHeightTexture", false);
 
 		shader->SetFloat3("u_Material.ambient", material.m_Ambient);
 		shader->SetFloat3("u_Material.diffuse", material.m_Diffuse);
 		shader->SetFloat3("u_Material.specular", material.m_Specular);
 		shader->SetFloat1("u_Material.shininess", material.m_Shininess);
 
-		if (material.m_DiffuseTexture != nullptr)
-		{
-			shader->SetBool("u_HasDiffuseTexture", true);
-			shader->SetInt1("texture_diffuse1", 0);
-			material.m_DiffuseTexture->Bind(0);
-		}
-
-		if (material.m_NormalMap != nullptr)
-		{
-			shader->SetBool("u_HasNormalTexture", true);
-			shader->SetInt1("texture_normal1", 1);
-			material.m_NormalMap->Bind(1);
-		}
-
-		if (material.m_HeightMap != nullptr)
-		{
-			shader->SetBool("u_HasHeightTexture", true);
-			shader->SetInt1("texture_height1", 2);
-			material.m_HeightMap->Bind(2);
-		}
-
-		if (material.m_AmbientMap != nullptr)
-		{
-			shader->SetBool("u_HasAmbientTexture", true);
-			shader->SetInt1("texture_ambient1", 3);
-			material.m_AmbientMap->Bind(3);
-		}
-
-		if (material.m_SpecularMap != nullptr)
-		{
-			shader->SetBool("u_HasSpecularTexture", true);
-			shader->SetInt1("texture_specular1", 4);
-			material.m_SpecularMap->Bind(4);
-		}
+		//if (material.m_DiffuseTexture != nullptr)
+		//{
+		//	shader->SetBool("u_HasDiffuseTexture", true);
+		//	shader->SetInt1("texture_diffuse1", 0);
+		//	material.m_DiffuseTexture->Bind(0);
+		//}
+		//
+		//if (material.m_NormalMap != nullptr)
+		//{
+		//	shader->SetBool("u_HasNormalTexture", true);
+		//	shader->SetInt1("texture_normal1", 1);
+		//	material.m_NormalMap->Bind(1);
+		//}
+		//
+		//if (material.m_HeightMap != nullptr)
+		//{
+		//	shader->SetBool("u_HasHeightTexture", true);
+		//	shader->SetInt1("texture_height1", 2);
+		//	material.m_HeightMap->Bind(2);
+		//}
+		//
+		//if (material.m_AmbientMap != nullptr)
+		//{
+		//	shader->SetBool("u_HasAmbientTexture", true);
+		//	shader->SetInt1("texture_ambient1", 3);
+		//	material.m_AmbientMap->Bind(3);
+		//}
+		//
+		//if (material.m_SpecularMap != nullptr)
+		//{
+		//	shader->SetBool("u_HasSpecularTexture", true);
+		//	shader->SetInt1("texture_specular1", 4);
+		//	material.m_SpecularMap->Bind(4);
+		//}
 	}
 
 

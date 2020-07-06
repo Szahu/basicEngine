@@ -3,6 +3,10 @@
 
 #include "Glad/glad.h"
 
+#include "engine/Core/Timestep.h"
+
+#include <fstream>
+
 using std::vector;
 
 void GridSquare::CalculateCornerPositions()
@@ -22,7 +26,18 @@ void GridSquare::CalculateCornerColors()
 }
 
 
-Terrain::Terrain(siv::PerlinNoise& noise, int gridSize)
+Terrain::Terrain(rp3d::CollisionWorld* world)
+{
+	m_CollisionWorld = world;
+	rp3d::Vector3 initPosition(50.0, 0.0, 50.0);
+	rp3d::Quaternion initOrientation = rp3d::Quaternion::identity();
+	rp3d::Transform transform(initPosition, initOrientation);
+	m_CollisionBody = m_CollisionWorld->createCollisionBody(transform);
+
+	
+}
+
+void Terrain::Generate(siv::PerlinNoise& noise, int gridSize)
 {
 	m_PerlinNoise.reseed(12345);
 	m_GridSize = gridSize;
@@ -31,6 +46,8 @@ Terrain::Terrain(siv::PerlinNoise& noise, int gridSize)
 	GenerateMeshData();
 	m_VertexCount = calculateVertexCount(m_GridSize + 1);
 }
+
+
 
 void Terrain::GenerateMeshData()
 {
@@ -86,9 +103,84 @@ void Terrain::GenerateMeshData()
 	m_VertexArray->AddVertexBuffer(t_VertexBuffer);
 	m_VertexArray->SetIndexBuffer(t_IndexBuffer);
 
-	vector<unsigned int>().swap(m_IndexData);
+
 	m_CollisionShape = new rp3d::HeightFieldShape(m_GridSize + 1, m_GridSize + 1, m_HeightGen.GetLowestValue(),
 		m_HeightGen.GetHighestValue(), &m_Heights[0], rp3d::HeightFieldShape::HeightDataType::HEIGHT_FLOAT_TYPE);
+
+	uint32_t vertexDataSize = t_VertexData.size() * sizeof(glm::vec3);
+	uint32_t indexDataSize = m_IndexData.size() * sizeof(unsigned int);
+
+	std::ofstream terrainFile;
+	terrainFile.open("testTerrain.terrain", std::ios::out | std::ios::binary);
+	terrainFile.seekp(0, std::ios::beg);
+	terrainFile.write((char*)&vertexDataSize, sizeof(uint32_t));
+	terrainFile.seekp(sizeof(uint32_t), std::ios::cur);
+	terrainFile.write((char*)&indexDataSize, sizeof(uint32_t));
+	terrainFile.seekp(sizeof(uint32_t), std::ios::cur);
+	terrainFile.write((char*)&t_VertexData, vertexDataSize);
+	terrainFile.seekp(indexDataSize, std::ios::cur);
+	terrainFile.write((char*)&m_IndexData, indexDataSize);
+	terrainFile.close();
+
+	vector<unsigned int>().swap(m_IndexData); //Clearing index data
+
+}
+
+void Terrain::LoadFromFile(const char* path)
+{
+	uint32_t vertexDataSize;
+	uint32_t indexDataSize;
+
+	vector<glm::vec3> t_VertexData;
+
+	
+
+	std::ifstream terrainFile;
+	terrainFile.open("testTerrain.terrain", std::ios::in | std::ios::binary);
+	terrainFile.seekg(0, std::ios::beg);
+	terrainFile.read((char*)&vertexDataSize, sizeof(uint32_t));
+	terrainFile.seekg(sizeof(uint32_t), std::ios::cur);
+	terrainFile.read((char*)&indexDataSize, sizeof(uint32_t));
+
+	t_VertexData.resize(vertexDataSize);
+	m_IndexData.resize(indexDataSize);
+
+	terrainFile.seekg(sizeof(uint32_t), std::ios::cur);
+	terrainFile.seekg(vertexDataSize, std::ios::cur);
+	terrainFile.read((char*)&t_VertexData, vertexDataSize);
+	terrainFile.seekg(indexDataSize, std::ios::cur);
+	terrainFile.read((char*)&m_IndexData, indexDataSize);
+	terrainFile.close();
+
+	Engine::Ref<Engine::VertexBuffer> t_VertexBuffer = Engine::VertexBuffer::Create(&t_VertexData[0].x, t_VertexData.size() * sizeof(glm::vec3));
+	Engine::Ref<Engine::IndexBuffer> t_IndexBuffer = Engine::IndexBuffer::Create(&m_IndexData[0], m_IndexData.size());
+
+	t_VertexBuffer->SetLayout(Engine::BufferLayout{
+			{ Engine::ShaderDataType::Float3, "a_Positions" },
+			{ Engine::ShaderDataType::Float3, "a_Normals" },
+			{ Engine::ShaderDataType::Float3, "a_Colors" },
+		});
+
+	m_VertexArray = Engine::VertexArray::Create();
+	m_VertexArray->AddVertexBuffer(t_VertexBuffer);
+	m_VertexArray->SetIndexBuffer(t_IndexBuffer);
+
+	vector<unsigned int>().swap(m_IndexData);
+
+	vector<float> fakeHeights; //fakeHeights.resize((m_GridSize + 1) * (m_GridSize + 1));
+
+	for (int i = 0; i < m_GridSize + 2; i++)
+	{
+		for (int o = 0; o < m_GridSize + 2; o++)
+		{
+			fakeHeights.push_back(1);
+		}
+	}
+
+	m_CollisionShape = new rp3d::HeightFieldShape(100 + 1, 100 + 1, m_HeightGen.GetLowestValue(),
+		m_HeightGen.GetHighestValue(), &fakeHeights[0], rp3d::HeightFieldShape::HeightDataType::HEIGHT_FLOAT_TYPE);
+
+	AddShape();
 
 }
 
@@ -98,8 +190,12 @@ void Terrain::LoadIndices()
 	m_IndexData = generator.GenerateIndices(m_GridSize + 1);
 }
 
+
+
 void Terrain::RegenerateTerrain(double frequency, int octaves, int amplitude, float spread)
 {
+	m_IsRegenerating = true;
+
 	m_ColorGen.SetSpread(spread);
 
 	if (frequency != 0) { m_Frequency = frequency; }
@@ -142,7 +238,21 @@ void Terrain::RegenerateTerrain(double frequency, int octaves, int amplitude, fl
 	glBufferSubData(GL_ARRAY_BUFFER, 0, t_VertexData.size() * sizeof(glm::vec3), &t_VertexData[0].x);
 	GetVertexArray()->GetVertexBuffers()[0]->Unbind();
 
+	//delete m_CollisionShape;
+	//delete m_CollisionBody;
 
+	m_CollisionShape = new rp3d::HeightFieldShape(m_GridSize + 1, m_GridSize + 1, m_HeightGen.GetLowestValue(),
+		m_HeightGen.GetHighestValue(), &m_Heights[0], rp3d::HeightFieldShape::HeightDataType::HEIGHT_FLOAT_TYPE);
+
+	rp3d::Vector3 initPosition(50.0, 0.0, 50.0);
+	rp3d::Quaternion initOrientation = rp3d::Quaternion::identity();
+	rp3d::Transform transform(initPosition, initOrientation);
+	m_CollisionBody = m_CollisionWorld->createCollisionBody(transform);
+
+	AddShape();
+
+
+	m_IsRegenerating = false;
 }
 
 

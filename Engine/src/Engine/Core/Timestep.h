@@ -44,4 +44,19 @@ namespace Engine
 		double m_StartTime = 0.0;
 	};
 
+	class Stoper
+	{
+	public:
+		void Start();
+
+		double Stop();
+
+		//double GetTimePassed() const { return m_TimePassed; }
+
+	private:
+		double m_StartTime = 0.0;
+		double m_TimePassed = 0.0;
+
+	};
+
 }

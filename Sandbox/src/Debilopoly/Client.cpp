@@ -9,6 +9,13 @@ Engine::Client::Client(glm::vec4* playerDataStorage)
 
 }
 
+void Engine::Client::SetUp(glm::vec4* playerDataStorage, const char* ip)
+{
+	m_ServerData = SocketData(ip, 56000);
+	m_PlayersDataPtr = playerDataStorage;
+}
+
+
 Engine::Client::~Client()
 {
 	Close();

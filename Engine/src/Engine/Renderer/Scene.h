@@ -39,7 +39,7 @@ namespace Engine
 		void AddSpotLight(const SpotLight& light) { m_SpotLights.push_back(light); }
 		std::vector<SpotLight>& GetSpotLights() { return m_SpotLights; }
 
-		ShaderLibrary& GetShaderLibrary() { return m_ShaderLibrary; }
+		ShaderLibrary& GetShaderLibrary() { return *m_ShaderLibrary; }
 		PerspectiveCameraController& GetCamera() { return m_Camera; }
 
 		const Skybox& GetSkybox() { return m_Skybox; }
@@ -61,7 +61,7 @@ namespace Engine
 		unsigned int m_ActiveSpotLight = 0;
 		LightType m_ActiveLightType = LightType::None;
 		PerspectiveCameraController m_Camera;
-		ShaderLibrary m_ShaderLibrary;
+		ShaderLibrary* m_ShaderLibrary;
 		std::vector<PointLight> m_PointLights;
 		std::vector<SpotLight> m_SpotLights;
 		std::unordered_map<std::string, Entity> m_Entities;

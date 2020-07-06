@@ -46,9 +46,6 @@
     <Filter Include="src\Engine\Toolbox">
       <UniqueIdentifier>{08BE3741-F4A1-F896-5D02-F3E94905E318}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Engine\Toolbox\Samples">
-      <UniqueIdentifier>{2C2569C7-1835-1598-81EE-79B66D1D0431}</UniqueIdentifier>
-    </Filter>
     <Filter Include="vendor">
       <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
     </Filter>
@@ -213,6 +210,12 @@
     <ClInclude Include="src\Engine\Renderer\Model.h">
       <Filter>src\Engine\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Renderer\ParticleSystem.h">
+      <Filter>src\Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Renderer\PostProcessing.h">
+      <Filter>src\Engine\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Renderer\RenderCommand.h">
       <Filter>src\Engine\Renderer</Filter>
     </ClInclude>
@@ -249,6 +252,9 @@
     <ClInclude Include="src\Engine\Toolbox\Audio.h">
       <Filter>src\Engine\Toolbox</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Toolbox\BasicMeshes.h">
+      <Filter>src\Engine\Toolbox</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Toolbox\MousePicker.h">
       <Filter>src\Engine\Toolbox</Filter>
     </ClInclude>
@@ -258,14 +264,17 @@
     <ClInclude Include="src\Engine\Toolbox\OrtographicCameraController.h">
       <Filter>src\Engine\Toolbox</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Toolbox\PerlinNoise.h">
+      <Filter>src\Engine\Toolbox</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Toolbox\PerspectiveCamera.h">
       <Filter>src\Engine\Toolbox</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Toolbox\PerspectiveCameraController.h">
       <Filter>src\Engine\Toolbox</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Toolbox\Samples\BasicMeshes.h">
-      <Filter>src\Engine\Toolbox\Samples</Filter>
+    <ClInclude Include="src\Engine\Toolbox\Random.h">
+      <Filter>src\Engine\Toolbox</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Toolbox\WindowsUtilities.h">
       <Filter>src\Engine\Toolbox</Filter>
@@ -1377,9 +1386,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Toolbox\Random.h" />
-    <ClInclude Include="src\Engine\Toolbox\PerlinNoise.hpp" />
-    <ClInclude Include="src\Engine\Toolbox\PerlinNoise.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EGpch.cpp">
@@ -1481,6 +1487,12 @@
     <ClCompile Include="src\Engine\Renderer\Model.cpp">
       <Filter>src\Engine\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Renderer\ParticleSystem.cpp">
+      <Filter>src\Engine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Renderer\PostProcessing.cpp">
+      <Filter>src\Engine\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Engine\Renderer\RenderCommand.cpp">
       <Filter>src\Engine\Renderer</Filter>
     </ClCompile>
@@ -1511,6 +1523,9 @@
     <ClCompile Include="src\Engine\Renderer\VertexArray.cpp">
       <Filter>src\Engine\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Toolbox\BasicMeshes.cpp">
+      <Filter>src\Engine\Toolbox</Filter>
+    </ClCompile>
     <ClCompile Include="src\Engine\Toolbox\MousePicker.cpp">
       <Filter>src\Engine\Toolbox</Filter>
     </ClCompile>
@@ -1520,14 +1535,17 @@
     <ClCompile Include="src\Engine\Toolbox\OrtographicCameraController.cpp">
       <Filter>src\Engine\Toolbox</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Toolbox\PerlinNoise.cpp">
+      <Filter>src\Engine\Toolbox</Filter>
+    </ClCompile>
     <ClCompile Include="src\Engine\Toolbox\PerspectiveCamera.cpp">
       <Filter>src\Engine\Toolbox</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Toolbox\PerspectiveCameraController.cpp">
       <Filter>src\Engine\Toolbox</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\Toolbox\Samples\BasicMeshes.cpp">
-      <Filter>src\Engine\Toolbox\Samples</Filter>
+    <ClCompile Include="src\Engine\Toolbox\Random.cpp">
+      <Filter>src\Engine\Toolbox</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Toolbox\WindowsUtilities.cpp">
       <Filter>src\Engine\Toolbox</Filter>
@@ -1535,7 +1553,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\Toolbox\Random.cpp" />
-    <ClCompile Include="src\Engine\Toolbox\PerlinNoise.cpp" />
   </ItemGroup>
 </Project>
