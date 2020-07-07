@@ -71,10 +71,11 @@ void MainLayer::OnAttach()
 
 void MainLayer::OnDraw(Timestep ts)
 {
-	Renderer::Submit(testTerrain.GetVertexArray(), glm::mat4(1.0f), "TerrainShader");
+	glm::mat4 terrain_tranform = glm::translate(glm::mat4(1.0f), glm::vec3(-50.0f, -30.0f, -50.0f));
+	Renderer::Submit(testTerrain.GetVertexArray(), terrain_tranform, "TerrainShader");
 	tr.SetPosition({ 0.0f, 4.0f, 0.0f });
 	//Renderer::Submit(model, tr.Get(), "Model");
-	Renderer::Submit(model, Material(), tr.Get(), false, "tester");
+	//Renderer::Submit(model, Material(), tr.Get(), false, "tester");
 
 	//m_ParticleSystem.OnUpdate(ts);
 	//m_ParticleSystem.OnRender();
@@ -142,12 +143,18 @@ void MainLayer::OnImGuiRender()
 {
 	//ImGui::SliderFloat3("Pos", &emiterPos.x, -1.0f, 10.0f);
 	//ImGui::SliderFloat("Size", &particleSize, 0.0f, 100.0f);
-	//ImGui::SliderFloat3("Light Direction", &m_SpotLights[0].GetLightData().Direction.x, -10.0f, 10.0f);
-	m_PointLights[0].OnImGuiRender();
+	ImGui::SliderFloat3("Light Direction", &m_SpotLights[0].GetLightData().Direction.x, -10.0f, 10.0f);
+	//m_PointLights[0].OnImGuiRender();
 
+	ImGui::Text("Camera Controls: \n Hold mouse scroll to rotate, \n Hold shift + mouse scroll to slide, \n scroll mouse wheel to zoom");
+
+	ImGui::Text("how spiky is terrain, from 0 to 64");
 	ImGui::InputDouble("freq", &freq);
+	ImGui::Text("only affects color");
 	ImGui::InputFloat("spread", &spread);
+	ImGui::Text("height of terrain");
 	ImGui::InputInt("amp", &amp);
+	ImGui::Text("how low poly looking is terrain, from 0 to 8");
 	ImGui::InputInt("oct", &octave);
 	if (ImGui::Button("ReGenerate!"))
 	{

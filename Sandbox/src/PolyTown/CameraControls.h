@@ -55,7 +55,7 @@ private:
 
 	float m_HorizontalSensivity = 4.0f;
 	float m_VerticalSensivity = 4.0f;
-	float m_MovingSensivity = 15.0f;
+	float m_MovingSensivity = 30.0f;
 
 	glm::vec2 m_DeltaMouse = { 0.0f, 0.0f };
 

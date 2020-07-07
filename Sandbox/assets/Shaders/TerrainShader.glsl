@@ -58,9 +58,11 @@ vec3 calculateLighting(){
 	return (lightColour * lightBias.x) + (brightness * lightColour * lightBias.y);
 }
 
+uniform mat4 u_Transform;
+
 void main(void){
 
-	gl_Position = u_ViewProjectionMatrix * vec4(in_position, 1.0);
+	gl_Position = u_ViewProjectionMatrix * u_Transform * vec4(in_position, 1.0);
 	
 	vec3 lighting = calculateLighting();
 	pass_colour = in_color * lighting;

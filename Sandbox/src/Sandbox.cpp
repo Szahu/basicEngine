@@ -17,9 +17,9 @@ public:
 	{
 		//PushLayer(new Sandbox2D());
 		//PushLayer(new Sandbox3D()); // Model Rendering
-		PushLayer(new GameLayer()); // Multiplayer and skeletal animation
+		//PushLayer(new GameLayer()); // Multiplayer and skeletal animation DONE!
 		//PushLayer(new TestLayer());
-		//PushLayer(new MainLayer()); // Terrain demo
+		PushLayer(new MainLayer()); // Terrain demo DONE!
 	}
 	~Sandbox()
 	{
