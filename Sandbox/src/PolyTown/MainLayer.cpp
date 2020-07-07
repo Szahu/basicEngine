@@ -161,8 +161,6 @@ void MainLayer::OnImGuiRender()
 		testTerrain.RegenerateTerrain(freq, octave, amp, spread);
 	}
 
-	//essa
-
 }
 
 void MainLayer::OnEvent(Engine::Event& event)

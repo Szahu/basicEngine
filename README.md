@@ -3,3 +3,8 @@ Basic 3D Engine based on **[The Cherno's](https://www.youtube.com/user/TheCherno
 - To clone do `git clone --recursive`
 
 **ATTENTION** cloned repository won't complie due to the fact that some dependancies are still local. 
+
+Screenshots:
+
+![Terrain Generation](https://github.com/Szahu/basicEngine/blob/master/Demo/Screenshots/terrain.png?raw=true)
+
