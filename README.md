@@ -4,7 +4,8 @@ Basic 3D Engine based on **[The Cherno's](https://www.youtube.com/user/TheCherno
 
 **ATTENTION** cloned repository won't complie due to the fact that some dependancies are still local. 
 
-Screenshots:
+**Screenshots:**
 
+Terrain Generation:
 ![Terrain Generation](https://github.com/Szahu/basicEngine/blob/master/Demo/Screenshots/terrain.png?raw=true)
 
