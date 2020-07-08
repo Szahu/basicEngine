@@ -1,7 +1,5 @@
 #pragma once
 
-#pragma once
-
 #include "Engine.h"
 #include "Engine/Core/Layer.h"
 

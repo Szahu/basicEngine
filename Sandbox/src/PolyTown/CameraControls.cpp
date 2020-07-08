@@ -1,11 +1,14 @@
 #include "CameraControls.h"
+#include "Engine/Core/Application.h"
 
 using namespace Engine;
 
 CameraController::CameraController():
 	m_Camera(65.0f, 1.6f)
 {
-
+	int width = Application::Get().GetWindow().GetWidth();
+	int height = Application::Get().GetWindow().GetHeight();
+	OnWindowResizeCallable(width, height);
 }
 
 void CameraController::OnUpdate(Timestep ts)
@@ -155,6 +158,11 @@ bool CameraController::OnWindowResize(WindowResizeEvent& e)
 	m_Camera.SetProjection(65.0f, (float)e.GetWidth() / (float)e.GetHeight());
 
 	return false;
+}
+
+void CameraController::OnWindowResizeCallable(int width, int height)
+{
+	m_Camera.SetProjection(65.0f, (float)width / (float)height);
 }
 
 void CameraController::CalculateInputMovement(Timestep ts)

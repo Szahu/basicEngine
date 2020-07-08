@@ -36,6 +36,11 @@ namespace Engine
 		Shutdown();
 	}
 
+	void WindowsWindow::SetWindowSize(unsigned int x, unsigned int y) const
+	{
+		glfwSetWindowSize(m_Window, x, y);
+	}
+
 	void WindowsWindow::Init(const WindowProps& props)
 	{
 		m_Data.Title = props.Title;

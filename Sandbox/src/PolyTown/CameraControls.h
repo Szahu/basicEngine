@@ -33,6 +33,8 @@ public:
 
 	void SetTargetPosition(const glm::vec3& pos) { m_TargetPosition = pos; }
 
+	void OnWindowResizeCallable(int width, int height);
+
 private:
 	
 	float CalculateHorizontalDistance();

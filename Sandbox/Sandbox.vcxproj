@@ -139,6 +139,7 @@
     <ClInclude Include="src\PolyTown\ColorGenerator.h" />
     <ClInclude Include="src\PolyTown\MainLayer.h" />
     <ClInclude Include="src\PolyTown\Terrain.h" />
+    <ClInclude Include="src\RenderingDemo\DemoMain.h" />
     <ClInclude Include="src\Sandbox2D.h" />
     <ClInclude Include="src\Sandbox3D.h" />
     <ClInclude Include="src\TestLayer.h" />
@@ -151,6 +152,7 @@
     <ClCompile Include="src\PolyTown\CameraControls.cpp" />
     <ClCompile Include="src\PolyTown\MainLayer.cpp" />
     <ClCompile Include="src\PolyTown\Terrain.cpp" />
+    <ClCompile Include="src\RenderingDemo\DemoMain.cpp" />
     <ClCompile Include="src\Sandbox.cpp" />
     <ClCompile Include="src\Sandbox2D.cpp" />
     <ClCompile Include="src\Sandbox3D.cpp" />

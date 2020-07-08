@@ -29,6 +29,9 @@ namespace Engine
 		bool IsVSync() const override;
 
 		inline virtual void* GetNativeWindow() const { return m_Window; }
+
+		virtual void SetWindowSize(unsigned int x, unsigned int y) const;
+
 	private:
 		virtual void Init(const WindowProps& props);
 		virtual void Shutdown();

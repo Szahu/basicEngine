@@ -19,6 +19,7 @@ MainLayer::MainLayer()
 
 void MainLayer::OnAttach()
 {
+
 	testTerrain.Generate(testNoise, 100);
 	//testTerrain.LoadFromFile("testTerrain.terrain");
 
@@ -37,7 +38,7 @@ void MainLayer::OnAttach()
 	m_ShaderLibrary->Load("assets/shaders/LowPolyModelShadows.glsl");
 	m_ShaderLibrary->Load("assets/shaders/Model/tester.glsl");
 
-	model.loadModel("assets/models/nanosuit/scene.gltf");
+	//model.loadModel("assets/models/nanosuit/scene.gltf");
 
 	Renderer::InitScene(&m_CameraController.GetCamera());
 
@@ -60,13 +61,12 @@ void MainLayer::OnAttach()
 	glDisable(GL_CULL_FACE);
 	glProvokingVertex(GL_FIRST_VERTEX_CONVENTION);
 
-	collisionCheck = std::thread(&MainLayer::CheckCollision, this);
+	//collisionCheck = std::thread(&MainLayer::CheckCollision, this);
 
 	//Renderer::AddPostProcessingEffect("Blur");
-	m_Shadows.SetSize(60);
-	emiterTimer.SetDuration(1.0f / 60.0f);
-	emiterTimer.ReStart();
-
+	//m_Shadows.SetSize(60);
+	//emiterTimer.SetDuration(1.0f / 60.0f);
+	//emiterTimer.ReStart();
 }
 
 void MainLayer::OnDraw(Timestep ts)
@@ -142,7 +142,7 @@ void MainLayer::OnUpdate(Engine::Timestep ts)
 void MainLayer::OnImGuiRender()
 {
 	//ImGui::SliderFloat3("Pos", &emiterPos.x, -1.0f, 10.0f);
-	//ImGui::SliderFloat("Size", &particleSize, 0.0f, 100.0f);
+	//ImGTui::SliderFloat("Size", &particleSize, 0.0f, 100.0f);
 	ImGui::SliderFloat3("Light Direction", &m_SpotLights[0].GetLightData().Direction.x, -10.0f, 10.0f);
 	//m_PointLights[0].OnImGuiRender();
 
@@ -199,6 +199,6 @@ void MainLayer::CheckCollision()
 
 void MainLayer::OnDetach()
 {
-	runCollisionTest = false;
-	collisionCheck.join();
+	//runCollisionTest = false;
+	//collisionCheck.join();
 }
