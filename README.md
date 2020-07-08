@@ -9,3 +9,6 @@ Basic 3D Engine based on **[The Cherno's](https://www.youtube.com/user/TheCherno
 Terrain Generation:
 ![Terrain Generation](https://github.com/Szahu/basicEngine/blob/master/Demo/Screenshots/terrain.png?raw=true)
 
+Model Rendering with lighting and shadows
+![Model Rendering](https://github.com/Szahu/basicEngine/blob/master/Demo/Screenshots/RenderingDemo.png?raw=true)
+

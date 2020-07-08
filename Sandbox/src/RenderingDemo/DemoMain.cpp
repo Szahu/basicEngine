@@ -18,6 +18,7 @@ void DemoMainLayer::OnAttach()
 	m_ShaderLibrary->Load("assets/shaders/PostProcessing/ColorShift.glsl");
 	m_ShaderLibrary->Load("assets/shaders/PostProcessing/Blur.glsl");
 	m_ShaderLibrary->Load("assets/shaders/simpleDepthShader.glsl");
+	m_ShaderLibrary->Load("assets/shaders/Material.glsl");
 
 	//Loading model
 	m_DemoModel.loadModel("assets/models/nanosuit/scene.gltf");
@@ -38,6 +39,7 @@ void DemoMainLayer::OnAttach()
 
 	Renderer::InitScene(&m_CameraController.GetCamera());
 
+	m_ShadowsRenderer.SetSize(40);
 }
 
 void DemoMainLayer::OnDetach()
@@ -49,7 +51,7 @@ void DemoMainLayer::OnDraw(Timestep ts)
 	Renderer::Submit(m_DemoModel, Material(), glm::mat4(1.0f), false, "Model");
 
 	glm::mat4 cubeTransform = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -0.5f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(100.0f, 1.0f, 100.0f));
-	Renderer::Submit(m_DemoCube, Material(), cubeTransform, false, "Model");
+	Renderer::Submit(m_DemoCube, Material(), cubeTransform, false, "Material");
 }
 
 void DemoMainLayer::OnUpdate(Engine::Timestep ts)
@@ -62,7 +64,7 @@ void DemoMainLayer::OnUpdate(Engine::Timestep ts)
 	//Rendering Shadows:
 	m_ShadowsRenderer.PreRender(m_SpotLights[0].GetLightData().Position, m_SpotLights[0].GetLightData().Position + m_SpotLights[0].GetLightData().Direction);
 	OnDraw(ts);
-	m_ShadowsRenderer.PostRender({m_ShaderLibrary->Get("Model")});
+	m_ShadowsRenderer.PostRender({m_ShaderLibrary->Get("Model"),m_ShaderLibrary->Get("Material")});
 
 	m_FrameBuffer->Bind();
 	Engine::RenderCommand::Clear();
@@ -98,7 +100,7 @@ void DemoMainLayer::OnImGuiRender()
 	ImGui::Text("Camera Controls: \n Hold mouse scroll to rotate, \n Hold shift + mouse scroll to slide, \n scroll mouse wheel to zoom");
 
 	ImGui::Text("LightControls:");
-	m_PointLights[0].OnImGuiRender();
+	//m_PointLights[0].OnImGuiRender();
 	m_SpotLights[0].OnImGuiRender();
 }
 
